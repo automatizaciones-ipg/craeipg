@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import VirtualTour from "../components/VirtualTour.tsx";
+---
+
+<Layout title="Recorrido Virtual - CRAE IPG">
+  <div class="bg-slate-50 min-h-screen">
+    <VirtualTour client:load />
+  </div>
+</Layout>
