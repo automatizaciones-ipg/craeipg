@@ -1,6 +1,6 @@
 ---
 import Header from "../components/Header.tsx";
-import Footer from "../components/Footer.tsx"; // 1. Importamos el Footer
+import Footer from "../components/Footer.tsx";
 import "../styles/global.css";
 
 interface Props {
@@ -22,6 +22,9 @@ const { title } = Astro.props;
   <body
     class="min-h-screen flex flex-col text-slate-700 font-sans antialiased overflow-x-hidden selection:bg-[#0077ff]/20 selection:text-[#003399]"
   >
+    {
+      /* EL HEADER DEBE SER client:load porque el usuario interactúa al instante */
+    }
     <Header client:load />
 
     <div class="flex flex-col flex-1 pt-24 min-h-screen">
@@ -31,7 +34,11 @@ const { title } = Astro.props;
         <slot />
       </main>
 
-      <Footer client:load />
+      {/* OPTIMIZACIÓN CLAVE: client:visible */}
+      {
+        /* El JS pesado de Framer Motion del Footer NO se cargará hasta llegar abajo */
+      }
+      <Footer client:visible />
     </div>
   </body>
 </html>

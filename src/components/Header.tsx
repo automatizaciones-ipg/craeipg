@@ -17,22 +17,18 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    // Patrón de optimización para no saturar la memoria
     const handleScroll = (): void => {
-      setIsScrolled(window.scrollY > 20);
+      // Usamos requestAnimationFrame para sincronizar la lectura del scroll con el refresco de pantalla
+      window.requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 20);
+      });
     };
     
-    window.addEventListener('scroll', handleScroll);
+    // El { passive: true } es vital para mejorar el rendimiento del scroll en móviles
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Bloquear el scroll cuando el menú móvil está abierto
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [isMobileMenuOpen]);
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-2' : 'py-4'}`}>
