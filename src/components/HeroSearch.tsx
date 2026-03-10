@@ -47,14 +47,17 @@ const HeroSearch: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-2xl relative group" ref={searchRef}>
+    <div className="w-full max-w-2xl relative group mx-auto" ref={searchRef}>
       {/* Brillo de fondo estético */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#003399] to-[#0077ff] rounded-2xl blur-md opacity-20 group-hover:opacity-40 transition duration-500"></div>
       
-      {/* Contenedor del Input */}
-      <div className={`relative flex items-center bg-white/95 backdrop-blur-xl border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${isDropdownOpen && query.length > 0 ? 'border-[#0077ff]/50 rounded-t-2xl rounded-b-none' : 'border-slate-100 focus-within:border-[#0077ff]/50 rounded-2xl'}`}>
-        <Search className="w-6 h-6 text-[#0077ff] ml-4 shrink-0" />
+      {/* Contenedor del Input (Ajustado con p-1.5 para contener bien el botón en móvil) */}
+      <div className={`relative flex items-center bg-white/95 backdrop-blur-xl border-2 transition-all duration-300 shadow-lg hover:shadow-xl p-1.5 md:p-2 ${isDropdownOpen && query.length > 0 ? 'border-[#0077ff]/50 rounded-t-2xl rounded-b-none' : 'border-slate-100 focus-within:border-[#0077ff]/50 rounded-2xl'}`}>
+        
+        {/* Lupa (Asegurada con shrink-0) */}
+        <Search className="w-5 h-5 md:w-6 md:h-6 text-[#0077ff] ml-2 md:ml-3 shrink-0" />
 
+        {/* Input (Con flex-1 y min-w-0 para que NUNCA empuje al botón) */}
         <input
           type="text"
           value={query}
@@ -63,12 +66,14 @@ const HeroSearch: React.FC = () => {
             setIsDropdownOpen(true);
           }}
           onFocus={() => setIsDropdownOpen(true)}
-          placeholder="¿Qué necesitas aprender o descargar hoy?"
-          className="w-full bg-transparent border-none outline-none py-3.5 px-4 text-slate-700 placeholder:text-slate-400 text-base md:text-lg"
+          placeholder="¿Qué recurso necesitas hoy?"
+          className="flex-1 min-w-0 bg-transparent border-none outline-none py-2 md:py-3 px-3 md:px-4 text-slate-700 placeholder:text-slate-400 text-sm md:text-lg text-ellipsis overflow-hidden"
           autoComplete="off"
         />
+        
+        {/* Botón Buscar (Visible siempre, shrink-0 para no cortarse jamás) */}
         <button
-          className="bg-gradient-to-r from-[#003399] to-[#0077ff] hover:from-[#002266] hover:to-[#0055cc] text-white px-6 py-2.5 m-1.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hidden sm:block duration-300"
+          className="shrink-0 bg-gradient-to-r from-[#003399] to-[#0077ff] hover:from-[#002266] hover:to-[#0055cc] text-white px-4 py-2.5 md:px-6 md:py-3 rounded-xl text-sm md:text-base font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-300 whitespace-nowrap"
         >
           Buscar
         </button>
@@ -95,20 +100,20 @@ const HeroSearch: React.FC = () => {
                     href={item.href}
                     className="flex items-center justify-between p-3 hover:bg-blue-50/80 rounded-xl transition-colors group cursor-pointer"
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 md:gap-4 overflow-hidden">
                       <div className="w-10 h-10 rounded-lg bg-blue-100/50 flex items-center justify-center text-[#0077ff] shrink-0 group-hover:scale-110 transition-transform">
                         {item.icon}
                       </div>
-                      <div className="flex flex-col text-left">
-                        <span className="text-slate-800 font-semibold text-sm group-hover:text-[#003399] transition-colors">{item.title}</span>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs text-slate-500">{item.category}</span>
-                          <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                          <span className="text-[10px] font-bold text-[#0077ff] bg-blue-100 px-2 py-0.5 rounded-md">{item.type}</span>
+                      <div className="flex flex-col text-left overflow-hidden">
+                        <span className="text-slate-800 font-semibold text-sm group-hover:text-[#003399] transition-colors truncate">{item.title}</span>
+                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                          <span className="text-xs text-slate-500 whitespace-nowrap">{item.category}</span>
+                          <span className="hidden md:inline-block w-1 h-1 rounded-full bg-slate-300 shrink-0"></span>
+                          <span className="text-[10px] font-bold text-[#0077ff] bg-blue-100 px-2 py-0.5 rounded-md whitespace-nowrap shrink-0">{item.type}</span>
                         </div>
                       </div>
                     </div>
-                    <ArrowRight size={16} className="text-slate-300 group-hover:text-[#0077ff] group-hover:-rotate-45 transition-all opacity-0 group-hover:opacity-100" />
+                    <ArrowRight size={16} className="text-slate-300 shrink-0 ml-2 group-hover:text-[#0077ff] group-hover:-rotate-45 transition-all opacity-0 group-hover:opacity-100" />
                   </a>
                 ))}
               </div>
@@ -117,8 +122,8 @@ const HeroSearch: React.FC = () => {
                 <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
                   <Search size={24} />
                 </div>
-                <p className="text-slate-600 font-medium">No encontramos resultados para "<span className="text-slate-900 font-bold">{query}</span>"</p>
-                <p className="text-sm text-slate-400 mt-1">Intenta con términos como "APA", "Tiempo" o "Plantilla".</p>
+                <p className="text-slate-600 font-medium text-sm md:text-base">No encontramos resultados para "<span className="text-slate-900 font-bold">{query}</span>"</p>
+                <p className="text-xs md:text-sm text-slate-400 mt-1">Intenta con términos como "APA", "Tiempo" o "Plantilla".</p>
               </div>
             )}
           </motion.div>
