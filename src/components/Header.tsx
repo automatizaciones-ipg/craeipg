@@ -8,7 +8,6 @@ const navLinks = [
   { name: 'Gestión del Tiempo', href: '/gestion-tiempo' },
   { name: 'Normas APA', href: '/normas-apa' },
   { name: 'Herramientas Digitales', href: '/herramientas-digitales' },
-  { name: 'Práctica Laboral', href: '/practica-laboral' },
   { name: 'Bienestar y Apoyo', href: '/bienestar-apoyo' },
 ];
 
@@ -53,7 +52,7 @@ const Header: React.FC = () => {
               </div>
               <div className="hidden md:block h-6 w-[2px] bg-slate-200 mx-1"></div>
               <span className="text-xl md:text-2xl font-black tracking-tight text-slate-800">
-                CRA<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">E</span>
+                APRENDE<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">+</span>
               </span>
             </motion.a>
 
@@ -93,7 +92,7 @@ const Header: React.FC = () => {
 
               {/* Botón Ir a IPG (Desktop y Tablets) */}
               <motion.a 
-                href="https://ipg.umas.cl/Alumnos"
+                href="https://ipg.cl"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02, y: -1 }}
@@ -101,7 +100,7 @@ const Header: React.FC = () => {
                 className="hidden sm:flex relative group overflow-hidden items-center gap-1.5 sm:gap-2 bg-[#003399] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_0_rgba(0,51,153,0.39)] hover:shadow-[0_6px_20px_rgba(0,51,153,0.23)] hover:bg-[#002266] transition-all duration-300"
               >
                 <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                <span>Aula Virtual IPG</span>
+                <span>IPG</span>
                 <ExternalLink size={14} className="sm:w-4 sm:h-4" />
               </motion.a>
 

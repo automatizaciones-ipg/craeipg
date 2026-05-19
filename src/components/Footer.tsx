@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
                 IPG
               </div>
               <span className="text-2xl font-black tracking-tight text-slate-800">
-                CRA<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">E</span>
+                APRENDE<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">+</span>
               </span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed pr-4">
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
               Recursos
             </h4>
             <ul className="flex flex-col gap-3">
-              {['Biblioteca Virtual', 'Normativas APA 7ª Ed.', 'Plantillas Institucionales', 'Reglamentos y Políticas', 'Software Académico'].map((item, i) => (
+              {['Biblioteca Virtual', 'Plantillas Institucionales', 'Reglamentos y Políticas'].map((item, i) => (
                 <li key={i}>
                   <a href="#" className="text-slate-500 text-sm hover:text-[#003399] transition-colors flex items-center group">
                     <ChevronRight size={14} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 text-[#0077ff] transition-all duration-300 mr-1" />
@@ -106,12 +106,12 @@ const Footer: React.FC = () => {
               <li className="flex items-start gap-3 text-sm text-slate-500">
                 <Mail size={16} className="text-[#0077ff] mt-0.5 shrink-0" />
                 <a href="mailto:soporte.crae@ipg.cl" className="hover:text-[#003399] transition-colors">
-                  soporte.crae@ipg.cl
+                  consejero.estudiante@ipg.cl
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-slate-500">
                 <Phone size={16} className="text-[#0077ff] mt-0.5 shrink-0" />
-                <span>+56 2 2123 4567<br/><span className="text-xs text-slate-400">Lun - Vie, 09:00 - 18:00</span></span>
+                <span>+56 9 8470 7929<br/><span className="text-xs text-slate-400">Lun - Vie, 09:00 - 18:00</span></span>
               </li>
               <li className="flex items-start gap-3 text-sm text-slate-500">
                 <MapPin size={16} className="text-[#0077ff] mt-0.5 shrink-0" />
@@ -131,7 +131,7 @@ const Footer: React.FC = () => {
           className="pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4"
         >
           <p className="text-slate-400 text-xs text-center md:text-left">
-            © {currentYear} Instituto Profesional IPG. Todos los derechos reservados.
+            © {currentYear} Luis Rivera - Instituto Profesional IPG. 2026 Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-6 text-xs text-slate-400">
             <a href="#" className="hover:text-[#003399] transition-colors">Políticas de Privacidad</a>

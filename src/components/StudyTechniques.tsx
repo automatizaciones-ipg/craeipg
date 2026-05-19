@@ -24,11 +24,12 @@ const StudyTechniques: React.FC = () => {
     { title: "Mnemotecnia", icon: <BrainCircuit size={24} />, desc: "Crea asociaciones mentales fuertes para recordar listas, fórmulas y conceptos.", color: "from-sky-500 to-blue-400" },
   ];
 
+  // AQUÍ ESTÁ LA MAGIA: Agregamos el ID real de Google Drive a cada archivo
   const downloads = [
-    { name: "Plantilla Mapa Mental (Word)", size: "1.2 MB", format: "DOCX" },
-    { name: "Planner de Estudio Semanal", size: "850 KB", format: "PDF" },
-    { name: "Guía Práctica: Método Cornell", size: "2.1 MB", format: "PDF" },
-    { name: "Fichas de Memorización (Flashcards)", size: "3.4 MB", format: "PPTX" },
+    { name: "Plantilla Mapa Mental (Word)", size: "1.2 MB", format: "DOCX", driveId: "1p-lH9n_fo4tVOpOsxsQxhELEtPab9RmB" },
+    { name: "Planner de Estudio Semanal", size: "850 KB", format: "PDF", driveId: "1p-lH9n_fo4tVOpOsxsQxhELEtPab9RmB" },
+    { name: "Guía Práctica: Método Cornell", size: "2.1 MB", format: "PDF", driveId: "1p-lH9n_fo4tVOpOsxsQxhELEtPab9RmB" },
+    { name: "Fichas de Memorización (Flashcards)", size: "3.4 MB", format: "PPTX", driveId: "ID_DE_DRIVE_AQUI_4" },
   ];
 
   return (
@@ -110,7 +111,9 @@ const StudyTechniques: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {downloads.map((file, idx) => (
-              <motion.div 
+              /* ENLACE DE DESCARGA: Cambiamos div por 'a' y apuntamos a la API */
+              <motion.a 
+                href={`/api/download?id=${file.driveId}`} // Llamamos al motor Edge con el ID
                 key={idx}
                 variants={itemVariants}
                 whileHover={{ scale: 1.01 }}
@@ -129,7 +132,7 @@ const StudyTechniques: React.FC = () => {
                 <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#0077ff] group-hover:text-white transition-colors">
                   <Download size={16} />
                 </div>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
         </section>
@@ -152,7 +155,6 @@ const StudyTechniques: React.FC = () => {
                 variants={itemVariants}
                 className="group relative aspect-[4/5] rounded-3xl overflow-hidden shadow-lg cursor-pointer"
               >
-                {/* Imagen de fondo (Usamos placeholders hermosos de Unsplash para la demo) */}
                 <img 
                   src={img.url} 
                   alt={img.title}

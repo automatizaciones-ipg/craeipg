@@ -21,18 +21,13 @@ const WelcomeSection: React.FC = () => {
     {
       icon: <Compass className="w-5 h-5 text-[#0077ff]" />,
       title: "Navegación Intuitiva",
-      desc: "Descubre dónde están tus asignaturas y calificaciones."
+      desc: "Descubre dónde están los recursos de APRENDE+."
     },
     {
       icon: <Library className="w-5 h-5 text-[#0077ff]" />,
-      title: "Recursos CRAE",
-      desc: "Aprende a integrar la biblioteca virtual en tus tareas."
+      title: "Recursos",
+      desc: "Aprende a descargar y utilzar los recursos de APRENDE+."
     },
-    {
-      icon: <MonitorPlay className="w-5 h-5 text-[#0077ff]" />,
-      title: "Clases Sincrónicas",
-      desc: "Cómo unirte a tus sesiones en vivo sin problemas."
-    }
   ];
 
   return (
@@ -59,7 +54,7 @@ const WelcomeSection: React.FC = () => {
             {/* Imagen de portada (Placeholder - Puedes cambiar la URL por tu miniatura) */}
             <img 
               src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop" 
-              alt="Video introductorio CRAE" 
+              alt="Video introductorio APRENDE+" 
               className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500 group-hover:scale-105 transform"
             />
             
@@ -69,7 +64,7 @@ const WelcomeSection: React.FC = () => {
             {/* Etiqueta flotante superior */}
             <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-              ¿Qué es el CRAE?
+              ¿Qué es el APRENDE+?
             </div>
 
             {/* Botón de Play Central */}
@@ -106,11 +101,11 @@ const WelcomeSection: React.FC = () => {
           </motion.div>
 
           <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 leading-tight">
-            Domina tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">Aula Virtual</span> en minutos
+            Domina <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">APRENDE+</span> en minutos
           </motion.h2>
 
           <motion.p variants={itemVariants} className="text-slate-500 text-lg leading-relaxed">
-            Hemos preparado un recorrido paso a paso para que aproveches al máximo la plataforma IPG. Olvídate de perderte entre menús y enfócate en lo que importa: tu aprendizaje.
+            Hemos preparado un recorrido paso a paso para que aproveches al máximo la plataforma APRENDE+. Olvídate de perderte entre menús y enfócate en lo que importa: tu aprendizaje.
           </motion.p>
 
           {/* Lista de características animadas */}
@@ -144,7 +139,7 @@ const WelcomeSection: React.FC = () => {
               {/* Brillo animado (Shimmer) dentro del botón */}
               <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
               
-              <span>Iniciar recorrido virtual</span>
+              <span>Iniciar recorrido virtual de APRENDE+</span>
               <div className="bg-white/20 p-1 rounded-md group-hover:bg-white/30 transition-colors">
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>

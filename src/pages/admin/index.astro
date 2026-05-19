@@ -1,0 +1,153 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getSession } from "auth-astro/server";
+
+// 1. CAPTURAR LA SESIÓN EN TIEMPO DE EJECUCIÓN DEL SERVIDOR
+const session = await getSession(Astro.request);
+
+// 2. COMPROBAR TU LISTA BLANCA CORPORATIVA
+const ALLOWED_ADMINS: string[] = [
+  "luis.rivera@ipg.cl",
+  // 'nuevo.admin@ipg.cl' <-- Mantén las listas sincronizadas
+];
+
+// 3. BLINDAJE: Si no cumple las condiciones, rebota al usuario inmediatamente a la raíz
+if (
+  !session ||
+  !session.user?.email ||
+  !ALLOWED_ADMINS.includes(session.user.email)
+) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout title="Consola de Auditoría - CRAE IPG">
+  <main class="max-w-6xl mx-auto p-6 md:p-12">
+    <div
+      class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10"
+    >
+      <div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">
+          Consola de Control
+        </h1>
+        <p class="text-slate-500 text-sm mt-1">
+          Monitoreo de descargas de material institucional en tiempo real.
+        </p>
+      </div>
+      <button
+        id="btn-refresh"
+        class="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2"
+      >
+        Actualizar Datos
+      </button>
+    </div>
+
+    <div
+      class="bg-white border border-slate-200/80 rounded-2xl shadow-xl shadow-slate-100/50 overflow-hidden"
+    >
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr
+              class="bg-slate-50 border-b border-slate-200/60 text-slate-400 text-[11px] font-bold uppercase tracking-wider"
+            >
+              <th class="py-4 px-6">Alumno</th>
+              <th class="py-4 px-6">Correo Institucional</th>
+              <th class="py-4 px-6">Recurso Descargado</th>
+              <th class="py-4 px-6 text-right">Fecha y Hora</th>
+            </tr>
+          </thead>
+          <tbody
+            id="logs-table-body"
+            class="divide-y divide-slate-100 text-sm text-slate-600"
+          >
+            <tr>
+              <td
+                colspan="4"
+                class="py-12 text-center text-slate-400 font-medium"
+              >
+                Cargando registros de auditoría...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  async function loadLogs() {
+    const tbody = document.getElementById("logs-table-body");
+    if (!tbody) return;
+
+    try {
+      const response = await fetch("/api/admin/logs");
+
+      // Si la API nos devuelve error de privilegios, mostramos mensaje elegante
+      if (response.status === 403) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="py-12 text-center text-amber-600 font-medium">
+              Acceso denegado: Tu cuenta no posee permisos de Auditoría.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      if (!response.ok) throw new Error("Error al consultar logs");
+
+      const logs = await response.json();
+
+      if (logs.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="py-12 text-center text-slate-400 font-medium">
+              No se han registrado descargas en esta sesión todavía.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = logs
+        .map((log: any) => {
+          const dateFormatted = new Date(log.timestamp).toLocaleString(
+            "es-CL",
+            {
+              dateStyle: "medium",
+              timeStyle: "short",
+            },
+          );
+
+          return `
+          <tr class="hover:bg-slate-50/60 transition-colors">
+            <td class="py-4 px-6 font-semibold text-slate-800">${log.name}</td>
+            <td class="py-4 px-6 font-mono text-xs text-slate-500">${log.email}</td>
+            <td class="py-4 px-6">
+              <span class="inline-flex items-center gap-1.5 font-medium text-blue-700 bg-blue-50/60 border border-blue-100/50 px-2.5 py-1 rounded-md text-xs">
+                ${log.fileName}
+              </span>
+            </td>
+            <td class="py-4 px-6 text-right font-medium text-slate-400 text-xs">${dateFormatted}</td>
+          </tr>
+        `;
+        })
+        .join("");
+    } catch (error) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="py-12 text-center text-red-500 font-medium">
+            Error al conectar con la pasarela de auditoría de Cloudflare.
+          </td>
+        </tr>
+      `;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadLogs();
+    document.getElementById("btn-refresh")?.addEventListener("click", loadLogs);
+  });
+</script>

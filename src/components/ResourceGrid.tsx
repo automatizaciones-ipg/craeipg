@@ -51,15 +51,6 @@ const categories: CategoryCard[] = [
     href: "/herramientas-digitales"
   },
   {
-    title: "Práctica Laboral",
-    description: "Manuales, guías y orientaciones para informes de práctica y proyectos de título.",
-    icon: <Briefcase size={28} className="text-[#003399]" />,
-    colSpan: "md:col-span-1 lg:col-span-1",
-    gradient: "from-white to-slate-50",
-    delay: 0.25,
-    href: "/practica-laboral"
-  },
-  {
     title: "Bienestar y Apoyo",
     description: "Recursos de manejo del estrés, autocuidado y canales de apoyo socioemocional de IPG.",
     icon: <HeartHandshake size={32} className="text-white" />,
@@ -76,7 +67,7 @@ const ResourceGrid: React.FC = () => {
       
       <div className="flex items-center gap-2 mb-8 px-2">
         <Sparkles className="text-[#0077ff] w-5 h-5" />
-        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Recursos del CRAE</h2>
+        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Recursos de APRENDE+</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
