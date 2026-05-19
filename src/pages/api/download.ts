@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
 import { SignJWT, importPKCS8 } from 'jose';
 
+
 // ==========================================
 // 1. DECLARACIONES DE TIPOS ESTRICTOS
 // ==========================================
