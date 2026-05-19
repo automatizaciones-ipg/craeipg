@@ -86,7 +86,7 @@ const Footer: React.FC = () => {
 
           {/* COLUMNA 3: Enlaces Institucionales */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
-            <h4 className="text-slate-800 font-bold mb-6">IPG</h4>
+            <h4 className="text-slate-800 font-bold mb-6">IPG+</h4>
             <ul className="flex flex-col gap-3">
               {['Portal Principal', 'Aula Virtual', 'Centro de Ayuda'].map((item, i) => (
                 <li key={i}>
