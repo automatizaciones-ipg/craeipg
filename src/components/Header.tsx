@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HelpCircle, ExternalLink, Menu, X, ChevronRight } from 'lucide-react';
+import { HelpCircle, Menu, X, ChevronRight, LogOut, Loader2 } from 'lucide-react';
+// Importamos la función de cierre de sesión segura del cliente de auth-astro
+import { signOut } from 'auth-astro/client';
 
 // Definimos los enlaces de navegación del CRAE (100% alineados con el Grid)
 const navLinks = [
@@ -14,11 +16,11 @@ const navLinks = [
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
   useEffect(() => {
     // Patrón de optimización para no saturar la memoria
     const handleScroll = (): void => {
-      // Usamos requestAnimationFrame para sincronizar la lectura del scroll con el refresco de pantalla
       window.requestAnimationFrame(() => {
         setIsScrolled(window.scrollY > 20);
       });
@@ -28,6 +30,21 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Función asíncrona para manejar el cierre de sesión de forma segura
+  const handleSignOut = async () => {
+    setIsLoggingOut(true);
+    try {
+      // 1. Destruimos la sesión de forma segura y estricta (sin pasar parámetros para evitar el error de TypeScript)
+      await signOut();
+      
+      // 2. Forzamos la redirección nativa al inicio
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      setIsLoggingOut(false); // Restauramos el botón si falla
+    }
+  };
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-2' : 'py-4'}`}>
@@ -47,7 +64,7 @@ const Header: React.FC = () => {
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#003399] to-[#0077ff] rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
                 <div className="h-12 w-12 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-xl flex items-center justify-center font-extrabold text-white shadow-md text-base">
-                 IPG+
+                 IPG<span className="text-cyan-300 font-black ml-[1px]">+</span>
                </div>
               </div>
               <div className="hidden md:block h-6 w-[2px] bg-slate-200 mx-1"></div>
@@ -57,8 +74,6 @@ const Header: React.FC = () => {
             </motion.a>
 
             {/* 2. ENLACES CENTRALES (Solo Desktop) */}
-            {/* Nota: Al tener más enlaces, en pantallas medianas (lg) podría verse un poco apretado, 
-                pero el menú hamburguesa cubrirá las pantallas más pequeñas (md/sm). */}
             <div className="hidden xl:flex items-center justify-center flex-1 mx-4 gap-4 xl:gap-6">
               {navLinks.map((link, index) => (
                 <motion.a
@@ -90,19 +105,47 @@ const Header: React.FC = () => {
 
               <div className="h-6 w-[2px] bg-slate-200 hidden sm:block"></div>
 
-              {/* Botón Ir a IPG (Desktop y Tablets) */}
-              <motion.a 
-                href="https://ipg.cl"
-                target="_blank"
-                rel="noopener noreferrer"
+              {/* Botón Cerrar Sesión (Desktop y Tablets) */}
+              <motion.button 
+                onClick={handleSignOut}
+                disabled={isLoggingOut}
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
-                className="hidden sm:flex relative group overflow-hidden items-center gap-1.5 sm:gap-2 bg-[#003399] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_0_rgba(0,51,153,0.39)] hover:shadow-[0_6px_20px_rgba(0,51,153,0.23)] hover:bg-[#002266] transition-all duration-300"
+                className={`hidden sm:flex relative group overflow-hidden items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 disabled:opacity-75 disabled:cursor-wait
+                  ${isLoggingOut 
+                    ? 'bg-slate-100 text-slate-500 shadow-inner' 
+                    : 'bg-slate-800 text-white shadow-[0_4px_14px_0_rgba(15,23,42,0.39)] hover:shadow-[0_6px_20px_rgba(225,29,72,0.25)] hover:bg-rose-600'
+                  }`}
               >
-                <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                <span>IPG</span>
-                <ExternalLink size={14} className="sm:w-4 sm:h-4" />
-              </motion.a>
+                {!isLoggingOut && (
+                  <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                )}
+                <span>{isLoggingOut ? 'Saliendo...' : 'Cerrar Sesión'}</span>
+                
+                {/* Animación de icono al salir */}
+                <AnimatePresence mode="wait">
+                  {isLoggingOut ? (
+                    <motion.div
+                      key="loader"
+                      initial={{ opacity: 0, rotate: -90 }}
+                      animate={{ opacity: 1, rotate: 0 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <Loader2 size={14} className="sm:w-4 sm:h-4 animate-spin" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="icon"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="group-hover:translate-x-0.5 transition-transform"
+                    >
+                      <LogOut size={14} className="sm:w-4 sm:h-4" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
 
               {/* Botón Menú Hamburguesa (Mobile, Tablet & pantallas < xl) */}
               <motion.button
@@ -118,7 +161,7 @@ const Header: React.FC = () => {
           </div>
         </nav>
 
-        {/* 4. MENÚ MÓVIL DESPLEGABLE (Animado con AnimatePresence) */}
+        {/* 4. MENÚ MÓVIL DESPLEGABLE */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -148,16 +191,23 @@ const Header: React.FC = () => {
 
                 <div className="h-[1px] bg-slate-100 my-2"></div>
 
-                {/* Botón Móvil "Ir a IPG" */}
-                <motion.a
-                  href="https://ipg.cl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full bg-[#003399] text-white p-3 rounded-xl font-semibold shadow-md"
+                {/* Botón Móvil "Cerrar Sesión" */}
+                <motion.button
+                  onClick={handleSignOut}
+                  disabled={isLoggingOut}
+                  className={`flex items-center justify-center gap-2 w-full p-3 rounded-xl font-semibold shadow-sm transition-colors ${
+                    isLoggingOut 
+                    ? 'bg-slate-100 text-slate-500' 
+                    : 'bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white'
+                  }`}
                 >
-                  <span>Ir a IPG</span>
-                  <ExternalLink size={16} />
-                </motion.a>
+                  <span>{isLoggingOut ? 'Cerrando sesión...' : 'Cerrar Sesión'}</span>
+                  {isLoggingOut ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <LogOut size={16} />
+                  )}
+                </motion.button>
 
               </div>
             </motion.div>
