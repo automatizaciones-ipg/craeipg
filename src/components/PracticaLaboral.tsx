@@ -241,7 +241,7 @@ const PracticaLaboral: React.FC = () => {
         <div className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-[#0077ff]/10 transition-colors">
           <ChevronLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
         </div>
-        Volver al inicio
+        Volver al inicio 
       </motion.a>
 
       {/* ── HERO — COPIA EXACTA de TimeManagement ── */}
