@@ -40,8 +40,8 @@ const Footer: React.FC = () => {
           {/* COLUMNA 1: Branding */}
           <motion.div variants={itemVariants} className="lg:col-span-4 flex flex-col gap-6">
             <div className="flex items-center gap-3 cursor-default">
-              <div className="h-10 w-10 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-xl flex items-center justify-center font-extrabold text-white shadow-md text-base">
-                IPG
+              <div className="h-12 w-12 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-xl flex items-center justify-center font-extrabold text-white shadow-md text-base">
+                IPG+
               </div>
               <span className="text-2xl font-black tracking-tight text-slate-800">
                 APRENDE<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">+</span>
@@ -86,7 +86,7 @@ const Footer: React.FC = () => {
 
           {/* COLUMNA 3: Enlaces Institucionales */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
-            <h4 className="text-slate-800 font-bold mb-6">IPG+</h4>
+            <h4 className="text-slate-800 font-bold mb-6">IPG</h4>
             <ul className="flex flex-col gap-3">
               {['Portal Principal', 'Aula Virtual', 'Centro de Ayuda'].map((item, i) => (
                 <li key={i}>

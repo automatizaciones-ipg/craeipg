@@ -46,7 +46,7 @@ const Header: React.FC = () => {
             >
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#003399] to-[#0077ff] rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                <div className="relative h-8 w-8 md:h-9 md:w-9 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-xl flex items-center justify-center font-extrabold text-white shadow-md text-xs md:text-base">
+                <div className="relative h-12 w-12 md:h-9 md:w-9 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-xl flex items-center justify-center font-extrabold text-white shadow-md text-xs md:text-base">
                   IPG+
                 </div>
               </div>
