@@ -12,6 +12,7 @@ export default defineConfig({
       authorization: { params: { prompt: "select_account" } }
     }),
   ],
+  trustHost: true,
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ profile }) {
