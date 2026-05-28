@@ -4,7 +4,6 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
-
 import auth from 'auth-astro';
 
 // https://astro.build/config
@@ -14,5 +13,8 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   integrations: [react(), auth()],
-  adapter: cloudflare()
+  adapter: cloudflare({
+    // 🛡️ SOLUCIÓN ROBUSTA: Previene errores de compatibilidad con 'sharp' en el deploy a Cloudflare
+    imageService: 'compile' 
+  })
 });

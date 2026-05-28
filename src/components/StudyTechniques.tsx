@@ -1,14 +1,66 @@
-import React from 'react';
-import { motion, type Variants } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { 
-  BrainCircuit, BookOpen, Clock, Download, 
-  ImageIcon, FileText, Network, Sparkles, ChevronLeft 
+  ChevronLeft, LayoutDashboard, Laptop, Calendar, 
+  Library, FileSignature, Mail, Cloud, FileText, 
+  FolderOpen, ArrowRight
 } from 'lucide-react';
 
-const StudyTechniques: React.FC = () => {
+// 🔌 Importación de las 8 subpáginas independientes (Clean Architecture)
+import PortalEstudiantil from './herramientas/PortalEstudiantil';
+import AulaVirtual from './herramientas/AulaVirtual';
+import CalendariosAcademicos from './herramientas/CalendariosAcademicos';
+import CraiPlataforma from './herramientas/CraiPlataforma';
+import RematriculaGuia from './herramientas/RematriculaGuia';
+import CorreoInstitucional from './herramientas/CorreoInstitucional';
+import GoogleDriveManual from './herramientas/GoogleDriveManual';
+import MicrosoftWordManual from './herramientas/MicrosoftWordManual';
+
+// Interfaces de tipado estricto
+type ResourceType = 'pdf' | 'video';
+
+interface Resource {
+  name: string;
+  type: ResourceType;
+  size: string;
+  driveId: string;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  color: string;
+  lightColor: string;
+  itemCount: number;
+}
+
+// 📂 Catálogo estructurado para renderizar las tarjetas del menú principal
+const categories: Category[] = [
+  { id: "portal", title: "Portal Estudiantil", icon: <LayoutDashboard size={24} />, color: "from-blue-500 to-cyan-400", lightColor: "text-blue-600", itemCount: 3 },
+  { id: "aula", title: "Aula Virtual", icon: <Laptop size={24} />, color: "from-indigo-500 to-purple-500", lightColor: "text-indigo-600", itemCount: 10 },
+  { id: "calendarios", title: "Calendarios Académicos", icon: <Calendar size={24} />, color: "from-emerald-400 to-teal-500", lightColor: "text-teal-600", itemCount: 2 },
+  { id: "crai", title: "CRAI", icon: <Library size={24} />, color: "from-amber-400 to-orange-500", lightColor: "text-orange-600", itemCount: 1 },
+  { id: "rematricula", title: "Rematrícula", icon: <FileSignature size={24} />, color: "from-rose-400 to-pink-500", lightColor: "text-rose-600", itemCount: 1 },
+  { id: "correo", title: "Correo Institucional", icon: <Mail size={24} />, color: "from-blue-600 to-indigo-600", lightColor: "text-blue-700", itemCount: 1 },
+  { id: "drive", title: "Google Drive", icon: <Cloud size={24} />, color: "from-[#00a86b] to-[#008f5a]", lightColor: "text-green-700", itemCount: 2 },
+  { id: "word", title: "Microsoft Word", icon: <FileText size={24} />, color: "from-blue-400 to-blue-600", lightColor: "text-blue-600", itemCount: 1 }
+];
+
+const DigitalTools: React.FC = () => {
+  // 🕹️ Estado maestro de enrutamiento interno
+  const [activeSection, setActiveSection] = useState<string>('menu');
+
+  // Variaciones de animación Premium para transiciones fluidas de pantallas
+  const pageTransition: Variants = {
+    hidden: { opacity: 0, x: 15, scale: 0.99 },
+    visible: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
+    exit: { opacity: 0, x: -15, scale: 0.99, transition: { duration: 0.3, ease: "easeIn" } }
+  };
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } }
   };
 
   const itemVariants: Variants = {
@@ -16,166 +68,157 @@ const StudyTechniques: React.FC = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
-  const strategies = [
-    { title: "Mapas Conceptuales", icon: <Network size={24} />, desc: "Aprende a estructurar jerárquicamente la información para una comprensión profunda.", color: "from-blue-500 to-cyan-400" },
-    { title: "Cuadros Sinópticos", icon: <FileText size={24} />, desc: "Organiza ideas principales y secundarias de forma visual y resumida.", color: "from-indigo-500 to-blue-500" },
-    { title: "Lectura Comprensiva", icon: <BookOpen size={24} />, desc: "Técnicas de subrayado, sumillado y análisis crítico de textos académicos.", color: "from-violet-500 to-purple-400" },
-    { title: "Repaso Espaciado", icon: <Clock size={24} />, desc: "Combate la curva del olvido repasando en intervalos de tiempo estratégicos.", color: "from-[#003399] to-[#0077ff]" },
-    { title: "Mnemotecnia", icon: <BrainCircuit size={24} />, desc: "Crea asociaciones mentales fuertes para recordar listas, fórmulas y conceptos.", color: "from-sky-500 to-blue-400" },
-  ];
-
-  // AQUÍ ESTÁ LA MAGIA: Agregamos el ID real de Google Drive a cada archivo
-  const downloads = [
-    { name: "Plantilla Mapa Mental (Word)", size: "1.2 MB", format: "DOCX", driveId: "1p-lH9n_fo4tVOpOsxsQxhELEtPab9RmB" },
-    { name: "Planner de Estudio Semanal", size: "850 KB", format: "PDF", driveId: "1p-lH9n_fo4tVOpOsxsQxhELEtPab9RmB" },
-    { name: "Guía Práctica: Método Cornell", size: "2.1 MB", format: "PDF", driveId: "1p-lH9n_fo4tVOpOsxsQxhELEtPab9RmB" },
-    { name: "Fichas de Memorización (Flashcards)", size: "3.4 MB", format: "PPTX", driveId: "ID_DE_DRIVE_AQUI_4" },
-  ];
+  const handleBack = () => setActiveSection('menu');
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
-      
-      {/* Botón Volver */}
-      <motion.a 
-        href="/"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="inline-flex items-center gap-2 text-slate-500 hover:text-[#003399] transition-colors mb-8 group font-medium"
-      >
-        <div className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-[#0077ff]/10 transition-colors">
-          <ChevronLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
-        </div>
-        Volver al inicio
-      </motion.a>
-
-      {/* CABECERA DE LA PÁGINA */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-[2rem] overflow-hidden p-8 md:p-12 border border-white bg-white/60 backdrop-blur-xl shadow-xl shadow-slate-200/50 mb-16"
-      >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#0077ff]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-1.5 bg-blue-50 text-[#0077ff] px-3 py-1 rounded-full text-sm font-bold border border-blue-100 mb-4 uppercase tracking-wider">
-            <BrainCircuit size={16} /> Área de Desarrollo Académico
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
-            Técnicas y <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">Estrategias de Estudio</span>
-          </h1>
-          <p className="text-lg text-slate-600 leading-relaxed">
-            Optimiza tu tiempo y mejora tu rendimiento académico con metodologías probadas. Explora nuestras guías, descarga material práctico y descubre cómo aprende tu cerebro.
-          </p>
-        </div>
-      </motion.div>
-
-      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex flex-col gap-20">
+    <div className="w-full min-h-screen bg-slate-50/30 text-slate-800 antialiased selection:bg-blue-500 selection:text-white overflow-x-hidden">
+      <AnimatePresence mode="wait">
         
-        {/* SECCIÓN 1: MÉTODOS Y ESTRATEGIAS (Bento Grid) */}
-        <section>
-          <motion.div variants={itemVariants} className="flex items-center gap-2 mb-8">
-            <Sparkles className="text-[#0077ff] w-6 h-6" />
-            <h2 className="text-2xl font-bold text-slate-800">Metodologías Destacadas</h2>
+        {/* ================= ENRUTADOR DINÁMICO DE SUBPÁGINAS ================= */}
+        {activeSection === 'portal' && (
+          <motion.div key="portal" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <PortalEstudiantil onBack={handleBack} />
           </motion.div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {strategies.map((item, idx) => (
-              <motion.div 
-                key={idx}
-                variants={itemVariants}
-                whileHover={{ y: -5, scale: 0.98 }}
-                className="group relative bg-white border border-slate-200 rounded-3xl p-6 shadow-lg shadow-slate-200/40 hover:shadow-xl hover:border-[#0077ff]/30 transition-all cursor-pointer overflow-hidden"
-              >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-5 rounded-bl-full group-hover:scale-110 transition-transform duration-500`}></div>
-                
-                <div className={`w-12 h-12 rounded-2xl mb-6 flex items-center justify-center bg-gradient-to-br ${item.color} text-white shadow-md`}>
-                  {item.icon}
-                </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-[#003399] transition-colors">{item.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+        )}
 
-        {/* SECCIÓN 2: MATERIAL DESCARGABLE */}
-        <section>
-          <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Download className="text-[#0077ff] w-6 h-6" />
-                <h2 className="text-2xl font-bold text-slate-800">Material Descargable</h2>
+        {activeSection === 'aula' && (
+          <motion.div key="aula" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <AulaVirtual onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {activeSection === 'calendarios' && (
+          <motion.div key="calendarios" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <CalendariosAcademicos onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {activeSection === 'crai' && (
+          <motion.div key="crai" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <CraiPlataforma onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {activeSection === 'rematricula' && (
+          <motion.div key="rematricula" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <RematriculaGuia onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {activeSection === 'correo' && (
+          <motion.div key="correo" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <CorreoInstitucional onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {activeSection === 'drive' && (
+          <motion.div key="drive" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <GoogleDriveManual onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {activeSection === 'word' && (
+          <motion.div key="word" variants={pageTransition} initial="hidden" animate="visible" exit="exit">
+            <MicrosoftWordManual onBack={handleBack} />
+          </motion.div>
+        )}
+
+        {/* ================= VISTA HOME PRINCIPAL (MENÚ) ================= */}
+        {activeSection === 'menu' && (
+          <motion.div 
+            key="menu" 
+            variants={pageTransition} 
+            initial="hidden" 
+            animate="visible" 
+            exit="exit"
+            className="w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12"
+          >
+            {/* Botón Volver al Ecosistema/Sitio Principal */}
+            <motion.a 
+              href="/"
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 text-slate-500 hover:text-[#003399] transition-colors mb-8 group font-medium decoration-transparent cursor-pointer"
+            >
+              <div className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-[#0077ff]/10 transition-colors">
+                <ChevronLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
               </div>
-              <p className="text-slate-500 text-sm">Plantillas listas para usar en tus asignaturas.</p>
-            </div>
+              Volver al inicio
+            </motion.a>
+
+            {/* Cabecera Hero Premium con Efecto Glassmorphism */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative rounded-[2rem] overflow-hidden p-8 md:p-12 border border-white bg-white/70 backdrop-blur-xl shadow-xl shadow-slate-200/40 mb-12 md:mb-16"
+            >
+              <div className="absolute top-0 right-0 w-80 h-80 bg-[#0077ff]/8 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal-400/8 rounded-full blur-3xl pointer-events-none"></div>
+              
+              <div className="relative z-10 max-w-3xl">
+                <div className="inline-flex items-center gap-2 bg-blue-50 text-[#0077ff] px-3 py-1.5 rounded-full text-sm font-bold border border-blue-100 mb-6 uppercase tracking-wider">
+                  <FolderOpen size={16} /> Ecosistema Digital IPG
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-none md:leading-tight">
+                  Tus Herramientas <br className="hidden sm:inline"/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] via-[#0077ff] to-cyan-500">
+                    Digitales e Instructivos
+                  </span>
+                </h1>
+                <p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                  Accede de manera directa y dinámica a todos los manuales, tutoriales multimedia y guías paso a paso de las plataformas institucionales. Diseñado de forma accesible para simplificar tu vida académica.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Cuadrícula de Navegación de Carpetas Premium */}
+            <motion.div 
+              variants={containerVariants} 
+              initial="hidden" 
+              animate="visible" 
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            >
+              {categories.map((category) => (
+                <motion.div 
+                  key={category.id}
+                  variants={itemVariants}
+                  onClick={() => setActiveSection(category.id)}
+                  className="flex flex-col bg-white rounded-3xl border border-slate-200 shadow-md shadow-slate-200/20 overflow-hidden cursor-pointer hover:shadow-xl hover:border-blue-400/40 transition-all duration-300 group relative"
+                  whileHover={{ y: -5 }}
+                >
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.color} opacity-[0.03] rounded-bl-[80px] group-hover:scale-110 transition-transform duration-500 pointer-events-none`}></div>
+                  
+                  <div className="p-6 flex flex-col justify-between h-full min-h-[180px] relative z-10">
+                    <div>
+                      {/* Contenedor del Ícono con degradado de fondo */}
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-br ${category.color} text-white shadow-sm mb-4`}>
+                        {category.icon}
+                      </div>
+                      
+                      <h2 className="text-xl font-bold text-slate-800 group-hover:text-[#0077ff] transition-colors leading-snug">
+                        {category.title}
+                      </h2>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-4">
+                      <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                        {category.itemCount} {category.itemCount === 1 ? 'Recurso' : 'Recursos'}
+                      </span>
+                      
+                      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
+                        <ArrowRight size={16} />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {downloads.map((file, idx) => (
-              /* ENLACE DE DESCARGA: Cambiamos div por 'a' y apuntamos a la API */
-              <motion.a 
-                href={`/api/download?id=${file.driveId}`} // Llamamos al motor Edge con el ID
-                key={idx}
-                variants={itemVariants}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-[#0077ff]/40 transition-all cursor-pointer group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0077ff] font-bold text-xs border border-blue-100">
-                    {file.format}
-                  </div>
-                  <div>
-                    <h4 className="text-slate-700 font-semibold text-sm group-hover:text-[#003399] transition-colors">{file.name}</h4>
-                    <span className="text-xs text-slate-400">{file.size}</span>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#0077ff] group-hover:text-white transition-colors">
-                  <Download size={16} />
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </section>
-
-        {/* SECCIÓN 3: INFOGRAFÍAS */}
-        <section className="pb-10">
-          <motion.div variants={itemVariants} className="flex items-center gap-2 mb-8">
-            <ImageIcon className="text-[#0077ff] w-6 h-6" />
-            <h2 className="text-2xl font-bold text-slate-800">Infografías Rápidas</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { title: "El Método Pomodoro", url: "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=800&auto=format&fit=crop" },
-              { title: "Cómo estructurar apuntes", url: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=800&auto=format&fit=crop" },
-              { title: "Curva del Olvido de Ebbinghaus", url: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=800&auto=format&fit=crop" }
-            ].map((img, idx) => (
-              <motion.div 
-                key={idx}
-                variants={itemVariants}
-                className="group relative aspect-[4/5] rounded-3xl overflow-hidden shadow-lg cursor-pointer"
-              >
-                <img 
-                  src={img.url} 
-                  alt={img.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-                
-                <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full text-white text-xs font-medium mb-3 border border-white/30">
-                    Infografía
-                  </div>
-                  <h3 className="text-white font-bold text-lg">{img.title}</h3>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-      </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-export default StudyTechniques;
+export default DigitalTools;
