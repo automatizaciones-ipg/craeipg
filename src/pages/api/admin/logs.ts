@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
+import { ALLOWED_ADMINS } from '../../../lib/admins';
 
-// Declaración estricta para el caché local
 declare global {
   var LOCAL_LOGS_CACHE: Array<Record<string, string | null | undefined>> | undefined;
 }
@@ -18,14 +18,6 @@ interface AppLocals {
     env?: CloudflareEnv;
   };
 }
-
-// ==========================================
-// CONTROL CENTRALIZADO DE ADMINISTRADORES
-// ==========================================
-const ALLOWED_ADMINS: string[] = [
-  'luis.rivera@ipg.cl'
-  // 'nuevo.admin@ipg.cl' <-- Para agregar más en el futuro, solo añádelos aquí.
-];
 
 export const GET: APIRoute = async (context) => {
   const { request, locals } = context;

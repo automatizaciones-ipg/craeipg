@@ -7,7 +7,7 @@ import {
 
 export default function CraiPlataforma({ onBack }: { onBack: () => void }) {
   const resources = [
-    { name: "Guía Oficial de Acceso y Autenticación CRAI IPG", size: "1.8 MB", driveId: "ID_AQUI" }
+    { name: "Guía Oficial de Acceso y Autenticación CRAI IPG", size: "433 KB", driveId: "1AvKdtlFVgj4YXZY7eEdeVCLytJAvx_3l" }
   ];
 
   return (

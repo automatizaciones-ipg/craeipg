@@ -7,9 +7,9 @@ import {
 
 export default function PortalEstudiantil({ onBack }: { onBack: () => void }) {
   const resources = [
-    { name: "Instructivo de Acceso al Portal", size: "1.2 MB", driveId: "ID_AQUI" },
-    { name: "Guía de Certificados Online", size: "850 KB", driveId: "ID_AQUI" },
-    { name: "Instructivo de Inscripción de Asignaturas", size: "1.5 MB", driveId: "ID_AQUI" },
+    { name: "Instructivo de Acceso al Portal", size: "836 KB", driveId: "1WzTBnrxqndLldO0wQT4XQy8ejTRH6XwO" },
+    { name: "Guía de Certificados Online", size: "1.1 MB", driveId: "1fSD1MuseHfYq5N37J0npmTZr2qP9ztX3" },
+    { name: "Instructivo de Inscripción de Asignaturas", size: "1.1 MB", driveId: "1g0XGtD7f_GcnvyqLZSALd7eHccHJ3N2w" },
   ];
 
   return (

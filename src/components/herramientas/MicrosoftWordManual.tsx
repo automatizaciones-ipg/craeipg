@@ -9,7 +9,7 @@ export default function MicrosoftWordManual({ onBack }: { onBack: () => void }) 
   const [activeTab, setActiveTab] = useState<'inicio' | 'edicion' | 'formato' | 'elementos' | 'revision'>('inicio');
 
   const resources = [
-    { name: "Manual de Uso Básico de Microsoft Word IPG", size: "2.4 MB", driveId: "ID_WORD_AQUI" }
+    { name: "Manual de Uso Básico de Microsoft Word IPG", size: "1.2 MB", driveId: "1jgKcHbljDTYX6jcVqDvAydyYyFVQ8YZS" }
   ];
 
   const categories = [

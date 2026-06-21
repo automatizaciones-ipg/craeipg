@@ -7,7 +7,7 @@ import {
 
 export default function GoogleDriveManual({ onBack }: { onBack: () => void }) {
   const resources = [
-    { name: "Manual Completo de Google Drive IPG", size: "3.1 MB", driveId: "ID_AQUI" }
+    { name: "Manual Completo de Google Drive IPG", size: "2.2 MB", driveId: "1w7L1R9_PprWJhL0nzd234S8Vo-mx0jKc" }
   ];
 
   const permisos = [

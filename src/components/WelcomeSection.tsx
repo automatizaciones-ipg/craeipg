@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion, type Variants } from 'framer-motion';
-import { Play, Sparkles, MonitorPlay, Compass, ArrowRight, Library } from 'lucide-react';
+import { Play, Sparkles, Compass, ArrowRight, Library, BookOpen, Layers } from 'lucide-react';
+
+// Pega aquí el ID del video de Google Drive cuando lo subas (ej: "1HhBEhjZKZzuTbsQ8qL2gFVDS01u-m5ur")
+const TOUR_VIDEO_ID = '';
 
 const WelcomeSection: React.FC = () => {
   // Variantes para animación en cascada del texto y características
@@ -21,12 +24,17 @@ const WelcomeSection: React.FC = () => {
     {
       icon: <Compass className="w-5 h-5 text-[#0077ff]" />,
       title: "Navegación Intuitiva",
-      desc: "Descubre dónde están los recursos de APRENDE+."
+      desc: "6 secciones temáticas con contenido interactivo, tutoriales y recursos descargables.",
     },
     {
       icon: <Library className="w-5 h-5 text-[#0077ff]" />,
-      title: "Recursos",
-      desc: "Aprende a descargar y utilzar los recursos de APRENDE+."
+      title: "34 Recursos Disponibles",
+      desc: "PDFs, infografías, planners, videos y guías oficiales del CRAI IPG.",
+    },
+    {
+      icon: <Layers className="w-5 h-5 text-[#0077ff]" />,
+      title: "Busca al Instante",
+      desc: "Usa el buscador para encontrar cualquier recurso en segundos, sin navegar.",
     },
   ];
 
@@ -50,36 +58,60 @@ const WelcomeSection: React.FC = () => {
           {/* Brillo de fondo que se expande al hacer hover */}
           <div className="absolute -inset-1 bg-gradient-to-r from-[#003399] to-[#0077ff] rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-700"></div>
           
-          <div className="relative aspect-video bg-slate-900 rounded-[2rem] overflow-hidden shadow-2xl border border-white/10">
-            {/* Imagen de portada (Placeholder - Puedes cambiar la URL por tu miniatura) */}
-            <img 
-              src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop" 
-              alt="Video introductorio APRENDE+" 
-              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500 group-hover:scale-105 transform"
-            />
-            
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+          <div className="relative aspect-video bg-gradient-to-br from-[#091124] via-[#0f1d40] to-[#003399] rounded-[2rem] overflow-hidden shadow-2xl border border-white/10">
+            {/* Aurora blobs — siempre visibles */}
+            <div className="absolute -top-12 -left-12 w-56 h-56 bg-gradient-to-br from-[#0052cc] to-[#003380] rounded-full blur-[80px] opacity-60 animate-[blob_12s_ease-in-out_infinite]" />
+            <div className="absolute -bottom-12 -right-12 w-56 h-56 bg-gradient-to-tr from-[#00bfff] to-[#0052cc] rounded-full blur-[80px] opacity-50 animate-[blob_16s_ease-in-out_infinite_2s]" />
 
-            {/* Etiqueta flotante superior */}
-            <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-              ¿Qué es el APRENDE+?
-            </div>
-
-            {/* Botón de Play Central */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20">
-                <div className="absolute inset-0 bg-white/30 rounded-full animate-ping opacity-75"></div>
-                <div className="relative bg-white/90 backdrop-blur-sm w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Play className="w-6 h-6 md:w-8 md:h-8 text-[#003399] ml-1.5" fill="currentColor" />
+            {TOUR_VIDEO_ID ? (
+              /* ── Video de Drive: pegar ID arriba cuando esté listo ── */
+              <iframe
+                src={`https://drive.google.com/file/d/${TOUR_VIDEO_ID}/preview`}
+                className="absolute inset-0 w-full h-full z-10"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Tutorial APRENDE+ — Recorrido Virtual"
+                style={{ border: 'none' }}
+              />
+            ) : (
+              /* ── Placeholder: grid de stats mientras subes el video ── */
+              <>
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 z-10">
+                  <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+                    {[
+                      { value: '34', label: 'Recursos' },
+                      { value: '6',  label: 'Secciones' },
+                      { value: '100%', label: 'Gratuito' },
+                      { value: 'IPG', label: 'Oficial' },
+                    ].map((stat, i) => (
+                      <div key={i} className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 text-center">
+                        <div className="text-2xl font-black text-white tracking-tight">{stat.value}</div>
+                        <div className="text-[11px] font-semibold text-blue-200/80 uppercase tracking-wider mt-0.5">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-4 py-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                    <span className="text-white/70 text-xs font-medium">Video tutorial próximamente</span>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Duración abajo a la derecha */}
-            <div className="absolute bottom-4 right-4 bg-slate-900/60 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-md">
-              02:45
+                {/* Play button linking to recorrido virtual */}
+                <div className="absolute inset-0 flex items-end justify-center pb-6 z-10">
+                  <a href="/recorrido-virtual" className="flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 hover:bg-white/25 transition-all">
+                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
+                      <Play className="w-3 h-3 text-[#003399] ml-0.5" fill="currentColor" />
+                    </div>
+                    <span className="text-white text-xs font-semibold">Recorrido Virtual APRENDE+</span>
+                  </a>
+                </div>
+              </>
+            )}
+
+            {/* Badge top — siempre visible */}
+            <div className="absolute top-4 left-4 bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 z-20">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              APRENDE+ · CRAI IPG
             </div>
           </div>
         </motion.div>

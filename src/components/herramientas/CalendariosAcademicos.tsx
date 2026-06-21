@@ -6,8 +6,8 @@ import {
 
 export default function CalendariosAcademicos({ onBack }: { onBack: () => void }) {
   const resources = [
-    { name: "Calendario Académico Modalidad Online 2026", size: "850 KB", driveId: "ID_AQUI" },
-    { name: "Calendario Académico Modalidad Presencial 2026", size: "820 KB", driveId: "ID_AQUI" },
+    { name: "Calendario Académico Modalidad Online 2026", size: "753 KB", driveId: "1sFKze5ajWJchrt5rliSXmuV_cChwRKV_" },
+    { name: "Calendario Académico Modalidad Presencial 2026", size: "707 KB", driveId: "1UC9EMhBRlRnBd-xDby2Y-jJ6MTixv_sw" },
   ];
 
   return (

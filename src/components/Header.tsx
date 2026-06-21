@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, Menu, X, ChevronRight, LogOut, Loader2 } from 'lucide-react';
-// Importamos la función de cierre de sesión segura del cliente de auth-astro
 import { signOut } from 'auth-astro/client';
+import HelpModal from './HelpModal';
 
 // Definimos los enlaces de navegación del CRAE (100% alineados con el Grid)
 const navLinks = [
@@ -17,6 +17,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
+  const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
 
   useEffect(() => {
     // Patrón de optimización para no saturar la memoria
@@ -94,10 +95,11 @@ const Header: React.FC = () => {
             {/* 3. ACCIONES Y MENÚ HAMBURGUESA (Derecha) */}
             <div className="flex items-center gap-3 shrink-0">
               
-              <motion.button 
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="hidden sm:flex items-center gap-2 p-2 text-slate-500 hover:text-[#003399] transition-colors"
+                onClick={() => setIsHelpOpen(true)}
+                className="hidden sm:flex items-center gap-2 p-2 rounded-xl text-slate-500 hover:text-[#003399] hover:bg-blue-50 transition-all"
                 title="Centro de Ayuda"
               >
                 <HelpCircle size={20} strokeWidth={2.5} />
@@ -228,6 +230,8 @@ const Header: React.FC = () => {
         </AnimatePresence>
 
       </div>
+
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </header>
   );
 };

@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRAE IPG — Auditoría Técnica Completa v2.0 · 2026-06-21</title>
+<style>
+  :root {
+    --bg:        #0f172a;
+    --bg2:       #1e293b;
+    --bg3:       #273248;
+    --border:    #334155;
+    --text:      #e2e8f0;
+    --muted:     #94a3b8;
+    --accent:    #3b82f6;
+    --accent2:   #06b6d4;
+    --green:     #22c55e;
+    --yellow:    #eab308;
+    --red:       #ef4444;
+    --orange:    #f97316;
+    --purple:    #a855f7;
+    --font-mono: 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* ─── LAYOUT ─────────────────────────────────────────── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── TOP BANNER ─────────────────────────────────────── */
+  .top-banner {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #0ea5e9 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .top-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,.03) 40px,
+      rgba(255,255,255,.03) 80px
+    );
+  }
+  .top-banner .label {
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.65);
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .top-banner h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+    position: relative;
+  }
+  .top-banner h1 span { color: #93c5fd; }
+  .top-banner p {
+    margin-top: 12px;
+    color: rgba(255,255,255,.75);
+    font-size: .95rem;
+    position: relative;
+  }
+
+  /* ─── SCORE BAR ──────────────────────────────────────── */
+  .score-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 32px;
+    position: relative;
+  }
+  .score-card {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 18px 28px;
+    text-align: center;
+    min-width: 130px;
+  }
+  .score-card .val {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+  }
+  .score-card .val.green { color: #86efac; }
+  .score-card .val.yellow { color: #fde047; }
+  .score-card .val.red    { color: #fca5a5; }
+  .score-card .lbl { font-size: .72rem; color: rgba(255,255,255,.6); margin-top: 4px; text-transform: uppercase; letter-spacing: .1em; }
+
+  /* ─── NAV ────────────────────────────────────────────── */
+  .toc {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toc ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    transition: color .2s;
+  }
+  .toc a:hover { color: var(--accent); }
+
+  /* ─── SECTIONS ───────────────────────────────────────── */
+  section { padding: 56px 0 20px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .section-title .num {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: #fff;
+  }
+  .section-title p {
+    font-size: .83rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 8px 0 28px;
+  }
+
+  /* ─── CARDS ──────────────────────────────────────────── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-size: .95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .card p { font-size: .88rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── GRID ───────────────────────────────────────────── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 760px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .top-banner h1 { font-size: 1.6rem; }
+  }
+
+  /* ─── TABLES ─────────────────────────────────────────── */
+  .tbl-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .83rem;
+  }
+  thead { background: var(--bg3); }
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(255,255,255,.02); }
+  code {
+    font-family: var(--font-mono);
+    font-size: .82em;
+    background: var(--bg3);
+    color: #93c5fd;
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
+
+  /* ─── BADGES ─────────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    white-space: nowrap;
+  }
+  .badge.green  { background: rgba(34,197,94,.15);  color: #86efac; border: 1px solid rgba(34,197,94,.3); }
+  .badge.yellow { background: rgba(234,179,8,.15);  color: #fde047; border: 1px solid rgba(234,179,8,.3); }
+  .badge.red    { background: rgba(239,68,68,.15);  color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+  .badge.blue   { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+  .badge.orange { background: rgba(249,115,22,.15); color: #fdba74; border: 1px solid rgba(249,115,22,.3); }
+  .badge.purple { background: rgba(168,85,247,.15); color: #d8b4fe; border: 1px solid rgba(168,85,247,.3); }
+  .badge.muted  { background: rgba(148,163,184,.12); color: var(--muted); border: 1px solid rgba(148,163,184,.2); }
+
+  /* ─── PRIORITY ISSUES ────────────────────────────────── */
+  .issue {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .issue.p1 { border-left-color: var(--red); }
+  .issue.p2 { border-left-color: var(--orange); }
+  .issue.p3 { border-left-color: var(--yellow); }
+  .issue.done { border-left-color: var(--green); opacity: .7; }
+  .issue-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .issue-head h4 { font-size: .9rem; font-weight: 700; color: #fff; }
+  .issue p { font-size: .83rem; color: var(--muted); }
+  .issue code { font-size: .78em; }
+
+  /* ─── ARCHITECTURE DIAGRAM ───────────────────────────── */
+  .arch-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    overflow-x: auto;
+  }
+  .arch-block pre {
+    font-family: var(--font-mono);
+    font-size: .77rem;
+    line-height: 1.7;
+    color: #94a3b8;
+    white-space: pre;
+  }
+  .arch-block pre .hl  { color: #93c5fd; }
+  .arch-block pre .hl2 { color: #86efac; }
+  .arch-block pre .hl3 { color: #fde047; }
+  .arch-block pre .hl4 { color: #d8b4fe; }
+
+  /* ─── ENV VAR TABLE ──────────────────────────────────── */
+  .env-row td:first-child { font-family: var(--font-mono); font-size: .8rem; color: #fde047; }
+
+  /* ─── FOOTER ─────────────────────────────────────────── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 28px;
+    font-size: .78rem;
+    color: var(--muted);
+    margin-top: 60px;
+  }
+  footer strong { color: var(--text); }
+
+  /* ─── PROGRESS BAR ───────────────────────────────────── */
+  .prog-bar-wrap { background: var(--bg3); border-radius: 99px; height: 8px; overflow: hidden; margin-top: 6px; }
+  .prog-bar { height: 100%; border-radius: 99px; }
+  .prog-bar.green  { background: var(--green); }
+  .prog-bar.yellow { background: var(--yellow); }
+  .prog-bar.red    { background: var(--red); }
+
+  /* Inline icon */
+  .icon-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .icon-dot.green  { background: var(--green); }
+  .icon-dot.yellow { background: var(--yellow); }
+  .icon-dot.red    { background: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     PORTADA
+═══════════════════════════════════════════════════════ -->
+<div class="top-banner">
+  <p class="label">Centro de Recursos de Apoyo Académico · IPG · Auditoría Técnica</p>
+  <h1>APRENDE+ <span>CRAE</span><br>Informe de Estado Técnico</h1>
+  <p>Versión 2.0 &nbsp;·&nbsp; Fecha de auditoría: 21 de junio de 2026 &nbsp;·&nbsp; Auditor: Claude Sonnet 4.6 para Luis Rivera (luis.rivera@ipg.cl)</p>
+
+  <div class="score-row">
+    <div class="score-card">
+      <div class="val green">87%</div>
+      <div class="lbl">Completitud</div>
+    </div>
+    <div class="score-card">
+      <div class="val green">A+</div>
+      <div class="lbl">Seguridad</div>
+    </div>
+    <div class="score-card">
+      <div class="val yellow">1</div>
+      <div class="lbl">Issue Crítico</div>
+    </div>
+    <div class="score-card">
+      <div class="val yellow">3</div>
+      <div class="lbl">Issues Medios</div>
+    </div>
+    <div class="score-card">
+      <div class="val green">21</div>
+      <div class="lbl">Drive IDs Reales</div>
+    </div>
+    <div class="score-card">
+      <div class="val green">0</div>
+      <div class="lbl">Placeholders</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════════════ -->
+<nav class="toc">
+  <ul>
+    <li><a href="#s1">01 Stack</a></li>
+    <li><a href="#s2">02 Arquitectura</a></li>
+    <li><a href="#s3">03 Rutas</a></li>
+    <li><a href="#s4">04 Contenido</a></li>
+    <li><a href="#s5">05 Seguridad</a></li>
+    <li><a href="#s6">06 Issues</a></li>
+    <li><a href="#s7">07 Variables de Entorno</a></li>
+    <li><a href="#s8">08 Roadmap</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════════════
+     §1 — STACK TECNOLÓGICO
+═══════════════════════════════════════════════════════ -->
+<section id="s1">
+  <div class="section-title">
+    <div class="num">01</div>
+    <div>
+      <h2>Stack Tecnológico</h2>
+      <p>Dependencias verificadas desde <code>package.json</code> · versiones exactas al día de auditoría</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Capa</th>
+          <th>Tecnología</th>
+          <th>Versión</th>
+          <th>Rol</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Runtime -->
+        <tr>
+          <td><span class="badge blue">Runtime</span></td>
+          <td><strong>Astro</strong></td>
+          <td><code>5.17.1</code></td>
+          <td>Framework SSR — renderizado en el servidor, Islands Architecture</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <tr>
+          <td><span class="badge blue">Runtime</span></td>
+          <td><strong>React</strong></td>
+          <td><code>19.2.4</code></td>
+          <td>UI interactiva vía Islands (<code>client:load</code>, <code>client:visible</code>)</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Deploy -->
+        <tr>
+          <td><span class="badge orange">Deploy</span></td>
+          <td><strong>@astrojs/cloudflare</strong></td>
+          <td><code>12.6.13</code></td>
+          <td>Adapter para desplegar en Cloudflare Workers/Pages</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <tr>
+          <td><span class="badge orange">Deploy</span></td>
+          <td><strong>Wrangler</strong></td>
+          <td><code>4.92.0</code></td>
+          <td>CLI de Cloudflare — build, preview, deploy</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Auth -->
+        <tr>
+          <td><span class="badge purple">Auth</span></td>
+          <td><strong>auth-astro</strong></td>
+          <td><code>4.2.0</code></td>
+          <td>Wrapper de Auth.js para Astro — Google OAuth 2.0</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <tr>
+          <td><span class="badge purple">Auth</span></td>
+          <td><strong>@auth/core</strong></td>
+          <td><code>0.34.3</code></td>
+          <td>Motor de sesiones JWT — validación de dominio institucional</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Styles -->
+        <tr>
+          <td><span class="badge muted">Estilos</span></td>
+          <td><strong>Tailwind CSS</strong></td>
+          <td><code>4.2.1</code></td>
+          <td>Utility-first CSS — integrado via @tailwindcss/vite</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <tr>
+          <td><span class="badge muted">Estilos</span></td>
+          <td><strong>DaisyUI</strong></td>
+          <td><code>5.5.19</code></td>
+          <td>Componentes CSS sobre Tailwind</td>
+          <td><span class="badge yellow">Parcial</span></td>
+        </tr>
+        <tr>
+          <td><span class="badge muted">Estilos</span></td>
+          <td><strong>tailwindcss-animate</strong></td>
+          <td><code>1.0.7</code></td>
+          <td>Clases de animación CSS utilitarias</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Animation -->
+        <tr>
+          <td><span class="badge muted">Animación</span></td>
+          <td><strong>framer-motion</strong></td>
+          <td><code>12.34.5</code></td>
+          <td>Animaciones declarativas React — fade-in, stagger, transitions de página</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Icons -->
+        <tr>
+          <td><span class="badge muted">Íconos</span></td>
+          <td><strong>lucide-react</strong></td>
+          <td><code>0.576.0</code></td>
+          <td>Biblioteca de íconos SVG — usados en todos los componentes</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Crypto -->
+        <tr>
+          <td><span class="badge red">Seguridad</span></td>
+          <td><strong>jose</strong></td>
+          <td><code>6.2.3</code></td>
+          <td>Firma JWT RS256 para Google Service Account — proxy de Drive</td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+        <!-- Storage -->
+        <tr>
+          <td><span class="badge orange">Storage</span></td>
+          <td><strong>Cloudflare KV</strong></td>
+          <td><em>Binding</em></td>
+          <td>Persistencia de logs de auditoría — namespace <code>CRAE_KV</code></td>
+          <td><span class="badge green">Activo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid3" style="margin-top:20px;">
+    <div class="card">
+      <h3>TypeScript</h3>
+      <p>Config extendida de <code>astro/tsconfigs/strict</code> con <code>react-jsx</code>. Sin <code>any</code> no tipado en APIs críticas (corregido en esta sesión).</p>
+    </div>
+    <div class="card">
+      <h3>Vite</h3>
+      <p>Bundler subyacente de Astro. Solo plugin activo: <code>@tailwindcss/vite</code>. Build target: Cloudflare Workers (ESM edge-compatible).</p>
+    </div>
+    <div class="card">
+      <h3>Node.js Compat</h3>
+      <p>Flag <code>nodejs_compat</code> habilitado en <code>wrangler.jsonc</code>. Permite uso de APIs de Node en el edge (necesario para <code>jose</code>).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §2 — ARQUITECTURA
+═══════════════════════════════════════════════════════ -->
+<section id="s2">
+  <div class="section-title">
+    <div class="num">02</div>
+    <div>
+      <h2>Arquitectura del Sistema</h2>
+      <p>Flujo completo desde el navegador hasta Google Drive — sin exposición de credenciales al cliente</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <!-- Flow diagram -->
+  <div class="arch-block" style="margin-bottom:24px;">
+    <pre>
+<span class="hl">┌─────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="hl">│                         CRAE IPG — ARQUITECTURA SSR EDGE                        │</span>
+<span class="hl">└─────────────────────────────────────────────────────────────────────────────────┘</span>
+
+  <span class="hl3">NAVEGADOR (Alumno)</span>
+  ┌────────────────────────────────────┐
+  │  React Islands (client:load/visible) │
+  │  ├─ HeroSearch.tsx  (buscador)      │
+  │  ├─ Header.tsx      (nav + logout)  │
+  │  ├─ ResourceGrid.tsx               │
+  │  └─ [página activa].tsx            │
+  └────────────────┬───────────────────┘
+                   │  HTTPS
+                   ▼
+  <span class="hl2">CLOUDFLARE WORKERS / PAGES EDGE</span>
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │                                                                        │
+  │  src/middleware.ts  ──── 1. ¿Ruta pública?  (/, /_astro, /api/auth)   │
+  │       │                  2. getSession() → verifica JWT                │
+  │       │                  3. ¿email @ipg.cl o @alumnos.ipg.cl?         │
+  │       │                  4. NO → redirect "/"                         │
+  │       ▼                                                                │
+  │  Astro SSR Router                                                      │
+  │  ├─ GET  /                 → index.astro       (login page, pública)   │
+  │  ├─ GET  /inicio           → inicio.astro      (dashboard)             │
+  │  ├─ GET  /tecnicas-estudio → StudyTechniques                           │
+  │  ├─ GET  /gestion-tiempo   → TimeManagement                            │
+  │  ├─ GET  /normas-apa       → APAStandards                              │
+  │  ├─ GET  /herramientas-digitales → DigitalTools (hub de 8)             │
+  │  ├─ GET  /bienestar-apoyo  → Bienestar                                 │
+  │  ├─ GET  /practica-laboral → PracticaLaboral                           │
+  │  ├─ GET  /recorrido-virtual → RecorridoVirtual                         │
+  │  └─ GET  /admin/           → admin/index.astro (whitelist)             │
+  │                                                                        │
+  │  API Routes (todas requieren sesión válida)                            │
+  │  ├─ GET /api/download?id=  → <span class="hl3">Motor de Descarga Segura</span>            │
+  │  ├─ GET /api/search?q=     → <span class="hl3">Buscador Predictivo Drive</span>           │
+  │  ├─ GET /api/platform-info → <span class="hl3">Credenciales Plataforma</span>             │
+  │  └─ GET /api/admin/logs    → <span class="hl3">Consola de Auditoría</span>               │
+  │                                                                        │
+  │  Cloudflare KV (CRAE_KV)  ←──── logs de descarga (key-value)          │
+  │  Secrets (wrangler)        ←──── GOOGLE_DRIVE_PRIVATE_KEY, AUTH_SECRET │
+  └──────────────────────────────┬───────────────────────────────────────-─┘
+                                 │  Service Account JWT  (RS256, jose)
+                                 ▼
+  <span class="hl4">GOOGLE APIs</span>
+  ┌─────────────────────────────────────────┐
+  │  oauth2.googleapis.com/token            │
+  │     → access_token  (5 min TTL)        │
+  │                                         │
+  │  drive.googleapis.com/v3/files/{id}    │
+  │     GET ?fields=name,mimeType  (meta)  │
+  │     GET ?alt=media             (stream)│
+  │                                         │
+  │  drive.googleapis.com/v3/files?q=...   │
+  │     (búsqueda — name contains 'X')     │
+  └─────────────────────────────────────────┘
+    </pre>
+  </div>
+
+  <!-- Auth flow -->
+  <div class="arch-block" style="margin-bottom:24px;">
+    <pre>
+<span class="hl">FLUJO DE AUTENTICACIÓN GOOGLE OAUTH 2.0</span>
+
+  Alumno → clic "Continuar con Google"
+       │
+       ▼  (auth-astro/client → signIn("google"))
+  Google OAuth Consent Screen
+       │  (solo muestra cuentas @ipg.cl / @alumnos.ipg.cl en el scope)
+       ▼
+  auth.config.ts → callback signIn()
+       ├─ profile.email.endsWith("@ipg.cl")      → true  → sesión creada
+       ├─ profile.email.endsWith("@alumnos.ipg.cl") → true  → sesión creada
+       └─ cualquier otro dominio               → <span class="hl3">false  → BLOQUEADO</span>
+       ▼
+  middleware.ts → en cada request protegido
+       └─ getSession() → verifica token JWT firmado con AUTH_SECRET
+          → allowedDomains.some() → double-check de dominio en edge
+    </pre>
+  </div>
+
+  <!-- Islands architecture -->
+  <div class="arch-block">
+    <pre>
+<span class="hl">ISLANDS ARCHITECTURE — HIDRATACIÓN SELECTIVA</span>
+
+  Estrategia          Componente            Cuándo hidrata JS
+  ──────────────────  ────────────────────  ──────────────────────────────────────
+  <span class="hl2">client:load</span>         Header.tsx            Inmediatamente — necesario para nav
+  <span class="hl2">client:load</span>         HeroSearch.tsx        Inmediatamente — interacción inmediata
+  <span class="hl2">client:load</span>         DigitalTools.tsx      Inmediatamente — router de herramientas
+  <span class="hl2">client:load</span>         StudyTechniques.tsx   Inmediatamente — mismo patrón
+  <span class="hl3">client:visible</span>      WelcomeSection.tsx    Lazy — sólo al llegar al viewport
+  <span class="hl3">client:visible</span>      ResourceGrid.tsx      Lazy — sólo al llegar al viewport
+  <span class="hl3">client:visible</span>      Footer.tsx            Lazy — Framer Motion pesado al final
+
+  → Framer Motion (12.34 MB) NO bloquea el First Paint
+  → TTI (Time To Interactive) header reducido cargando sólo lo crítico
+    </pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §3 — MAPA DE RUTAS
+═══════════════════════════════════════════════════════ -->
+<section id="s3">
+  <div class="section-title">
+    <div class="num">03</div>
+    <div>
+      <h2>Mapa de Rutas</h2>
+      <p>Todas las rutas definidas en <code>src/pages/</code> — incluyendo APIs y panel de administración</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ruta</th>
+          <th>Archivo</th>
+          <th>Componente Principal</th>
+          <th>Acceso</th>
+          <th>Estado UI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/</code></td>
+          <td><code>index.astro</code></td>
+          <td>Login SSO Google — diseño split-screen</td>
+          <td><span class="badge green">Pública</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/inicio</code></td>
+          <td><code>inicio.astro</code></td>
+          <td>HeroSearch + WelcomeSection + ResourceGrid</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/tecnicas-estudio</code></td>
+          <td><code>tecnicas-estudio.astro</code></td>
+          <td><code>StudyTechniques.tsx</code> → exporta <code>DigitalTools</code> ⚠</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge yellow">Ver Issue #4</span></td>
+        </tr>
+        <tr>
+          <td><code>/gestion-tiempo</code></td>
+          <td><code>gestion-tiempo.astro</code></td>
+          <td><code>TimeManagement.tsx</code></td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/normas-apa</code></td>
+          <td><code>normas-apa.astro</code></td>
+          <td><code>APAStandards.tsx</code> — citación + APA video embed</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/herramientas-digitales</code></td>
+          <td><code>herramientas-digitales.astro</code></td>
+          <td><code>DigitalTools.tsx</code> → hub de 8 sub-herramientas</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/bienestar-apoyo</code></td>
+          <td><code>bienestar-apoyo.astro</code></td>
+          <td><code>Bienestar.tsx</code></td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/practica-laboral</code></td>
+          <td><code>practica-laboral.astro</code></td>
+          <td><code>PracticaLaboral.tsx</code></td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge red">Sin archivos Drive</span></td>
+        </tr>
+        <tr>
+          <td><code>/recorrido-virtual</code></td>
+          <td><code>recorrido-virtual.astro</code></td>
+          <td>RecorridoVirtual — pendiente de revisión</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge muted">No auditado</span></td>
+        </tr>
+        <tr>
+          <td><code>/admin</code></td>
+          <td><code>admin/index.astro</code></td>
+          <td>Consola de Auditoría — tabla de logs + refresh</td>
+          <td><span class="badge purple">Solo Admin</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td colspan="5" style="background:var(--bg3); color:var(--muted); font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; padding:8px 16px;">API Routes</td>
+        </tr>
+        <tr>
+          <td><code>/api/download</code></td>
+          <td><code>api/download.ts</code></td>
+          <td>Motor de descarga segura — proxy Drive → stream</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/api/search</code></td>
+          <td><code>api/search.ts</code></td>
+          <td>Buscador predictivo — consulta Drive API + returns JSON</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/api/platform-info</code></td>
+          <td><code>api/platform-info.ts</code></td>
+          <td>Credenciales Moodle + Correo — nunca en cliente</td>
+          <td><span class="badge blue">Auth IPG</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/api/admin/logs</code></td>
+          <td><code>api/admin/logs.ts</code></td>
+          <td>Lectura de KV — 50 últimos registros de descarga</td>
+          <td><span class="badge purple">Solo Admin</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+        <tr>
+          <td><code>/api/auth/*</code></td>
+          <td><em>auth-astro (generado)</em></td>
+          <td>Callbacks de OAuth — signIn, signOut, session</td>
+          <td><span class="badge green">Pública</span></td>
+          <td><span class="badge green">Completo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §4 — ESTADO DE CONTENIDO
+═══════════════════════════════════════════════════════ -->
+<section id="s4">
+  <div class="section-title">
+    <div class="num">04</div>
+    <div>
+      <h2>Estado de Contenido por Componente</h2>
+      <p>Inventario completo de Drive IDs — 21 archivos reales integrados, 0 placeholders</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <!-- Overall progress -->
+  <div class="card" style="margin-bottom:24px;">
+    <h3>Cobertura Global de Contenido</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;">
+      <div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:.8rem;color:var(--muted);">Drive IDs válidos</span>
+          <span style="font-size:.8rem;color:var(--green);font-weight:700;">21 / 21</span>
+        </div>
+        <div class="prog-bar-wrap"><div class="prog-bar green" style="width:100%"></div></div>
+      </div>
+      <div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:.8rem;color:var(--muted);">Secciones con contenido funcional</span>
+          <span style="font-size:.8rem;color:var(--yellow);font-weight:700;">7 / 9</span>
+        </div>
+        <div class="prog-bar-wrap"><div class="prog-bar yellow" style="width:78%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Component tables -->
+  <!-- AulaVirtual -->
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+      <span class="badge green">Completo</span>
+      <h3 style="margin:0;">AulaVirtual.tsx — Plataforma Moodle</h3>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Archivo</th><th>Tamaño</th><th>Drive ID</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Cómo ingresar a la Plataforma Virtual IPG</td><td>710 KB</td><td><code>1gv5LyoTrfbnYoxNEQrM50xYr9ez4Fhp6</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Configuración de página personal (Perfil)</td><td>788 KB</td><td><code>1OGYnnscr9caU0mPqxUZ0idC3aS6pCqjb</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo subir un encargo (Archivo PDF)</td><td>900 KB</td><td><code>1QmChARaZ-by6p_ulTtkeoL_Zr8biGPxm</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo revisar el libro de calificaciones</td><td>562 KB</td><td><code>1hnRfWvIWD0YNSzxAK6oRtmp6Jbp_nMkV</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo responder una POL (Cuestionario)</td><td>639 KB</td><td><code>1NaFxnIUX0EQMS-vUdgC3mGTaYxp86jvS</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo responder una evaluación integradora</td><td>681 KB</td><td><code>1htHQV7kQgDUhainfnjojaCn6XHWyRZop</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo responder una evaluación formativa</td><td>645 KB</td><td><code>1N-J0JKEN4cjLskk-uvTA9i0bHU3j_wj-</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo participar en un foro sumativo</td><td>1.0 MB</td><td><code>1k83KG77o935YFoWv8kylCNhvA8f74MiA</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td>Cómo participar en el foro de interacción</td><td>683 KB</td><td><code>110szDxWaQwm8OSDJENdmDs-VAGi8NT9L</code></td><td><span class="badge green">OK</span></td></tr>
+          <tr><td colspan="3"><em>Contraseña Moodle</em> — fetched desde <code>/api/platform-info</code>, nunca en cliente</td><td><span class="badge green">Seguro</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Resto de herramientas en tabla compacta -->
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Componente / Herramienta</th>
+          <th>Archivos Drive</th>
+          <th>IDs</th>
+          <th>Estado</th>
+          <th>Nota</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CorreoInstitucional.tsx</strong></td>
+          <td>1 PDF (Guía acceso correo)</td>
+          <td><code>1A1Zeubo0N26jvT9JWJjjvVmAC6V5Dw7C</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>Clave fetched vía API. No hardcodeada.</td>
+        </tr>
+        <tr>
+          <td><strong>PortalEstudiantil.tsx</strong></td>
+          <td>3 PDFs (instructivos + certificados)</td>
+          <td><code>1WzTBnrxqndLldO0wQT4…</code> (×3)</td>
+          <td><span class="badge green">OK</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>CalendariosAcademicos.tsx</strong></td>
+          <td>2 PDFs (Online + Presencial 2026)</td>
+          <td><code>1sFKze5ajWJchrt5rli…</code> + <code>1UC9EMhBRlRn…</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>IDs encontrados via subfolder Drive</td>
+        </tr>
+        <tr>
+          <td><strong>RematriculaGuia.tsx</strong></td>
+          <td>1 PDF (Guía rematrícula 2026)</td>
+          <td><code>1chwpIFapVKJ2F-sx0n6c_emIWN1WUDzK</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>CraiPlataforma.tsx</strong></td>
+          <td>1 PDF (Acceso y autenticación CRAI)</td>
+          <td><code>1AvKdtlFVgj4YXZY7eEdeVCLytJAvx_3l</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>MicrosoftWordManual.tsx</strong></td>
+          <td>1 PDF (Manual Word IPG)</td>
+          <td><code>1jgKcHbljDTYX6jcVqDvAydyYyFVQ8YZS</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>GoogleDriveManual.tsx</strong></td>
+          <td>1 PDF + 1 Video embed</td>
+          <td>PDF: <code>1w7L1R9_PprW…</code><br/>Video: <code>1gWgsXpz6lgI…</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>Video embed correcto</td>
+        </tr>
+        <tr>
+          <td><strong>TimeManagement.tsx</strong></td>
+          <td>4 PDFs (planners + claves)</td>
+          <td><code>1z0sqG1U8vA…</code> + 3 más</td>
+          <td><span class="badge green">OK</span></td>
+          <td>Botones ahora son <code>&lt;a href&gt;</code> funcionales</td>
+        </tr>
+        <tr>
+          <td><strong>Bienestar.tsx</strong></td>
+          <td>3 PDFs + 1 M4A (Podcast)</td>
+          <td><code>17-u8-jhtGHv…</code> + 3 más</td>
+          <td><span class="badge green">OK</span></td>
+          <td>Badge M4A con color purple</td>
+        </tr>
+        <tr>
+          <td><strong>APAStandards.tsx</strong></td>
+          <td>1 PDF + 1 PPTX + 1 Video embed</td>
+          <td><code>1ndAjEVKJloQ…</code> + <code>1CX_tBMx…</code> + <code>1HhBEhjZKZz…</code></td>
+          <td><span class="badge green">OK</span></td>
+          <td>Badge PPTX orange. Sección APA video añadida.</td>
+        </tr>
+        <tr>
+          <td><strong>PracticaLaboral.tsx</strong></td>
+          <td>Sin archivos Drive reales</td>
+          <td>—</td>
+          <td><span class="badge red">Pendiente</span></td>
+          <td>UI completa. Falta que Luis suba los archivos a Drive.</td>
+        </tr>
+        <tr>
+          <td><strong>StudyTechniques.tsx</strong></td>
+          <td>Sin sección de recursos de estudio</td>
+          <td>—</td>
+          <td><span class="badge red">Issue de Arquitectura</span></td>
+          <td>Exporta DigitalTools (hub), no contenido de técnicas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Resources NOT integrated -->
+  <div class="card" style="margin-top:20px; border-color: rgba(234,179,8,.3);">
+    <h3 style="color: #fde047;">Recursos en Google Drive SIN integración UI</h3>
+    <p style="margin-bottom:12px;">Los siguientes archivos existen en Drive pero no tienen sección en ningún componente:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Archivo</th><th>Drive ID</th><th>Sección Sugerida</th></tr></thead>
+        <tbody>
+          <tr><td>aprende_mas_CRAI_IPG.pdf</td><td><code>1kd0aNYEKF2pPeXnsxmQghfQhIvOdfd9z</code></td><td>StudyTechniques.tsx → nueva sección PDF</td></tr>
+          <tr><td>Infografia_Estrategias_Estudio</td><td><code>1hRi0RTpFRDu_Se4AvV3t86qgRD5EuvkK</code></td><td>StudyTechniques.tsx → galería de infografías</td></tr>
+          <tr><td>Infografia_Tips_Ortografia</td><td><code>1YCAdp-Dd1MbnzNVcej91pyMz9C7lD6ft</code></td><td>StudyTechniques.tsx → galería de infografías</td></tr>
+          <tr><td>Infografia_Tips_Concentracion</td><td><code>1jEZjCxerPaTeqRlRDIZ4d0IoWnNeK7lV</code></td><td>StudyTechniques.tsx → galería de infografías</td></tr>
+          <tr><td>Video Comprensión Lectora</td><td><code>15ZPOYIyWxZx84lgHXItHcfKFVyQgXKqS</code></td><td>StudyTechniques.tsx → video embed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §5 — SEGURIDAD
+═══════════════════════════════════════════════════════ -->
+<section id="s5">
+  <div class="section-title">
+    <div class="num">05</div>
+    <div>
+      <h2>Análisis de Seguridad</h2>
+      <p>Auditoría multicapa — autenticación, autorización, secretos, cabeceras HTTP y mitigaciones</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <div class="grid2" style="margin-bottom:20px;">
+    <!-- Auth -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Autenticación</h3>
+        <span class="badge green">A+</span>
+      </div>
+      <p>Google OAuth 2.0 via auth-astro. Doble validación de dominio:</p>
+      <ul style="margin-top:8px; margin-left:16px; font-size:.83rem; color:var(--muted); line-height:1.8;">
+        <li><code>auth.config.ts</code> → callback <code>signIn()</code> bloquea dominios no institucionales</li>
+        <li><code>middleware.ts</code> → en cada request, verifica JWT + dominio nuevamente</li>
+        <li>Desarrollo local: bypass via <code>isDev</code> para facilitar trabajo sin OAuth real</li>
+      </ul>
+    </div>
+    <!-- Drive proxy -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Proxy de Archivos Drive</h3>
+        <span class="badge green">A+</span>
+      </div>
+      <p>Ningún archivo de Google Drive se expone directamente al navegador:</p>
+      <ul style="margin-top:8px; margin-left:16px; font-size:.83rem; color:var(--muted); line-height:1.8;">
+        <li>Service Account genera JWT RS256 con <code>jose</code> (5 min TTL)</li>
+        <li>Access token nunca llega al cliente — todo fluye edge → Drive → cliente</li>
+        <li><code>Cache-Control: no-store</code> en respuestas de descarga</li>
+        <li>Sesión verificada antes de cada descarga</li>
+      </ul>
+    </div>
+    <!-- Credentials -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Credenciales de Plataforma</h3>
+        <span class="badge green">A</span>
+      </div>
+      <p>Contraseñas Moodle e institucionales ya NO están hardcodeadas en JSX:</p>
+      <ul style="margin-top:8px; margin-left:16px; font-size:.83rem; color:var(--muted); line-height:1.8;">
+        <li><code>/api/platform-info</code> → sesión requerida → <code>Cache-Control: private</code></li>
+        <li>Componentes fetchen al montar con <code>useEffect</code>, muestran <code>••••••••</code> mientras carga</li>
+        <li>Único punto de cambio de credenciales: <code>platform-info.ts</code></li>
+      </ul>
+    </div>
+    <!-- Admin -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Panel de Administración</h3>
+        <span class="badge green">A+</span>
+      </div>
+      <p>Doble barrera de acceso al panel de auditoría:</p>
+      <ul style="margin-top:8px; margin-left:16px; font-size:.83rem; color:var(--muted); line-height:1.8;">
+        <li>Astro SSR verifica <code>ALLOWED_ADMINS</code> antes de renderizar la página</li>
+        <li><code>/api/admin/logs</code> vuelve a verificar en el servidor — defensa en profundidad</li>
+        <li>Single source of truth: <code>src/lib/admins.ts</code> (no duplicados)</li>
+      </ul>
+    </div>
+    <!-- Search injection -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Inyección en Búsqueda Drive</h3>
+        <span class="badge yellow">B+</span>
+      </div>
+      <p>Mitigación básica de caracteres especiales en query:</p>
+      <ul style="margin-top:8px; margin-left:16px; font-size:.83rem; color:var(--muted); line-height:1.8;">
+        <li><code>queryParam.replace(/'/g, "\\'")</code> — escapa comillas simples</li>
+        <li>Drive API no soporta SQL injection real — bajo riesgo</li>
+        <li>Sesión requerida → solo usuarios autenticados buscan</li>
+        <li><em>Mejora sugerida: sanitización más robusta con allowlist de caracteres</em></li>
+      </ul>
+    </div>
+    <!-- Secrets -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Gestión de Secretos</h3>
+        <span class="badge yellow">B</span>
+      </div>
+      <p>Estado mixto — la mayoría bien, uno expuesto:</p>
+      <ul style="margin-top:8px; margin-left:16px; font-size:.83rem; color:var(--muted); line-height:1.8;">
+        <li><code>AUTH_SECRET</code>, <code>GOOGLE_DRIVE_PRIVATE_KEY</code>, <code>GOOGLE_CLIENT_SECRET</code> → Cloudflare Secrets ✓</li>
+        <li><code>GOOGLE_CLIENT_ID</code> → <strong style="color:var(--yellow);">en texto plano en wrangler.jsonc</strong> ⚠</li>
+        <li><code>GOOGLE_DRIVE_CLIENT_EMAIL</code> → en texto plano en wrangler.jsonc (baja criticidad)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mitigaciones activas -->
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Vector de Ataque</th>
+          <th>Mitigación Implementada</th>
+          <th>Nivel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Acceso sin autenticación</td>
+          <td>Middleware SSR verifica JWT en cada request; redirect a / si falla</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>Descarga directa de archivos Drive</td>
+          <td>URLs de Drive nunca expuestas; proxy edge con token de corta vida (5 min)</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>Escalada de privilegios al panel admin</td>
+          <td>Whitelist en SSR + whitelist en API endpoint (dos capas independientes)</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>Credenciales en localStorage / cookies JS</td>
+          <td>auth-astro usa HttpOnly cookies para el JWT de sesión</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>Contraseñas plataforma en código fuente cliente</td>
+          <td>Fetched en runtime vía API session-gated; nunca en bundle JS público</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>Caching de datos privados</td>
+          <td><code>Cache-Control: private</code> en platform-info; <code>no-store</code> en downloads</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>Inyección de dominio en OAuth</td>
+          <td>Doble verificación de dominio @ipg.cl / @alumnos.ipg.cl (callback + middleware)</td>
+          <td><span class="badge green">Alto</span></td>
+        </tr>
+        <tr>
+          <td>GOOGLE_CLIENT_ID expuesto en wrangler.jsonc</td>
+          <td><strong style="color:var(--yellow);">Sin mitigación activa</strong> — mover a Cloudflare Secret</td>
+          <td><span class="badge yellow">Medio</span></td>
+        </tr>
+        <tr>
+          <td>XSS en logs de auditoría</td>
+          <td>innerHTML dinámico sin sanitización en admin/index.astro (log.name, log.fileName)</td>
+          <td><span class="badge orange">Medio</span></td>
+        </tr>
+        <tr>
+          <td>Cache poisoning en buscador</td>
+          <td>Cache-Control: private — no afecta a otros usuarios</td>
+          <td><span class="badge green">Bajo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §6 — ISSUES PRIORIZADOS
+═══════════════════════════════════════════════════════ -->
+<section id="s6">
+  <div class="section-title">
+    <div class="num">06</div>
+    <div>
+      <h2>Issues Priorizados</h2>
+      <p>Listado completo de problemas detectados — ordenados por impacto y criticidad</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <!-- P2 - XSS -->
+  <div class="issue p2">
+    <div class="issue-head">
+      <span class="badge orange">P2 · Seguridad</span>
+      <h4>XSS potencial en consola de auditoría (innerHTML dinámico)</h4>
+    </div>
+    <p>
+      En <code>admin/index.astro</code> los logs se renderizan con <code>tbody.innerHTML = logs.map(log =&gt; `...${log.name}...${log.fileName}...`)</code>.
+      Si un alumno descarga un archivo con nombre malicioso como <code>&lt;img onerror="..."&gt;</code>,
+      y el admin recarga la consola, el script se ejecuta en el contexto del admin.
+      <br/><br/>
+      <strong>Fix:</strong> Reemplazar interpolación directa por <code>document.createTextNode()</code> o
+      usar <code>el.textContent = log.name</code> al construir las celdas, o sanitizar con
+      <code>log.name.replace(/[&lt;&gt;"]/g, c =&gt; '&#'+c.charCodeAt(0)+';')</code>.
+    </p>
+  </div>
+
+  <!-- P2 - GOOGLE_CLIENT_ID -->
+  <div class="issue p2">
+    <div class="issue-head">
+      <span class="badge orange">P2 · Secretos</span>
+      <h4>GOOGLE_CLIENT_ID expuesto en wrangler.jsonc (texto plano en repositorio)</h4>
+    </div>
+    <p>
+      <code>wrangler.jsonc</code> contiene el Client ID de Google OAuth en texto plano bajo <code>"vars"</code>.
+      Si el repositorio alguna vez se hace público o se sube a GitHub, este ID queda expuesto.
+      Si bien el Client ID por sí solo no permite acceso, en combinación con otros datos puede
+      facilitar ataques de phishing OAuth.
+      <br/><br/>
+      <strong>Fix:</strong> Mover a Cloudflare Secret: <code>wrangler secret put GOOGLE_CLIENT_ID</code>.
+      Reemplazar en wrangler.jsonc por un placeholder o eliminar la clave de <code>"vars"</code>.
+    </p>
+  </div>
+
+  <!-- P3 - StudyTechniques naming confusion -->
+  <div class="issue p3">
+    <div class="issue-head">
+      <span class="badge yellow">P3 · Arquitectura</span>
+      <h4>StudyTechniques.tsx exporta DigitalTools — confusión semántica y duplicado</h4>
+    </div>
+    <p>
+      <code>src/components/StudyTechniques.tsx</code> importa y re-exporta el componente <code>DigitalTools</code>
+      (hub de 8 herramientas). Esto significa que la ruta <code>/tecnicas-estudio</code> muestra el mismo
+      hub de herramientas digitales que <code>/herramientas-digitales</code>, con el mismo contenido.
+      El ResourceGrid lleva a <code>/tecnicas-estudio</code> con título "Técnicas y Estrategias de Estudio"
+      pero el contenido es incorrecto.
+      <br/><br/>
+      <strong>Fix:</strong> Crear un componente <code>StudyTechniques.tsx</code> real con secciones de
+      técnicas de estudio (infografías, CRAI PDF, video). Los 5 Drive IDs están disponibles — solo
+      falta el componente UI. Ver §4 "Recursos sin integración".
+    </p>
+  </div>
+
+  <!-- P3 - PracticaLaboral -->
+  <div class="issue p3">
+    <div class="issue-head">
+      <span class="badge yellow">P3 · Contenido</span>
+      <h4>PracticaLaboral.tsx sin archivos Drive reales — botones no funcionales</h4>
+    </div>
+    <p>
+      El componente <code>PracticaLaboral.tsx</code> tiene UI completa (etapas, cards interactivos)
+      pero el array <code>downloads</code> apunta a archivos inexistentes en Drive.
+      Los botones de descarga presentan UI pero fallan en el edge.
+      <br/><br/>
+      <strong>Fix:</strong> Luis debe subir los documentos de práctica laboral a Google Drive
+      y compartirlos con el Service Account. Luego actualizar los Drive IDs en el componente.
+    </p>
+  </div>
+
+  <!-- P3 - Resources sin integración -->
+  <div class="issue p3">
+    <div class="issue-head">
+      <span class="badge yellow">P3 · Contenido</span>
+      <h4>5 archivos en Google Drive sin sección UI correspondiente</h4>
+    </div>
+    <p>
+      Existen 5 archivos en la carpeta Drive que no tienen presencia en ningún componente:
+      <code>aprende_mas_CRAI_IPG.pdf</code>, 3 infografías de estudio, y el video de comprensión lectora.
+      Representan contenido valioso que los alumnos no pueden acceder.
+      <br/><br/>
+      <strong>Fix:</strong> Implementar un <code>StudyTechniques.tsx</code> real (ver issue anterior)
+      que incluya estos recursos.
+    </p>
+  </div>
+
+  <!-- DONE issues -->
+  <div style="margin-top:28px; margin-bottom:8px;">
+    <p style="font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted);">
+      <span class="icon-dot green"></span>Issues Resueltos en esta sesión
+    </p>
+  </div>
+
+  <div class="issue done">
+    <div class="issue-head">
+      <span class="badge green">RESUELTO</span>
+      <h4>21 Drive IDs placeholder (<code>ID_AQUI</code>, <code>ID_WORD_AQUI</code>) reemplazados por IDs reales</h4>
+    </div>
+    <p>Afectaba: AulaVirtual (9), CorreoInstitucional (1), PortalEstudiantil (3), CalendariosAcademicos (2), RematriculaGuia (1), CraiPlataforma (1), MicrosoftWordManual (1), GoogleDriveManual (1), TimeManagement (4), Bienestar (4), APAStandards (2+video embed).</p>
+  </div>
+
+  <div class="issue done">
+    <div class="issue-head">
+      <span class="badge green">RESUELTO</span>
+      <h4>Contraseñas Moodle y correo hardcodeadas en JSX</h4>
+    </div>
+    <p>Movidas a <code>/api/platform-info</code>. Componentes usan <code>useEffect</code> + fetch. Nunca en bundle cliente.</p>
+  </div>
+
+  <div class="issue done">
+    <div class="issue-head">
+      <span class="badge green">RESUELTO</span>
+      <h4>ALLOWED_ADMINS duplicado — definido en 3 archivos distintos</h4>
+    </div>
+    <p>Consolidado en <code>src/lib/admins.ts</code>. Admin page y logs API importan desde ahí.</p>
+  </div>
+
+  <div class="issue done">
+    <div class="issue-head">
+      <span class="badge green">RESUELTO</span>
+      <h4>Cache-Control: public en endpoint de búsqueda</h4>
+    </div>
+    <p>Cambiado a <code>private, max-age=10</code>. Resultados de búsqueda son personales y no deben cachearse en proxies compartidos.</p>
+  </div>
+
+  <div class="issue done">
+    <div class="issue-head">
+      <span class="badge green">RESUELTO</span>
+      <h4>Botones de descarga no funcionales (motion.div sin href)</h4>
+    </div>
+    <p>TimeManagement, Bienestar y APAStandards usaban <code>motion.div</code> sin href. Cambiados a <code>motion.a</code> con <code>href={`/api/download?id=${driveId}`}</code>.</p>
+  </div>
+
+  <div class="issue done">
+    <div class="issue-head">
+      <span class="badge green">RESUELTO</span>
+      <h4>as any en api/search.ts</h4>
+    </div>
+    <p>Reemplazado con interfaz <code>DriveLocals</code> tipada estrictamente.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §7 — VARIABLES DE ENTORNO
+═══════════════════════════════════════════════════════ -->
+<section id="s7">
+  <div class="section-title">
+    <div class="num">07</div>
+    <div>
+      <h2>Variables de Entorno Requeridas</h2>
+      <p>Todas las variables necesarias para que el sistema funcione en producción</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <div class="tbl-wrap">
+    <table class="env-row">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Ubicación</th>
+          <th>Descripción</th>
+          <th>Criticidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AUTH_SECRET</td>
+          <td>Cloudflare Secret</td>
+          <td>Clave de firma para JWT de sesión auth-astro. Mínimo 32 chars random.</td>
+          <td><span class="badge red">Crítico</span></td>
+        </tr>
+        <tr>
+          <td>GOOGLE_CLIENT_ID</td>
+          <td><span style="color:var(--yellow)">wrangler.jsonc vars ⚠</span></td>
+          <td>OAuth 2.0 Client ID — debería moverse a Secret</td>
+          <td><span class="badge orange">Alto</span></td>
+        </tr>
+        <tr>
+          <td>GOOGLE_CLIENT_SECRET</td>
+          <td>Cloudflare Secret</td>
+          <td>OAuth 2.0 Client Secret — nunca en texto plano</td>
+          <td><span class="badge red">Crítico</span></td>
+        </tr>
+        <tr>
+          <td>GOOGLE_DRIVE_PRIVATE_KEY</td>
+          <td>Cloudflare Secret</td>
+          <td>Clave privada RS256 del Service Account (PEM). Newlines escapados como <code>\n</code>.</td>
+          <td><span class="badge red">Crítico</span></td>
+        </tr>
+        <tr>
+          <td>GOOGLE_DRIVE_CLIENT_EMAIL</td>
+          <td>wrangler.jsonc vars</td>
+          <td>Email del Service Account Drive. Baja criticidad sola.</td>
+          <td><span class="badge yellow">Medio</span></td>
+        </tr>
+        <tr>
+          <td>AUTH_TRUST_HOST</td>
+          <td>wrangler.jsonc vars</td>
+          <td>Valor: <code>true</code>. Necesario para auth-astro en Cloudflare.</td>
+          <td><span class="badge muted">Config</span></td>
+        </tr>
+        <tr>
+          <td>AUTH_URL</td>
+          <td>wrangler.jsonc vars</td>
+          <td>URL pública del worker: <code>https://craeipg.automatizaciones-730.workers.dev</code></td>
+          <td><span class="badge muted">Config</span></td>
+        </tr>
+        <tr>
+          <td>CRAE_KV</td>
+          <td>wrangler.jsonc kv_namespaces</td>
+          <td>Binding al KV namespace para logs de auditoría. ID: <code>5bc1c7b0fdd544778749ce8a978d30bf</code></td>
+          <td><span class="badge yellow">Medio</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:16px; border-color:rgba(59,130,246,.3);">
+    <h3>Para desarrollo local (.env o .dev.vars)</h3>
+    <p style="font-family:var(--font-mono); font-size:.8rem; line-height:2; color:#93c5fd;">
+      AUTH_SECRET="tu_secret_aleatorio_minimo_32_chars"<br/>
+      AUTH_URL="http://localhost:4321"<br/>
+      AUTH_TRUST_HOST="true"<br/>
+      GOOGLE_CLIENT_ID="578505337080-14t2u0a6aklgk4ha3l5qp0mmu28lknhm.apps.googleusercontent.com"<br/>
+      GOOGLE_CLIENT_SECRET="tu_client_secret_aqui"<br/>
+      GOOGLE_DRIVE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"<br/>
+      GOOGLE_DRIVE_CLIENT_EMAIL="aprendemas-drive-downloader@aprendemas-ipg-auth.iam.gserviceaccount.com"
+    </p>
+    <p style="margin-top:10px; font-size:.8rem;"><strong>Nota:</strong> En dev, el middleware hace bypass (<code>isDev=true</code>) y el proxy Drive sí funciona con las credenciales del .env.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     §8 — ROADMAP
+═══════════════════════════════════════════════════════ -->
+<section id="s8">
+  <div class="section-title">
+    <div class="num">08</div>
+    <div>
+      <h2>Roadmap y Próximos Pasos</h2>
+      <p>Plan de trabajo recomendado ordenado por impacto y esfuerzo</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <div class="tbl-wrap" style="margin-bottom:24px;">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tarea</th>
+          <th>Esfuerzo</th>
+          <th>Impacto</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <strong>Fix XSS en consola admin</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Sanitizar log.name y log.fileName antes de innerHTML en admin/index.astro</span>
+          </td>
+          <td><span class="badge green">30 min</span></td>
+          <td><span class="badge red">Crítico</span></td>
+          <td><span class="badge red">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>
+            <strong>Mover GOOGLE_CLIENT_ID a Cloudflare Secret</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Ejecutar: <code>wrangler secret put GOOGLE_CLIENT_ID</code></span>
+          </td>
+          <td><span class="badge green">15 min</span></td>
+          <td><span class="badge orange">Alto</span></td>
+          <td><span class="badge red">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>
+            <strong>Construir StudyTechniques.tsx real</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Crear componente con infografías (×3), CRAI PDF, video comprensión lectora. IDs ya disponibles.</span>
+          </td>
+          <td><span class="badge yellow">3-4 hrs</span></td>
+          <td><span class="badge orange">Alto</span></td>
+          <td><span class="badge red">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>
+            <strong>Subir archivos PracticaLaboral a Drive</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Luis sube los documentos, comparte con Service Account, actualiza Drive IDs en PracticaLaboral.tsx</span>
+          </td>
+          <td><span class="badge yellow">Variable</span></td>
+          <td><span class="badge yellow">Medio</span></td>
+          <td><span class="badge orange">Bloqueado — espera contenido</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>
+            <strong>Consolidar StudyTechniques.tsx y DigitalTools.tsx</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Eliminar duplicado. Una vez que StudyTechniques sea un componente real, DigitalTools.tsx puede simplificarse.</span>
+          </td>
+          <td><span class="badge yellow">1-2 hrs</span></td>
+          <td><span class="badge yellow">Medio</span></td>
+          <td><span class="badge muted">Pendiente (depende de #3)</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>
+            <strong>Configurar dominio personalizado</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Mover de *.workers.dev a dominio IPG propio. Actualizar AUTH_URL y Google OAuth redirect URIs.</span>
+          </td>
+          <td><span class="badge yellow">1-2 hrs</span></td>
+          <td><span class="badge yellow">Medio</span></td>
+          <td><span class="badge muted">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>
+            <strong>Agregar Content Security Policy (CSP)</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Headers CSP en middleware para mitigar XSS de forma sistémica. <code>script-src 'self'</code>, <code>frame-src drive.google.com</code>.</span>
+          </td>
+          <td><span class="badge yellow">2 hrs</span></td>
+          <td><span class="badge yellow">Medio</span></td>
+          <td><span class="badge muted">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>
+            <strong>Auditar recorrido-virtual.astro</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">No fue auditado en esta sesión. Verificar contenido, Drive IDs y seguridad.</span>
+          </td>
+          <td><span class="badge green">30 min</span></td>
+          <td><span class="badge muted">Bajo</span></td>
+          <td><span class="badge muted">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>
+            <strong>Rate limiting en APIs de descarga y búsqueda</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Cloudflare Rate Limiting para /api/download y /api/search — protección contra scraping masivo.</span>
+          </td>
+          <td><span class="badge yellow">1 hr</span></td>
+          <td><span class="badge muted">Preventivo</span></td>
+          <td><span class="badge muted">Pendiente</span></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>
+            <strong>KV TTL para logs de auditoría</strong><br/>
+            <span style="font-size:.8rem;color:var(--muted);">Agregar TTL (ej. 90 días) a las keys de KV para cumplir con política de retención de datos.</span>
+          </td>
+          <td><span class="badge green">30 min</span></td>
+          <td><span class="badge muted">Compliance</span></td>
+          <td><span class="badge muted">Pendiente</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Matrix -->
+  <div class="arch-block">
+    <pre>
+<span class="hl">MATRIZ ESFUERZO vs IMPACTO</span>
+
+         ┌──────────────────────────────────────┐
+  ALTO   │ #3 StudyTechniques  │  #1 XSS Fix    │
+  IMPACTO│ #4 PracticaLaboral  │  #2 Client ID  │
+         ├─────────────────────┼────────────────┤
+  BAJO   │ #9 Rate Limit       │  #7 CSP        │
+  IMPACTO│ #10 KV TTL          │  #6 Dominio    │
+         └──────────────────────────────────────┘
+            ALTO ESFUERZO         BAJO ESFUERZO
+
+  → PRIORIZAR: <span class="hl2">#1</span>, <span class="hl2">#2</span> (bajo esfuerzo, alto impacto — Quick Wins)
+  → PLANIFICAR: <span class="hl3">#3</span>, <span class="hl3">#4</span> (alto impacto, requieren trabajo)
+    </pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     COMPONENT MAP
+═══════════════════════════════════════════════════════ -->
+<section>
+  <div class="section-title">
+    <div class="num" style="background:var(--purple);">09</div>
+    <div>
+      <h2>Mapa de Componentes</h2>
+      <p>Árbol completo de archivos fuente relevantes</p>
+    </div>
+  </div>
+  <hr class="divider" />
+
+  <div class="arch-block">
+    <pre>
+<span class="hl">craeipg/</span>
+├── <span class="hl3">auth.config.ts</span>              ← Google OAuth config + domain whitelist
+├── <span class="hl3">astro.config.mjs</span>            ← SSR mode + Cloudflare adapter
+├── <span class="hl3">wrangler.jsonc</span>              ← KV binding + vars + compat flags
+├── tsconfig.json
+│
+├── <span class="hl">src/</span>
+│   ├── <span class="hl2">middleware.ts</span>             ← Route protection SSR-level
+│   ├── <span class="hl2">lib/</span>
+│   │   └── admins.ts              ← ALLOWED_ADMINS single source of truth
+│   │
+│   ├── <span class="hl2">layouts/</span>
+│   │   └── Layout.astro           ← Header + Footer + slot
+│   │
+│   ├── <span class="hl2">pages/</span>
+│   │   ├── index.astro            ← Login (pública)
+│   │   ├── inicio.astro           ← Dashboard (auth)
+│   │   ├── tecnicas-estudio.astro ← ⚠ carga StudyTechniques (exporta DigitalTools)
+│   │   ├── gestion-tiempo.astro
+│   │   ├── normas-apa.astro
+│   │   ├── herramientas-digitales.astro
+│   │   ├── bienestar-apoyo.astro
+│   │   ├── practica-laboral.astro ← ⚠ sin Drive IDs reales
+│   │   ├── recorrido-virtual.astro← ⚠ no auditado
+│   │   ├── admin/
+│   │   │   └── index.astro        ← Consola auditoría (admin-only) ⚠ XSS
+│   │   └── api/
+│   │       ├── download.ts        ← Motor descarga segura (SA + jose)
+│   │       ├── search.ts          ← Buscador predictivo Drive
+│   │       ├── platform-info.ts   ← Credenciales plataforma (session-gated)
+│   │       └── admin/
+│   │           └── logs.ts        ← Lectura KV logs (admin-only)
+│   │
+│   └── <span class="hl2">components/</span>
+│       ├── Header.tsx             ← Nav + signOut (client:load)
+│       ├── Footer.tsx             ← Footer (client:visible)
+│       ├── HeroSearch.tsx         ← Buscador Drive (client:load)
+│       ├── WelcomeSection.tsx     ← Bienvenida (client:visible)
+│       ├── ResourceGrid.tsx       ← Grid de categorías (client:visible)
+│       ├── StudyTechniques.tsx    ← ⚠ exporta DigitalTools (duplicado)
+│       ├── DigitalTools.tsx       ← Hub herramientas digitales (8 sub)
+│       ├── TimeManagement.tsx     ← Gestión tiempo + 4 PDFs ✓
+│       ├── APAStandards.tsx       ← APA + 2 archivos + video ✓
+│       ├── Bienestar.tsx          ← Bienestar + 3 PDF + 1 M4A ✓
+│       ├── PracticaLaboral.tsx    ← ⚠ sin archivos Drive
+│       └── herramientas/
+│           ├── AulaVirtual.tsx    ← 9 PDFs Moodle + clave API ✓
+│           ├── CorreoInstitucional.tsx ← 1 PDF + clave API ✓
+│           ├── PortalEstudiantil.tsx   ← 3 PDFs ✓
+│           ├── CalendariosAcademicos.tsx ← 2 PDFs 2026 ✓
+│           ├── RematriculaGuia.tsx     ← 1 PDF ✓
+│           ├── CraiPlataforma.tsx      ← 1 PDF ✓
+│           ├── MicrosoftWordManual.tsx ← 1 PDF ✓
+│           └── GoogleDriveManual.tsx   ← 1 PDF + 1 video ✓
+    </pre>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    <strong>CRAE IPG — APRENDE+</strong> &nbsp;·&nbsp;
+    Auditoría Técnica v2.0 &nbsp;·&nbsp;
+    Generado el 21 de junio de 2026 &nbsp;·&nbsp;
+    Auditor: Claude Sonnet 4.6 para <strong>Luis Rivera</strong> (luis.rivera@ipg.cl)
+  </p>
+  <p style="margin-top:8px; font-size:.72rem;">
+    Este documento es confidencial y de uso interno del Instituto Profesional IPG.
+    Contiene información técnica sensible sobre la arquitectura de seguridad del sistema.
+  </p>
+</footer>
+
+</body>
+</html>

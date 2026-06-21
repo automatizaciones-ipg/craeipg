@@ -122,34 +122,6 @@ const keyDocs = [
   },
 ];
 
-// 3. Descargas — misma estructura que TimeManagement
-const downloads = [
-  { name: 'Plantilla Informe de Práctica (Word)',      size: '2.4 MB', format: 'DOCX'  },
-  { name: 'Plantilla Proyecto de Título (Word)',       size: '3.1 MB', format: 'DOCX'  },
-  { name: 'Formulario Evaluación Supervisor',          size: '420 KB', format: 'PDF'   },
-  { name: 'Bitácora Semanal Editable',                 size: '980 KB', format: 'EXCEL' },
-  { name: 'Rúbrica de Evaluación Informe Final',       size: '560 KB', format: 'PDF'   },
-  { name: 'Guía de Normas IPG para Práctica',          size: '1.8 MB', format: 'PDF'   },
-];
-
-// 4. Recursos visuales — misma estructura que TimeManagement
-const visualResources = [
-  {
-    title: 'Cómo redactar un informe de práctica impecable',
-    tag: 'Guía',
-    url: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Del aula a la empresa: tu primera práctica profesional',
-    tag: 'Artículo',
-    url: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Cómo defender tu proyecto de título con confianza',
-    tag: 'Infografía',
-    url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop',
-  },
-];
 
 // ─── STAGE CARD con stepper interactivo ───────────────────────────────────────
 const StageCard: React.FC<{ item: typeof stages[0] }> = ({ item }) => {
@@ -337,85 +309,81 @@ const PracticaLaboral: React.FC = () => {
         </section>
 
         {/* ════════════════════════════════════════
-            SECCIÓN 3: DESCARGAS
-            COPIA EXACTA de TimeManagement
+            SECCIÓN 3: PLANTILLAS Y FORMULARIOS
         ════════════════════════════════════════ */}
         <section>
-          <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="text-teal-500 w-6 h-6" />
-                <h2 className="text-2xl font-bold text-slate-800">Plantillas y Formularios</h2>
-              </div>
-              <p className="text-slate-500 text-sm">Documentos oficiales IPG listos para completar y entregar.</p>
-            </div>
+          <motion.div variants={itemVariants} className="flex items-center gap-2 mb-8">
+            <CheckCircle2 className="text-teal-500 w-6 h-6" />
+            <h2 className="text-2xl font-bold text-slate-800">Plantillas y Formularios</h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {downloads.map((file, idx) => (
-              <motion.div
-                key={idx}
-                variants={itemVariants}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-teal-400/40 transition-all cursor-pointer group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs border ${
-                    file.format === 'PDF'
-                      ? 'bg-red-50 text-red-600 border-red-100'
-                      : file.format === 'DOCX'
-                        ? 'bg-blue-50 text-blue-700 border-blue-100'
-                        : 'bg-emerald-50 text-emerald-600 border-emerald-100'
-                  }`}>
-                    {file.format}
-                  </div>
-                  <div>
-                    <h4 className="text-slate-700 font-semibold text-sm group-hover:text-teal-600 transition-colors">{file.name}</h4>
-                    <span className="text-xs text-slate-400">{file.size}</span>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-teal-500 group-hover:text-white transition-colors">
-                  <Download size={16} />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col md:flex-row items-center gap-6 p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-teal-50 border border-teal-200/60 shadow-sm"
+          >
+            <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-lg">
+              <Clock className="text-white" size={28} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-teal-600 uppercase tracking-widest mb-1">Próximamente</p>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Plantillas oficiales en proceso de carga</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">
+                Las plantillas de Informe de Práctica, Bitácora Semanal, Formulario de Evaluación del Supervisor
+                y demás documentos oficiales IPG estarán disponibles aquí para descarga directa.
+                Mientras tanto, consúltalas con tu Docente Guía o a través de tu sede.
+              </p>
+            </div>
+          </motion.div>
         </section>
 
         {/* ════════════════════════════════════════
-            SECCIÓN 4: RECURSOS VISUALES
-            COPIA EXACTA de balanceResources TimeManagement
+            SECCIÓN 4: CLAVES PARA TU PRÁCTICA
         ════════════════════════════════════════ */}
         <section className="pb-10">
           <motion.div variants={itemVariants} className="flex items-center gap-2 mb-8">
             <Scale className="text-[#003399] w-6 h-6" />
-            <h2 className="text-2xl font-bold text-slate-800">Orientación y Consejos</h2>
+            <h2 className="text-2xl font-bold text-slate-800">Claves para una Práctica Exitosa</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {visualResources.map((res, idx) => (
+            {[
+              {
+                color: 'from-blue-600 to-indigo-700',
+                icon: <ClipboardList size={28} className="text-white" />,
+                badge: 'Organización',
+                title: 'Lleva una Bitácora Desde el Día 1',
+                desc: 'Registra tus actividades diarias desde el primer día. Intentar reconstruir 3 meses de trabajo al final es la causa más frecuente de informes deficientes.',
+              },
+              {
+                color: 'from-teal-600 to-emerald-600',
+                icon: <Users size={28} className="text-white" />,
+                badge: 'Red Profesional',
+                title: 'Construye Tu Red en la Empresa',
+                desc: 'Las prácticas son tus primeras referencias laborales reales. Trabaja con profesionalismo, cumple plazos y mantén comunicación activa con tu supervisor.',
+              },
+              {
+                color: 'from-slate-700 to-slate-900',
+                icon: <GraduationCap size={28} className="text-white" />,
+                badge: 'Titulación',
+                title: 'Vincula la Práctica con tu Proyecto',
+                desc: 'Si puedes, elige un problema real de la empresa como base para tu Proyecto de Título. Tendrás acceso a datos reales, contexto institucional y un supervisor externo calificado.',
+              },
+            ].map((item, idx) => (
               <motion.div
                 key={idx}
                 variants={itemVariants}
-                className="group relative aspect-[4/3] rounded-3xl overflow-hidden shadow-lg cursor-pointer"
+                className={`relative rounded-3xl overflow-hidden p-8 bg-gradient-to-br ${item.color} text-white shadow-xl`}
               >
-                <img
-                  src={res.url}
-                  alt={res.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
-
-                <div className="absolute top-4 right-4">
-                  <div className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-medium border border-white/30 flex items-center gap-1.5">
-                    {res.tag === 'Artículo' ? <Coffee size={12} /> : <Scale size={12} />}
-                    {res.tag}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center mb-6">
+                    {item.icon}
                   </div>
-                </div>
-
-                <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-white font-bold text-lg md:text-xl leading-snug">{res.title}</h3>
+                  <div className="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full border border-white/30 mb-4">
+                    {item.badge}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                  <p className="text-white/80 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
             ))}

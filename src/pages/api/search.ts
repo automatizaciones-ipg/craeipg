@@ -19,7 +19,8 @@ export const GET: APIRoute = async (context) => {
 
   try {
     // 3. EXTRACCIÓN DE CREDENCIALES SEGURO (Híbrido)
-    const runtimeEnv = (context.locals as any).runtime?.env;
+    interface DriveLocals { runtime?: { env?: { GOOGLE_DRIVE_PRIVATE_KEY?: string; GOOGLE_DRIVE_CLIENT_EMAIL?: string } } }
+    const runtimeEnv = (context.locals as DriveLocals).runtime?.env;
     const rawPrivateKey = runtimeEnv?.GOOGLE_DRIVE_PRIVATE_KEY || import.meta.env.GOOGLE_DRIVE_PRIVATE_KEY;
     const clientEmail = runtimeEnv?.GOOGLE_DRIVE_CLIENT_EMAIL || import.meta.env.GOOGLE_DRIVE_CLIENT_EMAIL;
 
@@ -75,7 +76,7 @@ export const GET: APIRoute = async (context) => {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=10' // Guardamos en caché del Edge por 10 segundos para mitigar spam de peticiones
+        'Cache-Control': 'private, max-age=10'
       }
     });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { 
   ChevronLeft, Laptop, PlayCircle, FileText, Download, Sparkles, 
@@ -17,17 +17,24 @@ export default function AulaVirtual({ onBack }: { onBack: () => void }) {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
 
-  // 📂 Los 9 PDFs oficiales extraídos de tus instructivos
+  const [moodlePassword, setMoodlePassword] = useState('••••••••');
+  useEffect(() => {
+    fetch('/api/platform-info')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data?.moodle?.password) setMoodlePassword(data.moodle.password); })
+      .catch(() => {});
+  }, []);
+
   const pdfResources = [
-    { name: "Cómo ingresar a la Plataforma Virtual IPG", size: "1.2 MB", driveId: "ID_AQUI" },
-    { name: "Configuración de página personal (Perfil)", size: "850 KB", driveId: "ID_AQUI" },
-    { name: "Cómo subir un encargo (Archivo PDF)", size: "1.5 MB", driveId: "ID_AQUI" },
-    { name: "Cómo revisar el libro de calificaciones", size: "900 KB", driveId: "ID_AQUI" },
-    { name: "Cómo responder una POL (Cuestionario)", size: "1.1 MB", driveId: "ID_AQUI" },
-    { name: "Cómo responder una evaluación integradora", size: "1.3 MB", driveId: "ID_AQUI" },
-    { name: "Cómo responder una evaluación formativa", size: "1.0 MB", driveId: "ID_AQUI" },
-    { name: "Cómo participar en un foro sumativo", size: "1.4 MB", driveId: "ID_AQUI" },
-    { name: "Cómo participar en el foro de interacción", size: "1.2 MB", driveId: "ID_AQUI" },
+    { name: "Cómo ingresar a la Plataforma Virtual IPG", size: "710 KB", driveId: "1gv5LyoTrfbnYoxNEQrM50xYr9ez4Fhp6" },
+    { name: "Configuración de página personal (Perfil)", size: "788 KB", driveId: "1OGYnnscr9caU0mPqxUZ0idC3aS6pCqjb" },
+    { name: "Cómo subir un encargo (Archivo PDF)", size: "900 KB", driveId: "1QmChARaZ-by6p_ulTtkeoL_Zr8biGPxm" },
+    { name: "Cómo revisar el libro de calificaciones", size: "562 KB", driveId: "1hnRfWvIWD0YNSzxAK6oRtmp6Jbp_nMkV" },
+    { name: "Cómo responder una POL (Cuestionario)", size: "639 KB", driveId: "1NaFxnIUX0EQMS-vUdgC3mGTaYxp86jvS" },
+    { name: "Cómo responder una evaluación integradora", size: "681 KB", driveId: "1htHQV7kQgDUhainfnjojaCn6XHWyRZop" },
+    { name: "Cómo responder una evaluación formativa", size: "645 KB", driveId: "1N-J0JKEN4cjLskk-uvTA9i0bHU3j_wj-" },
+    { name: "Cómo participar en un foro sumativo", size: "1.0 MB", driveId: "1k83KG77o935YFoWv8kylCNhvA8f74MiA" },
+    { name: "Cómo participar en el foro de interacción", size: "683 KB", driveId: "110szDxWaQwm8OSDJENdmDs-VAGi8NT9L" },
   ];
 
   return (
@@ -99,7 +106,7 @@ export default function AulaVirtual({ onBack }: { onBack: () => void }) {
                 <Lock size={14} /> Contraseña
               </div>
               <p className="text-slate-800 font-medium font-mono text-lg tracking-wide">
-                ipg.2025
+                {moodlePassword}
               </p>
               <p className="text-xs text-slate-500">Clave estándar de acceso a plataforma.</p>
             </div>

@@ -1,17 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getSession } from "auth-astro/server";
+import { ALLOWED_ADMINS } from "../../lib/admins";
 
-// 1. CAPTURAR LA SESIÓN EN TIEMPO DE EJECUCIÓN DEL SERVIDOR
 const session = await getSession(Astro.request);
 
-// 2. COMPROBAR TU LISTA BLANCA CORPORATIVA
-const ALLOWED_ADMINS: string[] = [
-  "luis.rivera@ipg.cl",
-  // 'nuevo.admin@ipg.cl' <-- Mantén las listas sincronizadas
-];
-
-// 3. BLINDAJE: Si no cumple las condiciones, rebota al usuario inmediatamente a la raíz
 if (
   !session ||
   !session.user?.email ||
@@ -111,8 +104,9 @@ if (
         return;
       }
 
+      function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
       tbody.innerHTML = logs
-        .map((log: any) => {
+        .map((log) => {
           const dateFormatted = new Date(log.timestamp).toLocaleString(
             "es-CL",
             {
@@ -123,14 +117,14 @@ if (
 
           return `
           <tr class="hover:bg-slate-50/60 transition-colors">
-            <td class="py-4 px-6 font-semibold text-slate-800">${log.name}</td>
-            <td class="py-4 px-6 font-mono text-xs text-slate-500">${log.email}</td>
+            <td class="py-4 px-6 font-semibold text-slate-800">${esc(log.name)}</td>
+            <td class="py-4 px-6 font-mono text-xs text-slate-500">${esc(log.email)}</td>
             <td class="py-4 px-6">
               <span class="inline-flex items-center gap-1.5 font-medium text-blue-700 bg-blue-50/60 border border-blue-100/50 px-2.5 py-1 rounded-md text-xs">
-                ${log.fileName}
+                ${esc(log.fileName)}
               </span>
             </td>
-            <td class="py-4 px-6 text-right font-medium text-slate-400 text-xs">${dateFormatted}</td>
+            <td class="py-4 px-6 text-right font-medium text-slate-400 text-xs">${esc(dateFormatted)}</td>
           </tr>
         `;
         })

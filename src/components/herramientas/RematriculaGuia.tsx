@@ -7,7 +7,7 @@ import {
 
 export default function RematriculaGuia({ onBack }: { onBack: () => void }) {
   const resources = [
-    { name: "Guía de Rematrícula Estudiantes Antiguos IPG 2026", size: "2.4 MB", driveId: "ID_AQUI" }
+    { name: "Guía de Rematrícula Estudiantes Antiguos IPG 2026", size: "1.6 MB", driveId: "1chwpIFapVKJ2F-sx0n6c_emIWN1WUDzK" }
   ];
 
   const sedesContactos = [

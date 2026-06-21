@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ChevronLeft, Mail, FileText, Download, Sparkles, 
   AlertCircle, Lock, Laptop, Smartphone, LifeBuoy 
 } from 'lucide-react';
 
 export default function CorreoInstitucional({ onBack }: { onBack: () => void }) {
+  const [correoPassword, setCorreoPassword] = useState('••••••••');
+  useEffect(() => {
+    fetch('/api/platform-info')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data?.correo?.password) setCorreoPassword(data.correo.password); })
+      .catch(() => {});
+  }, []);
+
   const resources = [
-    { name: "Guía Oficial de Acceso a Correo Institucional IPG", size: "1.1 MB", driveId: "ID_AQUI" }
+    { name: "Guía Oficial de Acceso a Correo Institucional IPG", size: "767 KB", driveId: "1A1Zeubo0N26jvT9JWJjjvVmAC6V5Dw7C" }
   ];
 
   return (
@@ -67,7 +75,7 @@ export default function CorreoInstitucional({ onBack }: { onBack: () => void }) 
               <div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Contraseña Inicial</span>
                 <p className="text-slate-800 font-medium mt-1 bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono text-lg">
-                  alumnos.2026
+                  {correoPassword}
                 </p>
               </div>
               <div className="mt-2 text-xs text-slate-500 flex gap-2 items-start bg-amber-50 p-3 rounded-lg border border-amber-100">
@@ -90,7 +98,7 @@ export default function CorreoInstitucional({ onBack }: { onBack: () => void }) 
                 <ol className="list-decimal list-inside text-sm text-slate-600 space-y-2 marker:text-blue-600 marker:font-bold">
                   <li>Ingresa a <a href="https://www.gmail.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline font-medium">www.gmail.com</a> y haz clic en "Acceder".</li>
                   <li>Escribe tu correo institucional con el formato indicado.</li>
-                  <li>Ingresa la contraseña inicial: <strong className="text-slate-800">alumnos.2026</strong></li>
+                  <li>Ingresa la contraseña inicial: <strong className="text-slate-800">{correoPassword}</strong></li>
                   <li>Crea una nueva contraseña segura y fácil de recordar.</li>
                   <li>¡Listo! Tu correo ya está activado.</li>
                 </ol>
