@@ -14,25 +14,23 @@ interface CloudflareEnv {
 }
 
 interface AppLocals {
-  runtime?: {
-    env?: CloudflareEnv;
-  };
+  runtime?: { env?: CloudflareEnv };
 }
 
 export const GET: APIRoute = async (context) => {
   const { request, locals } = context;
 
-  // 1. CONTROL DE AUTENTICACIÓN
+  // 1. Autenticación
   const session = await getSession(request);
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     return new Response(JSON.stringify({ error: 'No autorizado' }), { status: 401 });
   }
 
-  // 2. CONTROL DE AUTORIZACIÓN (Lista Blanca Estricta)
+  // 2. Autorización — solo admins
   if (!isAdmin(session.user.email)) {
     return new Response(
-      JSON.stringify({ error: 'Acceso denegado: Privilegios de administrador insuficientes.' }), 
-      { status: 403 }
+      JSON.stringify({ error: 'Acceso denegado: Privilegios de administrador insuficientes.' }),
+      { status: 403 },
     );
   }
 
@@ -44,9 +42,17 @@ export const GET: APIRoute = async (context) => {
 
     if (KV) {
       const list = await KV.list({ prefix: 'download_log:', limit: 50 });
-      for (const key of list.keys) {
-        const val = await KV.get(key.name);
-        if (val) logs.push(JSON.parse(val));
+
+      // Promise.all en lugar de await secuencial — reduce latencia de ~50 round-trips a 1
+      const kvValues = await Promise.all(list.keys.map(k => KV.get(k.name)));
+
+      for (const val of kvValues) {
+        if (!val) continue;
+        try {
+          logs.push(JSON.parse(val));
+        } catch {
+          // Registro KV corrupto — se omite sin romper el resto de la respuesta
+        }
       }
     } else {
       logs = globalThis.LOCAL_LOGS_CACHE || [];
@@ -54,11 +60,11 @@ export const GET: APIRoute = async (context) => {
 
     return new Response(JSON.stringify(logs), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
     });
 
   } catch (error) {
-    console.error('Error cargando logs de auditoría:', error);
+    console.error('Error cargando logs de auditoría:', error instanceof Error ? error.message : 'error desconocido');
     return new Response(JSON.stringify({ error: 'Error interno del servidor' }), { status: 500 });
   }
 };

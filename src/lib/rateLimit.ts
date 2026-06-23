@@ -34,7 +34,8 @@ export async function checkRateLimit(
   const key = `rl:${endpoint}:${identifier}:${slot}`;
 
   const stored = await kv.get(key);
-  const count = stored ? parseInt(stored, 10) : 0;
+  // || 0 convierte NaN (dato corrupto en KV) a 0 en lugar de silenciar el rate limit
+  const count = Math.max(0, parseInt(stored ?? '0', 10) || 0);
 
   if (count >= limit) {
     const elapsedMs = Date.now() % (windowSecs * 1000);

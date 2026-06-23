@@ -97,7 +97,8 @@ const ResourceGrid: React.FC = () => {
             href={cat.href}
             key={index}
             initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.45, delay: cat.delay, ease: [0.25, 0.1, 0.25, 1] }}
             whileHover={{ y: -5, transition: { type: "spring", stiffness: 400, damping: 25 } }}
             whileTap={{ scale: 0.98 }}

@@ -14,6 +14,9 @@ export default defineConfig({
   ],
   trustHost: true,
   secret: process.env.AUTH_SECRET,
+  session: {
+    maxAge: 8 * 60 * 60, // 8 horas — sesión fija desde el login, sin renovación automática
+  },
   callbacks: {
     async signIn({ profile }) {
       if (!profile || !profile.email) return false;

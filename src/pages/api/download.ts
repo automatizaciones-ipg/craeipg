@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
-import { SignJWT, importPKCS8 } from 'jose';
+import { getGoogleToken } from '../../lib/googleAuth';
 import { checkRateLimit, type KVStore } from '../../lib/rateLimit';
 
 declare global {
@@ -21,36 +21,6 @@ interface AppLocals {
 
 globalThis.LOCAL_LOGS_CACHE = globalThis.LOCAL_LOGS_CACHE || [];
 
-// Cache de token a nivel de módulo (se reutiliza entre requests del mismo Worker)
-let _tokenCache: { token: string; expiry: number } | null = null;
-
-async function getGoogleToken(privateKeyPem: string, clientEmail: string): Promise<string> {
-  const now = Date.now();
-  if (_tokenCache && now < _tokenCache.expiry) return _tokenCache.token;
-
-  const privateKey = await importPKCS8(privateKeyPem.replace(/\\n/g, '\n'), 'RS256');
-  const jwt = await new SignJWT({
-    iss: clientEmail,
-    scope: 'https://www.googleapis.com/auth/drive.readonly',
-    aud: 'https://oauth2.googleapis.com/token',
-  })
-    .setProtectedHeader({ alg: 'RS256', typ: 'JWT' })
-    .setIssuedAt()
-    .setExpirationTime('1h')
-    .sign(privateKey);
-
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
-  });
-  const data = await res.json();
-  if (!data.access_token) throw new Error('Google rechazó el Service Account JWT.');
-
-  _tokenCache = { token: data.access_token, expiry: now + 55 * 60 * 1000 };
-  return _tokenCache.token;
-}
-
 export const GET: APIRoute = async (context) => {
   const { request, url, locals } = context;
 
@@ -60,22 +30,20 @@ export const GET: APIRoute = async (context) => {
     return new Response('Acceso no autorizado. Inicie sesión con su correo institucional.', { status: 401 });
   }
 
+  // 2. Validación del fileId — Google Drive IDs: alfanumérico + guión + guión bajo, 25-50 chars
   const fileId = url.searchParams.get('id');
-  if (!fileId) {
-    return new Response('Error: Falta el identificador del archivo (ID).', { status: 400 });
+  if (!fileId || !/^[A-Za-z0-9_-]{25,50}$/.test(fileId)) {
+    return new Response('Error: Identificador de archivo inválido.', { status: 400 });
   }
 
   const runtimeEnv = (locals as AppLocals).runtime?.env;
 
-  // 2. Rate limiting: 10 descargas por minuto por usuario
+  // 3. Rate limiting: 10 descargas por minuto por usuario
   const rl = await checkRateLimit(runtimeEnv?.CRAE_KV, session.user.email, 'download', 10, 60);
   if (!rl.allowed) {
     return new Response(
       'Límite de descargas alcanzado. Espera un momento antes de intentarlo de nuevo.',
-      {
-        status: 429,
-        headers: { 'Retry-After': String(rl.retryAfterSeconds) },
-      },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfterSeconds) } },
     );
   }
 
@@ -91,7 +59,7 @@ export const GET: APIRoute = async (context) => {
 
     const metaReq = await fetch(
       `https://www.googleapis.com/drive/v3/files/${fileId}?fields=name,mimeType`,
-      { headers: { Authorization: `Bearer ${accessToken}` } }
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     if (!metaReq.ok) {
       return new Response('El archivo solicitado no existe en Drive o el Robot no tiene permisos.', { status: 404 });
@@ -100,12 +68,13 @@ export const GET: APIRoute = async (context) => {
 
     const fileReq = await fetch(
       `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-      { headers: { Authorization: `Bearer ${accessToken}` } }
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     if (!fileReq.ok || !fileReq.body) {
       throw new Error('No se pudo inicializar la descarga binaria desde Google Drive.');
     }
 
+    // Auditoría de descarga
     const logData = {
       email: session.user.email,
       name: session.user.name ?? 'Alumno IPG',
@@ -113,7 +82,6 @@ export const GET: APIRoute = async (context) => {
       timestamp: new Date().toISOString(),
       fileId,
     };
-
     const KV = runtimeEnv?.CRAE_KV;
     if (KV) {
       await KV.put(`download_log:${Date.now()}:${session.user.email}`, JSON.stringify(logData));
@@ -121,17 +89,22 @@ export const GET: APIRoute = async (context) => {
       globalThis.LOCAL_LOGS_CACHE?.unshift(logData);
     }
 
+    // RFC 6266: filename* para soporte correcto de ñ, á, é en el nombre del archivo descargado
+    const rawName = meta.name ?? 'archivo_crae';
+    const asciiFallback = rawName.replace(/[^\x20-\x7E]/g, '_');
+    const encodedName = encodeURIComponent(rawName);
+
     return new Response(fileReq.body, {
       status: 200,
       headers: {
         'Content-Type': meta.mimeType ?? 'application/octet-stream',
-        'Content-Disposition': `attachment; filename="${encodeURIComponent(meta.name ?? 'archivo_crae')}"`,
-        'Cache-Control': 'no-store, max-age=0',
+        'Content-Disposition': `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encodedName}`,
+        'Cache-Control': 'no-store',
       },
     });
 
   } catch (error) {
-    console.error('Error en el Motor de Descargas Edge:', error);
+    console.error('Error en Motor de Descargas:', error instanceof Error ? error.message : 'error desconocido');
     return new Response('Error interno del servidor al procesar la descarga segura.', { status: 500 });
   }
 };
