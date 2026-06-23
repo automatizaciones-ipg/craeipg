@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
-import { ALLOWED_ADMINS } from '../../../lib/admins';
+import { isAdmin } from '../../../lib/admins';
 
 declare global {
   var LOCAL_LOGS_CACHE: Array<Record<string, string | null | undefined>> | undefined;
@@ -29,7 +29,7 @@ export const GET: APIRoute = async (context) => {
   }
 
   // 2. CONTROL DE AUTORIZACIÓN (Lista Blanca Estricta)
-  if (!ALLOWED_ADMINS.includes(session.user.email)) {
+  if (!isAdmin(session.user.email)) {
     return new Response(
       JSON.stringify({ error: 'Acceso denegado: Privilegios de administrador insuficientes.' }), 
       { status: 403 }

@@ -1,15 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getSession } from "auth-astro/server";
-import { ALLOWED_ADMINS } from "../../lib/admins";
+import { isAdmin } from "../../lib/admins";
 
 const session = await getSession(Astro.request);
 
-if (
-  !session ||
-  !session.user?.email ||
-  !ALLOWED_ADMINS.includes(session.user.email)
-) {
+if (!session || !session.user?.email || !isAdmin(session.user.email)) {
   return Astro.redirect("/");
 }
 ---

@@ -1,7 +1,6 @@
 import { getSession } from "auth-astro/server";
 import { defineMiddleware } from "astro:middleware";
 
-// 🛠️ Contratos de interfaz para satisfacer a TypeScript al 100%
 interface CloudflareRuntime {
   runtime?: {
     env: Record<string, string>;
@@ -14,59 +13,93 @@ interface GlobalWithProcess {
   };
 }
 
+// Content Security Policy — ajustado a las dependencias reales del sistema.
+// unsafe-inline en script-src: necesario para los islands de Astro (hidratación inline).
+// unsafe-inline en style-src: necesario para los estilos inline de Framer Motion y Tailwind.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://accounts.google.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data: https://*.googleusercontent.com",
+  "connect-src 'self'",
+  "frame-src https://drive.google.com",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://accounts.google.com",
+].join('; ');
+
+/**
+ * Añade los headers de seguridad a cualquier respuesta sin tocar el body.
+ * Pasar response.body como ReadableStream mantiene el streaming de descargas intacto.
+ * En desarrollo se omite CSP para evitar interferencias con el HMR de Astro.
+ */
+function withSecurityHeaders(response: Response, isDev: boolean): Response {
+  if (isDev) return response;
+
+  const headers = new Headers(response.headers);
+  headers.set('Content-Security-Policy', CSP);
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('X-Frame-Options', 'DENY');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
-  // 1. Detectamos si estamos en entorno de desarrollo local
   const isDev = import.meta.env.DEV;
 
-  // Moldeamos 'context.locals' de forma segura bajo la interfaz de Cloudflare
   const locals = context.locals as CloudflareRuntime;
   const runtimeEnv = locals.runtime?.env;
 
-  // 🛡️ SOLUCIÓN ROBUSTA: Solo mutamos globalThis si NO estamos en desarrollo.
-  // Esto evita el error "poisoned stub" durante el Hot Refresh de Astro.
+  // Inyecta el entorno de Cloudflare en process.env para que las librerías
+  // que usan process.env (admins.ts, platform-info.ts) puedan leerlo en runtime.
   if (runtimeEnv && !isDev) {
     const globalRef = globalThis as unknown as GlobalWithProcess;
     globalRef.process = globalRef.process || { env: {} };
     globalRef.process.env = { ...globalRef.process.env, ...runtimeEnv };
   }
 
-  const { url } = context;
-  const pathname = url.pathname;
+  const pathname = context.url.pathname;
 
-  const isPublicRoute = 
-    pathname === "/" || 
-    pathname.startsWith("/_astro") || 
-    pathname.startsWith("/api/auth") || 
-    pathname.includes("favicon.svg");
+  const isPublicRoute =
+    pathname === '/' ||
+    pathname.startsWith('/_astro') ||
+    pathname.startsWith('/api/auth') ||
+    pathname.includes('favicon.svg');
+
+  let response: Response;
 
   if (isPublicRoute) {
-    if (pathname === "/") {
-      // 2. Bypass en local para entrar directo al dashboard
-      if (isDev) return context.redirect("/inicio");
-
-      const session = await getSession(context.request);
-      if (session?.user?.email) {
-        return context.redirect("/inicio");
+    if (pathname === '/') {
+      if (isDev) {
+        response = context.redirect('/inicio');
+      } else {
+        const session = await getSession(context.request);
+        response = session?.user?.email
+          ? context.redirect('/inicio')
+          : await next();
       }
+    } else {
+      response = await next();
     }
-    return next();
+  } else if (isDev) {
+    response = await next();
+  } else {
+    const session = await getSession(context.request);
+    const email = session?.user?.email?.toLowerCase();
+    const allowedDomains = ['@ipg.cl', '@alumnos.ipg.cl'];
+    const hasValidSession =
+      session && email && allowedDomains.some((d) => email.endsWith(d));
+
+    response = hasValidSession ? await next() : context.redirect('/');
   }
 
-  // 3. Bypass Principal para dejar pasar HMR en rutas protegidas
-  if (isDev) {
-    return next();
-  }
-
-  // --- De aquí para abajo, código exclusivo de Producción ---
-  const session = await getSession(context.request);
-  const email = session?.user?.email?.toLowerCase();
-
-  const allowedDomains = ["@ipg.cl", "@alumnos.ipg.cl"];
-  const hasValidSession = session && email && allowedDomains.some(domain => email.endsWith(domain));
-
-  if (!hasValidSession) {
-    return context.redirect("/");
-  }
-
-  return next();
+  return withSecurityHeaders(response, isDev);
 });

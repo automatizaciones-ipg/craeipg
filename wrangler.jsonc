@@ -13,11 +13,23 @@
   "observability": {
     "enabled": true
   },
+  /*
+   * VARS: solo valores no-secretos (visibles en este archivo).
+   * Para secretos (claves, tokens, contraseñas) usa:
+   *   wrangler secret put NOMBRE_VARIABLE
+   * Secretos requeridos en producción:
+   *   - AUTH_SECRET
+   *   - GOOGLE_CLIENT_ID
+   *   - GOOGLE_CLIENT_SECRET
+   *   - GOOGLE_DRIVE_PRIVATE_KEY
+   *   - GOOGLE_DRIVE_CLIENT_EMAIL
+   *   - MOODLE_PASSWORD
+   *   - EMAIL_PASSWORD
+   *   - ADMIN_EMAILS  (lista separada por comas, ej: "luis.rivera@ipg.cl,otro@ipg.cl")
+   */
   "vars": {
     "AUTH_TRUST_HOST": "true",
-    "AUTH_URL": "https://craeipg.automatizaciones-730.workers.dev",
-    "GOOGLE_CLIENT_ID": "578505337080-14t2u0a6aklgk4ha3l5qp0mmu28lknhm.apps.googleusercontent.com",
-    "GOOGLE_DRIVE_CLIENT_EMAIL": "aprendemas-drive-downloader@aprendemas-ipg-auth.iam.gserviceaccount.com"
+    "AUTH_URL": "https://craeipg.automatizaciones-730.workers.dev"
   },
   "kv_namespaces": [
     {

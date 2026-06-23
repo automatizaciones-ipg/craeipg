@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Play, Sparkles, Compass, ArrowRight, Library, BookOpen, Layers } from 'lucide-react';
+import { TOTAL_RESOURCES } from '../data/resources';
 
 // Pega aquí el ID del video de Google Drive cuando lo subas (ej: "1HhBEhjZKZzuTbsQ8qL2gFVDS01u-m5ur")
 const TOUR_VIDEO_ID = '';
@@ -28,7 +29,7 @@ const WelcomeSection: React.FC = () => {
     },
     {
       icon: <Library className="w-5 h-5 text-[#0077ff]" />,
-      title: "34 Recursos Disponibles",
+      title: `${TOTAL_RESOURCES} Recursos Disponibles`,
       desc: "PDFs, infografías, planners, videos y guías oficiales del CRAI IPG.",
     },
     {
@@ -79,7 +80,7 @@ const WelcomeSection: React.FC = () => {
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 z-10">
                   <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
                     {[
-                      { value: '34', label: 'Recursos' },
+                      { value: String(TOTAL_RESOURCES), label: 'Recursos' },
                       { value: '6',  label: 'Secciones' },
                       { value: '100%', label: 'Gratuito' },
                       { value: 'IPG', label: 'Oficial' },
@@ -89,10 +90,6 @@ const WelcomeSection: React.FC = () => {
                         <div className="text-[11px] font-semibold text-blue-200/80 uppercase tracking-wider mt-0.5">{stat.label}</div>
                       </div>
                     ))}
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-4 py-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                    <span className="text-white/70 text-xs font-medium">Video tutorial próximamente</span>
                   </div>
                 </div>
 

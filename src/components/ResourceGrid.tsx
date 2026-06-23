@@ -4,6 +4,7 @@ import {
   BrainCircuit, Clock, BookOpenCheck, MonitorSmartphone,
   Briefcase, HeartHandshake, ArrowRight, Sparkles, Clock3
 } from 'lucide-react';
+import { TOTAL_RESOURCES } from '../data/resources';
 
 interface CategoryCard {
   title: string;
@@ -77,7 +78,6 @@ const categories: CategoryCard[] = [
     dark: false,
     delay: 0.3,
     href: "/practica-laboral",
-    badge: "Próximamente",
   },
 ];
 
@@ -88,7 +88,7 @@ const ResourceGrid: React.FC = () => {
       <div className="flex items-center gap-2 mb-8">
         <Sparkles className="text-[#0077ff] w-5 h-5" />
         <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Recursos de APRENDE+</h2>
-        <span className="ml-auto text-xs text-slate-400 font-medium hidden sm:block">{categories.length} secciones · 34 recursos</span>
+        <span className="ml-auto text-xs text-slate-400 font-medium hidden sm:block">{categories.length} secciones · {TOTAL_RESOURCES} recursos</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5">
