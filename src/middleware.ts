@@ -77,12 +77,20 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   let response: Response;
 
+  const safeGetSession = async () => {
+    try {
+      return await getSession(context.request);
+    } catch {
+      return null;
+    }
+  };
+
   if (isPublicRoute) {
     if (pathname === '/') {
       if (isDev) {
         response = context.redirect('/inicio');
       } else {
-        const session = await getSession(context.request);
+        const session = await safeGetSession();
         response = session?.user?.email
           ? context.redirect('/inicio')
           : await next();
@@ -93,7 +101,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   } else if (isDev) {
     response = await next();
   } else {
-    const session = await getSession(context.request);
+    const session = await safeGetSession();
     const email = session?.user?.email?.toLowerCase();
     const allowedDomains = ['@ipg.cl', '@alumnos.ipg.cl'];
     const hasValidSession =
