@@ -112,3 +112,5 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   return withSecurityHeaders(response, isDev);
 });
+
+
