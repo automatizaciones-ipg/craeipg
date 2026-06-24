@@ -1,0 +1,23 @@
+{
+  "name": "APRENDE+ CRAE IPG",
+  "short_name": "APRENDE+",
+  "description": "Portal de recursos académicos del CRAE — Instituto Profesional IPG",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#003399",
+  "lang": "es-CL",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    }
+  ]
+}

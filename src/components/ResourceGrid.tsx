@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
   BrainCircuit, Clock, BookOpenCheck, MonitorSmartphone,
-  Briefcase, HeartHandshake, ArrowRight, Sparkles, Clock3
+  HeartHandshake, ArrowRight, Sparkles
 } from 'lucide-react';
 import { TOTAL_RESOURCES } from '../data/resources';
 
@@ -68,16 +68,6 @@ const categories: CategoryCard[] = [
     dark: true,
     delay: 0.25,
     href: "/bienestar-apoyo",
-  },
-  {
-    title: "Práctica Laboral",
-    description: "Orientaciones, pautas y recursos de apoyo para planificar y desarrollar con éxito tu práctica profesional en IPG.",
-    icon: <Briefcase size={28} className="text-amber-600" />,
-    colSpan: "md:col-span-3 lg:col-span-3",
-    gradient: "from-amber-50 via-orange-50/40 to-white",
-    dark: false,
-    delay: 0.3,
-    href: "/practica-laboral",
   },
 ];
 

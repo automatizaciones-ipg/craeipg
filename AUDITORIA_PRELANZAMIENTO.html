@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>APRENDE+ — Auditoría Pre-Lanzamiento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f8faff; --bg2: #ffffff; --bg3: #f1f5fe;
+    --border: #e2e8f0; --text: #0f172a; --text2: #475569; --text3: #94a3b8;
+    --ipg: #003399; --ipg-mid: #0052cc; --ipg-light: #0077ff;
+    --green: #16a34a; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+    --yellow: #b45309; --yellow-bg: #fffbeb; --yellow-border: #fde68a;
+    --red: #dc2626; --red-bg: #fef2f2; --red-border: #fecaca;
+    --blue: #1d4ed8; --blue-bg: #eff6ff; --blue-border: #bfdbfe;
+    --purple: #7c3aed; --purple-bg: #f5f3ff; --purple-border: #ddd6fe;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; display: flex; }
+
+  /* SIDEBAR */
+  #sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); overflow-y: auto; z-index: 100; padding: 24px 0 40px; box-shadow: 4px 0 16px rgba(0,51,153,0.04); }
+  #sidebar::-webkit-scrollbar { width: 4px; } #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .sidebar-badge { width: 38px; height: 38px; background: linear-gradient(135deg, var(--ipg), var(--ipg-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 9px; color: white; letter-spacing: 0.5px; }
+  .sidebar-logo span { font-weight: 800; font-size: 13px; color: var(--text); }
+  .sidebar-section { padding: 6px 12px 2px 20px; font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+  .sidebar-link { display: block; padding: 7px 20px; font-size: 12.5px; color: var(--text2); text-decoration: none; border-left: 2px solid transparent; transition: all 0.15s; }
+  .sidebar-link:hover { color: var(--ipg); background: var(--bg3); }
+  .sidebar-link.active { color: var(--ipg); border-left-color: var(--ipg); background: rgba(0,51,153,0.05); }
+
+  /* MAIN */
+  #main { margin-left: 260px; flex: 1; max-width: calc(100% - 260px); padding: 48px 48px 80px; }
+
+  /* HEADER */
+  .doc-header { border-bottom: 2px solid var(--border); padding-bottom: 32px; margin-bottom: 48px; }
+  .doc-header .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,51,153,0.07); border: 1px solid rgba(0,51,153,0.15); color: var(--ipg); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .doc-header h1 { font-size: 30px; font-weight: 900; color: var(--text); line-height: 1.2; }
+  .doc-header h1 span { color: var(--ipg-light); }
+  .doc-header p { color: var(--text2); margin-top: 8px; font-size: 15px; }
+  .doc-header .meta { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .doc-header .meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+
+  /* SCORE DASHBOARD */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 40px; }
+  .score-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .score-card .score-num { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .score-card .score-label { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; }
+  .score-card.red .score-num { color: var(--red); }
+  .score-card.yellow .score-num { color: var(--yellow); }
+  .score-card.green .score-num { color: var(--green); }
+  .score-card.blue .score-num { color: var(--blue); }
+
+  /* SECTION */
+  .section { margin-bottom: 56px; scroll-margin-top: 24px; }
+  .section-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+  .section-title .icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .icon-red { background: var(--red-bg); } .icon-yellow { background: var(--yellow-bg); }
+  .icon-green { background: var(--green-bg); } .icon-blue { background: var(--blue-bg); }
+  .icon-purple { background: var(--purple-bg); }
+
+  h3 { font-size: 14px; font-weight: 700; color: var(--text); margin: 20px 0 10px; }
+  p { color: var(--text2); margin-bottom: 12px; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--bg3); color: var(--text2); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--bg3); }
+  tbody td { padding: 11px 16px; color: var(--text2); vertical-align: top; }
+  tbody td:first-child { color: var(--text); font-weight: 600; }
+  td code, p code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; background: var(--bg3); padding: 2px 6px; border-radius: 4px; color: var(--ipg); border: 1px solid var(--border); }
+
+  /* CODE BLOCKS */
+  pre { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 20px; overflow-x: auto; margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.7; }
+  pre code { color: #e2e8f0; font-family: inherit; background: none; padding: 0; border: none; }
+  .c-kw { color: #f472b6; } .c-str { color: #a5f3fc; } .c-prop { color: #93c5fd; }
+  .c-val { color: #fde68a; } .c-cmt { color: #64748b; font-style: italic; }
+  .c-green { color: #86efac; } .c-tag { color: #f9a8d4; }
+
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .ok { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .warn { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .fail { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .info { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+  .soon { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+
+  /* CALLOUTS */
+  .callout { padding: 14px 18px; border-radius: 8px; border-left: 4px solid; margin-bottom: 16px; font-size: 13px; }
+  .callout-red { background: var(--red-bg); border-color: var(--red); color: #991b1b; }
+  .callout-yellow { background: var(--yellow-bg); border-color: var(--yellow); color: #92400e; }
+  .callout-green { background: var(--green-bg); border-color: var(--green); color: #166534; }
+  .callout-blue { background: var(--blue-bg); border-color: var(--blue); color: #1e40af; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text2); }
+  .checklist li.done { background: var(--green-bg); border-color: var(--green-border); color: #166534; }
+  .checklist li.todo { background: var(--red-bg); border-color: var(--red-border); color: #991b1b; }
+  .checklist li.partial { background: var(--yellow-bg); border-color: var(--yellow-border); color: #92400e; }
+  .checklist li .ci { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .checklist li strong { color: inherit; }
+
+  /* PRIORITY CARDS */
+  .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .pcard { border-radius: 10px; padding: 16px 18px; border: 1px solid; }
+  .pcard-red { background: var(--red-bg); border-color: var(--red-border); }
+  .pcard-yellow { background: var(--yellow-bg); border-color: var(--yellow-border); }
+  .pcard-green { background: var(--green-bg); border-color: var(--green-border); }
+  .pcard h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .pcard-red h4 { color: var(--red); } .pcard-yellow h4 { color: var(--yellow); } .pcard-green h4 { color: var(--green); }
+  .pcard ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .pcard ul li { font-size: 12.5px; color: var(--text2); display: flex; gap: 6px; }
+  .pcard ul li::before { content: "→"; font-weight: 700; flex-shrink: 0; }
+  .pcard-red ul li::before { color: var(--red); } .pcard-yellow ul li::before { color: var(--yellow); } .pcard-green ul li::before { color: var(--green); }
+
+  #back-top { position: fixed; bottom: 28px; right: 28px; width: 40px; height: 40px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--text2); transition: all 0.2s; z-index: 200; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  #back-top:hover { background: var(--ipg); color: white; border-color: var(--ipg); }
+
+  @media (max-width: 768px) { #sidebar { display: none; } #main { margin-left: 0; max-width: 100%; padding: 24px 20px 60px; } .priority-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-badge">IPG</div>
+    <span>Auditoría Lanzamiento</span>
+  </div>
+  <div class="sidebar-section">Resumen</div>
+  <a href="#dashboard" class="sidebar-link">Dashboard de Estado</a>
+  <a href="#prioridades" class="sidebar-link">Prioridades de Acción</a>
+  <div class="sidebar-section">SEO On-Page</div>
+  <a href="#titulos" class="sidebar-link">Títulos y Meta</a>
+  <a href="#og" class="sidebar-link">Open Graph / Social</a>
+  <a href="#canonical" class="sidebar-link">Canonical y Estructura</a>
+  <div class="sidebar-section">GEO &amp; Metadata</div>
+  <a href="#geo" class="sidebar-link">GEO / Geotargeting</a>
+  <a href="#schema" class="sidebar-link">Schema.org JSON-LD</a>
+  <div class="sidebar-section">Técnico</div>
+  <a href="#robots" class="sidebar-link">robots.txt</a>
+  <a href="#sitemap" class="sidebar-link">sitemap.xml</a>
+  <a href="#assets" class="sidebar-link">Favicons y Assets</a>
+  <a href="#performance" class="sidebar-link">Performance</a>
+  <a href="#accesibilidad" class="sidebar-link">Accesibilidad</a>
+  <a href="#seguridad" class="sidebar-link">Seguridad</a>
+  <div class="sidebar-section">Soluciones</div>
+  <a href="#head-block" class="sidebar-link">Bloque &lt;head&gt; Completo</a>
+  <a href="#checklist" class="sidebar-link">Checklist de Lanzamiento</a>
+</nav>
+
+<main id="main">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="eyebrow">🚀 Auditoría Pre-Lanzamiento</div>
+    <h1>APRENDE+ <span>CRAE IPG</span> — Auditoría de Lanzamiento</h1>
+    <p>Análisis completo de SEO, GEO, performance, accesibilidad y seguridad para lanzar hoy.</p>
+    <div class="meta">
+      <div class="meta-item">📅 <strong>24 junio 2026</strong></div>
+      <div class="meta-item">🌐 <strong>https://craeipg.automatizaciones-730.workers.dev</strong></div>
+      <div class="meta-item">🎯 <strong>Objetivo: lanzar hoy</strong></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section class="section" id="dashboard">
+    <div class="section-title"><div class="icon icon-blue">📊</div>Dashboard de Estado</div>
+    <div class="score-grid">
+      <div class="score-card red"><div class="score-num">9</div><div class="score-label">Críticos ❌</div></div>
+      <div class="score-card yellow"><div class="score-num">7</div><div class="score-label">Importantes ⚠️</div></div>
+      <div class="score-card green"><div class="score-num">8</div><div class="score-label">Aprobados ✅</div></div>
+      <div class="score-card blue"><div class="score-num">3</div><div class="score-label">Post-Launch 🔜</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Área</th><th>Ítem</th><th>Estado</th><th>Impacto</th></tr></thead>
+        <tbody>
+          <tr><td>SEO</td><td>Títulos duplicados/incorrectos en 2 páginas</td><td><span class="badge fail">❌ Crítico</span></td><td>SEO directo — Google indexa títulos incorrectos</td></tr>
+          <tr><td>SEO</td><td>Open Graph tags (og:title, og:description, og:image)</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin OG: links sociales aparecen sin preview</td></tr>
+          <tr><td>SEO</td><td>Twitter Card meta tags</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin Twitter Card: links en Twitter sin tarjeta</td></tr>
+          <tr><td>SEO</td><td>Canonical URL</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin canonical: riesgo contenido duplicado</td></tr>
+          <tr><td>SEO</td><td>robots.txt</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin robots.txt Googlebot no tiene directivas</td></tr>
+          <tr><td>SEO</td><td>sitemap.xml</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin sitemap Google no descubre todas las URLs</td></tr>
+          <tr><td>GEO</td><td>Geo meta tags (region, placename)</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin geo: sin geotargeting para Santiago/Chile</td></tr>
+          <tr><td>Schema</td><td>JSON-LD EducationalOrganization + WebSite</td><td><span class="badge fail">❌ Crítico</span></td><td>Sin structured data: sin rich results en Google</td></tr>
+          <tr><td>Bugs</td><td>Stale Práctica Laboral en HeroSearch, Footer, HelpModal</td><td><span class="badge fail">❌ Crítico</span></td><td>Links a sección desconectada desde buscador/footer</td></tr>
+          <tr><td>SEO</td><td>Keywords meta tag</td><td><span class="badge warn">⚠️ Importante</span></td><td>Bajo impacto en Google, útil para Bing/Yahoo</td></tr>
+          <tr><td>SEO</td><td>hreflang (idioma español)</td><td><span class="badge warn">⚠️ Importante</span></td><td>Sin hreflang motores pueden asumir idioma incorrecto</td></tr>
+          <tr><td>GEO</td><td>og:locale</td><td><span class="badge warn">⚠️ Importante</span></td><td>Sin locale: Facebook/LinkedIn no aplican regionalización</td></tr>
+          <tr><td>Assets</td><td>apple-touch-icon (PNG 180×180)</td><td><span class="badge warn">⚠️ Importante</span></td><td>Sin ATI: iOS muestra ícono genérico al agregar a pantalla</td></tr>
+          <tr><td>Assets</td><td>PWA manifest.json</td><td><span class="badge warn">⚠️ Importante</span></td><td>Sin manifest: no instalable como PWA en mobile</td></tr>
+          <tr><td>Perf</td><td>font-display: swap en Google Fonts</td><td><span class="badge warn">⚠️ Importante</span></td><td>Sin swap: texto invisible durante carga de font (FOIT)</td></tr>
+          <tr><td>Seguridad</td><td>Rotación AUTH_SECRET</td><td><span class="badge warn">⚠️ Importante</span></td><td>Sesiones de 30 días anteriores aún válidas</td></tr>
+          <tr><td>SEO</td><td>Meta description en Layout.astro</td><td><span class="badge ok">✅ OK</span></td><td>Existe como prop del componente Layout</td></tr>
+          <tr><td>SEO</td><td>lang="es" en &lt;html&gt;</td><td><span class="badge ok">✅ OK</span></td><td>Layout.astro declara lang="es"</td></tr>
+          <tr><td>SEO</td><td>charset UTF-8</td><td><span class="badge ok">✅ OK</span></td><td>Declarado en Layout.astro</td></tr>
+          <tr><td>SEO</td><td>viewport meta tag</td><td><span class="badge ok">✅ OK</span></td><td>width=device-width, initial-scale=1.0</td></tr>
+          <tr><td>Assets</td><td>favicon.svg</td><td><span class="badge ok">✅ OK</span></td><td>Formato moderno SVG en public/</td></tr>
+          <tr><td>Assets</td><td>favicon.ico</td><td><span class="badge ok">✅ OK</span></td><td>Fallback para browsers legacy en public/</td></tr>
+          <tr><td>Seguridad</td><td>CSP Headers</td><td><span class="badge ok">✅ OK</span></td><td>Configurados en middleware.ts</td></tr>
+          <tr><td>Seguridad</td><td>HSTS</td><td><span class="badge ok">✅ OK</span></td><td>max-age=31536000; includeSubDomains</td></tr>
+          <tr><td>Seguridad</td><td>X-Frame-Options: DENY</td><td><span class="badge ok">✅ OK</span></td><td>Protege contra clickjacking</td></tr>
+          <tr><td>Perf</td><td>SSR en Cloudflare Edge</td><td><span class="badge ok">✅ OK</span></td><td>Workers en edge global — latencia mínima</td></tr>
+          <tr><td>Accesibilidad</td><td>Iconos con aria-hidden</td><td><span class="badge ok">✅ OK</span></td><td>SVGs decorativos marcados aria-hidden="true"</td></tr>
+          <tr><td>GEO</td><td>Analytics / Core Web Vitals</td><td><span class="badge soon">🔜 Post-Launch</span></td><td>Cloudflare Analytics o GA4 para monitoreo</td></tr>
+          <tr><td>SEO</td><td>Dominio personalizado (ipg.cl)</td><td><span class="badge soon">🔜 Post-Launch</span></td><td>Actualizar AUTH_URL + configurar en wrangler.jsonc</td></tr>
+          <tr><td>Perf</td><td>Image optimization (og:image)</td><td><span class="badge soon">🔜 Post-Launch</span></td><td>Crear og-image.png 1200×630 para compartir en redes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PRIORIDADES -->
+  <section class="section" id="prioridades">
+    <div class="section-title"><div class="icon icon-red">🎯</div>Prioridades de Acción para Lanzar Hoy</div>
+    <div class="priority-grid">
+      <div class="pcard pcard-red">
+        <h4>❌ BLOQUEAN el lanzamiento (hacer ahora)</h4>
+        <ul>
+          <li>Corregir título de herramientas-digitales.astro</li>
+          <li>Corregir título de bienestar-apoyo.astro</li>
+          <li>Agregar bloque &lt;head&gt; completo en Layout.astro</li>
+          <li>Crear public/robots.txt</li>
+          <li>Crear public/sitemap.xml</li>
+          <li>Limpiar stale Práctica Laboral (Footer, HeroSearch, HelpModal)</li>
+        </ul>
+      </div>
+      <div class="pcard pcard-yellow">
+        <h4>⚠️ DEBERÍAN hacerse hoy (antes de compartir)</h4>
+        <ul>
+          <li>apple-touch-icon.png (180×180) en public/</li>
+          <li>manifest.json básico en public/</li>
+          <li>font-display=swap en Google Fonts</li>
+          <li>Rotar AUTH_SECRET (wrangler secret)</li>
+          <li>og:image PNG 1200×630 en public/</li>
+        </ul>
+      </div>
+      <div class="pcard pcard-green">
+        <h4>✅ Ya están bien — no tocar</h4>
+        <ul>
+          <li>CSP headers, HSTS, X-Frame-Options</li>
+          <li>Rate limiting en las 3 APIs</li>
+          <li>lang="es", charset, viewport</li>
+          <li>favicon.svg + favicon.ico</li>
+          <li>Sesión fija 8h (sin rolling)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TITULOS SEO -->
+  <section class="section" id="titulos">
+    <div class="section-title"><div class="icon icon-red">🏷️</div>Títulos de Página y Meta Description</div>
+    <div class="callout callout-red"><strong>BUGS CRÍTICOS:</strong> Dos páginas tienen títulos copy-paste incorrectos. Google indexará estos títulos erróneos si no se corrigen antes del lanzamiento.</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Página</th><th>Título ACTUAL</th><th>Título CORRECTO</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><code>/</code></td><td>Acceso al Portal | APRENDE+ IPG</td><td>— correcto —</td><td><span class="badge ok">✅ OK</span></td></tr>
+          <tr><td><code>/inicio</code></td><td>CRAE - Centro de Recursos Estudiantiles IPG</td><td>— correcto —</td><td><span class="badge ok">✅ OK</span></td></tr>
+          <tr><td><code>/tecnicas-estudio</code></td><td>Técnicas de Estudio - CRAE IPG</td><td>— correcto —</td><td><span class="badge ok">✅ OK</span></td></tr>
+          <tr><td><code>/gestion-tiempo</code></td><td>Gestión del Tiempo - CRAE IPG</td><td>— correcto —</td><td><span class="badge ok">✅ OK</span></td></tr>
+          <tr><td><code>/normas-apa</code></td><td>Normas y Estándares (APA) - CRAE IPG</td><td>— correcto —</td><td><span class="badge ok">✅ OK</span></td></tr>
+          <tr><td><code>/herramientas-digitales</code></td><td><strong style="color:var(--red)">"Normas y Estándares (APA) - CRAE IPG"</strong></td><td>Herramientas Digitales - CRAE IPG</td><td><span class="badge fail">❌ BUG</span></td></tr>
+          <tr><td><code>/bienestar-apoyo</code></td><td><strong style="color:var(--red)">"Gestión del Tiempo - CRAE IPG"</strong></td><td>Bienestar y Apoyo - CRAE IPG</td><td><span class="badge fail">❌ BUG</span></td></tr>
+          <tr><td><code>/recorrido-virtual</code></td><td>Recorrido Virtual - CRAE IPG</td><td>— correcto —</td><td><span class="badge ok">✅ OK</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Fix para herramientas-digitales.astro</h3>
+    <pre><code><span class="c-tag">&lt;Layout</span> <span class="c-prop">title</span>=<span class="c-str">"Herramientas Digitales - CRAE IPG"</span>
+         <span class="c-prop">description</span>=<span class="c-str">"Guías y recursos para Aula Virtual, correo institucional, Google Drive, Microsoft Word y portal estudiantil de IPG."</span><span class="c-tag">&gt;</span></code></pre>
+    <h3>Fix para bienestar-apoyo.astro</h3>
+    <pre><code><span class="c-tag">&lt;Layout</span> <span class="c-prop">title</span>=<span class="c-str">"Bienestar y Apoyo Estudiantil - CRAE IPG"</span>
+         <span class="c-prop">description</span>=<span class="c-str">"Recursos de bienestar estudiantil: programa ¿No Solo A?, autocuidado, podcast y apoyo emocional para alumnos IPG."</span><span class="c-tag">&gt;</span></code></pre>
+  </section>
+
+  <!-- OPEN GRAPH -->
+  <section class="section" id="og">
+    <div class="section-title"><div class="icon icon-red">📣</div>Open Graph / Twitter Card / Social</div>
+    <div class="callout callout-red"><strong>Estado actual:</strong> Layout.astro NO incluye ningún tag Open Graph ni Twitter Card. Al compartir un link en WhatsApp, LinkedIn, Twitter, Facebook — no aparece ningún preview (título, descripción, imagen). Esto es crítico para el lanzamiento.</div>
+    <p>El bloque completo está en la sección <a href="#head-block">Bloque &lt;head&gt; Completo</a>. Aquí se explica qué falta y por qué:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tag</th><th>Plataforma</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><code>og:type</code></td><td>Facebook, LinkedIn, WhatsApp</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:title</code></td><td>Facebook, LinkedIn, WhatsApp, Slack</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:description</code></td><td>Facebook, LinkedIn, WhatsApp, Slack</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:image</code></td><td>Todas las redes (preview visual)</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:url</code></td><td>Todas las redes (URL canónica)</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:site_name</code></td><td>Facebook, LinkedIn</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:locale</code></td><td>Facebook, LinkedIn</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>twitter:card</code></td><td>Twitter/X</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>twitter:title</code></td><td>Twitter/X</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>twitter:description</code></td><td>Twitter/X</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>twitter:image</code></td><td>Twitter/X</td><td><span class="badge fail">❌ Falta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-blue"><strong>og:image:</strong> Crear un PNG de 1200×630px en <code>public/og-image.png</code>. Puede ser la pantalla de login o un branding de APRENDE+. Sin esta imagen, las redes sociales no mostrarán preview visual al compartir el link.</div>
+  </section>
+
+  <!-- CANONICAL -->
+  <section class="section" id="canonical">
+    <div class="section-title"><div class="icon icon-yellow">🔗</div>Canonical URL y Estructura</div>
+    <p>La URL canónica le indica a los buscadores cuál es la URL "oficial" de cada página, evitando penalizaciones por contenido duplicado.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tag</th><th>Estado Actual</th><th>Solución</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;link rel="canonical"&gt;</code></td><td><span class="badge fail">❌ Falta</span></td><td>Agregar con URL actual de la página: <code>Astro.url.href</code></td></tr>
+          <tr><td>Keyword meta tag</td><td><span class="badge fail">❌ Falta</span></td><td>Agregar como prop opcional de Layout.astro</td></tr>
+          <tr><td>hreflang (es, es-CL)</td><td><span class="badge fail">❌ Falta</span></td><td>Agregar <code>&lt;link rel="alternate" hreflang="es-CL"&gt;</code></td></tr>
+          <tr><td>meta description</td><td><span class="badge ok">✅ Existe</span></td><td>Ya está como prop de Layout.astro. Verificar que cada página pase una description única.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-yellow"><strong>hreflang:</strong> Aunque APRENDE+ es solo en español, declarar hreflang="es-CL" le indica a Google que el contenido es específico de Chile, mejorando el ranking en búsquedas locales.</div>
+  </section>
+
+  <!-- GEO -->
+  <section class="section" id="geo">
+    <div class="section-title"><div class="icon icon-yellow">📍</div>GEO / Geotargeting</div>
+    <div class="callout callout-yellow"><strong>Sin geo tags:</strong> Los motores no pueden asociar este sitio con Chile/Santiago sin declaraciones explícitas. Crítico para que alumnos de IPG Chile encuentren el portal al buscar.</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Meta Tag</th><th>Valor</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><code>geo.region</code></td><td>CL-RM (Región Metropolitana)</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>geo.placename</code></td><td>Santiago, Chile</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>geo.position</code></td><td>-33.4372;-70.6506 (Santiago)</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>ICBM</code></td><td>-33.4372, -70.6506</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>og:locale</code></td><td>es_CL</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td><code>hreflang</code></td><td>es-CL</td><td><span class="badge fail">❌ Falta</span></td></tr>
+          <tr><td>lang="es"</td><td>layout.astro: &lt;html lang="es"&gt;</td><td><span class="badge ok">✅ OK</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Todo esto se resuelve con el bloque &lt;head&gt; de la sección siguiente. Es una sola edición en Layout.astro.</p>
+  </section>
+
+  <!-- SCHEMA.ORG -->
+  <section class="section" id="schema">
+    <div class="section-title"><div class="icon icon-yellow">🧩</div>Schema.org JSON-LD</div>
+    <p>Structured data le dice a Google exactamente qué es este sitio. Sin él, no aparecen rich results (breadcrumbs, site links, descripción de la organización en el panel de conocimiento).</p>
+    <h3>JSON-LD para Layout.astro (agregar en &lt;head&gt;)</h3>
+    <pre><code><span class="c-tag">&lt;script</span> <span class="c-prop">type</span>=<span class="c-str">"application/ld+json"</span> <span class="c-prop">set:html</span>=<span class="c-str">{JSON.stringify({</span>
+  <span class="c-str">"@context"</span>: <span class="c-str">"https://schema.org"</span>,
+  <span class="c-str">"@graph"</span>: [
+    {
+      <span class="c-str">"@type"</span>: <span class="c-str">"EducationalOrganization"</span>,
+      <span class="c-str">"@id"</span>: <span class="c-str">"https://craeipg.automatizaciones-730.workers.dev/#organization"</span>,
+      <span class="c-str">"name"</span>: <span class="c-str">"CRAE — Centro de Recursos de Apoyo Estudiantil IPG"</span>,
+      <span class="c-str">"alternateName"</span>: <span class="c-str">"APRENDE+ CRAE IPG"</span>,
+      <span class="c-str">"url"</span>: <span class="c-str">"https://craeipg.automatizaciones-730.workers.dev"</span>,
+      <span class="c-str">"description"</span>: <span class="c-str">"Portal de recursos académicos del Instituto Profesional IPG"</span>,
+      <span class="c-str">"address"</span>: {
+        <span class="c-str">"@type"</span>: <span class="c-str">"PostalAddress"</span>,
+        <span class="c-str">"addressLocality"</span>: <span class="c-str">"Santiago"</span>,
+        <span class="c-str">"addressCountry"</span>: <span class="c-str">"CL"</span>
+      },
+      <span class="c-str">"parentOrganization"</span>: {
+        <span class="c-str">"@type"</span>: <span class="c-str">"CollegeOrUniversity"</span>,
+        <span class="c-str">"name"</span>: <span class="c-str">"Instituto Profesional IPG"</span>,
+        <span class="c-str">"url"</span>: <span class="c-str">"https://www.ipg.cl"</span>
+      }
+    },
+    {
+      <span class="c-str">"@type"</span>: <span class="c-str">"WebSite"</span>,
+      <span class="c-str">"@id"</span>: <span class="c-str">"https://craeipg.automatizaciones-730.workers.dev/#website"</span>,
+      <span class="c-str">"name"</span>: <span class="c-str">"APRENDE+ CRAE IPG"</span>,
+      <span class="c-str">"url"</span>: <span class="c-str">"https://craeipg.automatizaciones-730.workers.dev"</span>,
+      <span class="c-str">"inLanguage"</span>: <span class="c-str">"es-CL"</span>,
+      <span class="c-str">"publisher"</span>: { <span class="c-str">"@id"</span>: <span class="c-str">"https://craeipg.automatizaciones-730.workers.dev/#organization"</span> }
+    }
+  ]
+}<span class="c-str">)}</span> <span class="c-tag">/&gt;</span></code></pre>
+    <div class="callout callout-blue"><strong>Actualizar URLs:</strong> Cuando se configure el dominio personalizado (ej: aprende.ipg.cl), actualizar todas las URLs en el JSON-LD y el bloque &lt;head&gt;.</div>
+  </section>
+
+  <!-- ROBOTS.TXT -->
+  <section class="section" id="robots">
+    <div class="section-title"><div class="icon icon-red">🤖</div>robots.txt</div>
+    <div class="callout callout-red"><strong>Falta en public/:</strong> Sin robots.txt, Googlebot no tiene directivas y puede rastrear rutas sensibles como /api/* o /admin.</div>
+    <h3>Contenido de public/robots.txt</h3>
+    <pre><code><span class="c-cmt"># APRENDE+ CRAE IPG — robots.txt</span>
+User-agent: *
+<span class="c-cmt"># Permitir todas las páginas de contenido</span>
+Allow: /
+Allow: /inicio
+Allow: /tecnicas-estudio
+Allow: /gestion-tiempo
+Allow: /normas-apa
+Allow: /herramientas-digitales
+Allow: /bienestar-apoyo
+Allow: /recorrido-virtual
+
+<span class="c-cmt"># Bloquear rutas de administración y APIs</span>
+Disallow: /admin
+Disallow: /api/
+Disallow: /api/auth/
+
+<span class="c-cmt"># Sitemap</span>
+Sitemap: https://craeipg.automatizaciones-730.workers.dev/sitemap.xml</code></pre>
+    <p>Crear como <code>public/robots.txt</code> — Astro lo servirá como archivo estático en <code>/robots.txt</code>.</p>
+  </section>
+
+  <!-- SITEMAP -->
+  <section class="section" id="sitemap">
+    <div class="section-title"><div class="icon icon-red">🗺️</div>sitemap.xml</div>
+    <div class="callout callout-yellow"><strong>App protegida por login:</strong> Las páginas de contenido requieren autenticación. El sitemap principalmente ayuda a Google a descubrir la URL raíz y el recorrido virtual (únicos accesibles sin sesión).</div>
+    <h3>Contenido de public/sitemap.xml</h3>
+    <pre><code><span class="c-tag">&lt;?xml</span> <span class="c-prop">version</span>=<span class="c-str">"1.0"</span> <span class="c-prop">encoding</span>=<span class="c-str">"UTF-8"</span><span class="c-tag">?&gt;</span>
+<span class="c-tag">&lt;urlset</span> <span class="c-prop">xmlns</span>=<span class="c-str">"http://www.sitemaps.org/schemas/sitemap/0.9"</span>
+        <span class="c-prop">xmlns:xhtml</span>=<span class="c-str">"http://www.w3.org/1999/xhtml"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;url&gt;</span>
+    <span class="c-tag">&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/<span class="c-tag">&lt;/loc&gt;</span>
+    <span class="c-tag">&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;</span>
+    <span class="c-tag">&lt;priority&gt;</span>1.0<span class="c-tag">&lt;/priority&gt;</span>
+    <span class="c-tag">&lt;lastmod&gt;</span>2026-06-24<span class="c-tag">&lt;/lastmod&gt;</span>
+  <span class="c-tag">&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;</span>
+    <span class="c-tag">&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/inicio<span class="c-tag">&lt;/loc&gt;</span>
+    <span class="c-tag">&lt;changefreq&gt;</span>weekly<span class="c-tag">&lt;/changefreq&gt;</span>
+    <span class="c-tag">&lt;priority&gt;</span>0.9<span class="c-tag">&lt;/priority&gt;</span>
+    <span class="c-tag">&lt;lastmod&gt;</span>2026-06-24<span class="c-tag">&lt;/lastmod&gt;</span>
+  <span class="c-tag">&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/tecnicas-estudio<span class="c-tag">&lt;/loc&gt;&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;&lt;priority&gt;</span>0.8<span class="c-tag">&lt;/priority&gt;&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/gestion-tiempo<span class="c-tag">&lt;/loc&gt;&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;&lt;priority&gt;</span>0.8<span class="c-tag">&lt;/priority&gt;&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/normas-apa<span class="c-tag">&lt;/loc&gt;&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;&lt;priority&gt;</span>0.8<span class="c-tag">&lt;/priority&gt;&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/herramientas-digitales<span class="c-tag">&lt;/loc&gt;&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;&lt;priority&gt;</span>0.8<span class="c-tag">&lt;/priority&gt;&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/bienestar-apoyo<span class="c-tag">&lt;/loc&gt;&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;&lt;priority&gt;</span>0.8<span class="c-tag">&lt;/priority&gt;&lt;/url&gt;</span>
+  <span class="c-tag">&lt;url&gt;&lt;loc&gt;</span>https://craeipg.automatizaciones-730.workers.dev/recorrido-virtual<span class="c-tag">&lt;/loc&gt;&lt;changefreq&gt;</span>monthly<span class="c-tag">&lt;/changefreq&gt;&lt;priority&gt;</span>0.7<span class="c-tag">&lt;/priority&gt;&lt;/url&gt;</span>
+<span class="c-tag">&lt;/urlset&gt;</span></code></pre>
+  </section>
+
+  <!-- ASSETS -->
+  <section class="section" id="assets">
+    <div class="section-title"><div class="icon icon-yellow">🖼️</div>Favicons y Assets</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Asset</th><th>Ruta</th><th>Estado</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>favicon.svg</td><td>public/favicon.svg</td><td><span class="badge ok">✅ OK</span></td><td>Formato moderno — browsers actuales.</td></tr>
+          <tr><td>favicon.ico</td><td>public/favicon.ico</td><td><span class="badge ok">✅ OK</span></td><td>Fallback para IE y browsers legacy.</td></tr>
+          <tr><td>apple-touch-icon.png</td><td>public/apple-touch-icon.png</td><td><span class="badge fail">❌ Falta</span></td><td>PNG 180×180px. iOS usa esto al "Agregar a pantalla de inicio".</td></tr>
+          <tr><td>og-image.png</td><td>public/og-image.png</td><td><span class="badge fail">❌ Falta</span></td><td>PNG 1200×630px. Preview visual en redes sociales.</td></tr>
+          <tr><td>manifest.json</td><td>public/manifest.json</td><td><span class="badge fail">❌ Falta</span></td><td>PWA manifest para instalar en mobile como app.</td></tr>
+          <tr><td>favicon-32x32.png</td><td>public/favicon-32x32.png</td><td><span class="badge warn">⚠️ Opcional</span></td><td>Algunos browsers prefieren PNG sobre SVG para el favicon.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Contenido de public/manifest.json (mínimo viável)</h3>
+    <pre><code>{
+  <span class="c-prop">"name"</span>: <span class="c-str">"APRENDE+ CRAE IPG"</span>,
+  <span class="c-prop">"short_name"</span>: <span class="c-str">"APRENDE+"</span>,
+  <span class="c-prop">"description"</span>: <span class="c-str">"Portal de recursos académicos del CRAE Instituto Profesional IPG"</span>,
+  <span class="c-prop">"start_url"</span>: <span class="c-str">"/"</span>,
+  <span class="c-prop">"display"</span>: <span class="c-str">"standalone"</span>,
+  <span class="c-prop">"background_color"</span>: <span class="c-str">"#ffffff"</span>,
+  <span class="c-prop">"theme_color"</span>: <span class="c-str">"#003399"</span>,
+  <span class="c-prop">"lang"</span>: <span class="c-str">"es-CL"</span>,
+  <span class="c-prop">"icons"</span>: [
+    { <span class="c-prop">"src"</span>: <span class="c-str">"/apple-touch-icon.png"</span>, <span class="c-prop">"sizes"</span>: <span class="c-str">"180x180"</span>, <span class="c-prop">"type"</span>: <span class="c-str">"image/png"</span> },
+    { <span class="c-prop">"src"</span>: <span class="c-str">"/favicon.svg"</span>, <span class="c-prop">"sizes"</span>: <span class="c-str">"any"</span>, <span class="c-prop">"type"</span>: <span class="c-str">"image/svg+xml"</span> }
+  ]
+}</code></pre>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section class="section" id="performance">
+    <div class="section-title"><div class="icon icon-yellow">⚡</div>Performance</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ítem</th><th>Estado Actual</th><th>Impacto</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>SSR en Cloudflare Edge</td><td><span class="badge ok">✅ OK</span></td><td>Pages renderizadas en el edge global — latencia mínima para Chile</td><td>—</td></tr>
+          <tr><td>React islands lazy</td><td><span class="badge ok">✅ OK</span></td><td>client:visible = no hidrata hasta que el componente entra al viewport</td><td>—</td></tr>
+          <tr><td>Tree-shaking lucide-react</td><td><span class="badge ok">✅ OK</span></td><td>Solo se incluye código de iconos importados</td><td>—</td></tr>
+          <tr><td>font-display: swap</td><td><span class="badge fail">❌ Falta</span></td><td>Sin swap: texto invisible (FOIT) durante carga del font Plus Jakarta Sans</td><td>Agregar &display=swap en URL de Google Fonts</td></tr>
+          <tr><td>preload fonts</td><td><span class="badge warn">⚠️ Opcional</span></td><td>Sin preload: el font se descarga tarde en el critical path</td><td>Agregar &lt;link rel="preload" as="font"&gt;</td></tr>
+          <tr><td>Google Fonts en index.astro</td><td><span class="badge warn">⚠️ Parcial</span></td><td>Font cargado en login pero NO en Layout.astro — páginas autenticadas usan system font</td><td>Mover carga de font a Layout.astro</td></tr>
+          <tr><td>No SSG (todo es SSR)</td><td><span class="badge ok">✅ Intencional</span></td><td>Output: 'server' requerido para auth. Worker en edge compensa latencia.</td><td>—</td></tr>
+          <tr><td>Token cache 55min</td><td><span class="badge ok">✅ OK</span></td><td>Service Account token cacheado en módulo Worker — 0 extra fetches a Google OAuth</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Fix font-display (en Layout.astro — mover desde index.astro)</h3>
+    <pre><code><span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"preconnect"</span> <span class="c-prop">href</span>=<span class="c-str">"https://fonts.googleapis.com"</span> <span class="c-tag">/&gt;</span>
+<span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"preconnect"</span> <span class="c-prop">href</span>=<span class="c-str">"https://fonts.gstatic.com"</span> <span class="c-prop">crossorigin</span> <span class="c-tag">/&gt;</span>
+<span class="c-cmt">&lt;!-- &display=swap es la clave — evita FOIT --&gt;</span>
+<span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"stylesheet"</span>
+      <span class="c-prop">href</span>=<span class="c-str">"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"</span> <span class="c-tag">/&gt;</span></code></pre>
+  </section>
+
+  <!-- ACCESIBILIDAD -->
+  <section class="section" id="accesibilidad">
+    <div class="section-title"><div class="icon icon-green">♿</div>Accesibilidad</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ítem</th><th>Estado</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td>lang="es" en &lt;html&gt;</td><td><span class="badge ok">✅ OK</span></td><td>Layout.astro declara lang="es"</td></tr>
+          <tr><td>aria-hidden en SVG decorativos</td><td><span class="badge ok">✅ OK</span></td><td>Hub SVG en WelcomeSection.tsx: aria-hidden="true"</td></tr>
+          <tr><td>title en iframes</td><td><span class="badge ok">✅ OK</span></td><td>WelcomeSection iframe: title="Tutorial APRENDE+ — Recorrido Virtual"</td></tr>
+          <tr><td>Contraste de color</td><td><span class="badge ok">✅ OK</span></td><td>Colores IPG (#003399, slate-800) sobre fondo blanco superan WCAG AA</td></tr>
+          <tr><td>Roles de navegación</td><td><span class="badge warn">⚠️ Revisar</span></td><td>Header.tsx: verificar que nav tenga aria-label="Navegación principal"</td></tr>
+          <tr><td>Skip to main content</td><td><span class="badge warn">⚠️ Falta</span></td><td>Sin enlace de salto para usuarios de teclado/screen reader</td></tr>
+          <tr><td>Focus visible</td><td><span class="badge warn">⚠️ Revisar</span></td><td>Tailwind remueve outline por defecto — verificar focus-visible en botones/links</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SEGURIDAD -->
+  <section class="section" id="seguridad">
+    <div class="section-title"><div class="icon icon-green">🛡️</div>Seguridad — Checklist</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Control</th><th>Estado</th><th>Acción</th></tr></thead>
+        <tbody>
+          <tr><td>CSP headers</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>HSTS (1 año)</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>X-Frame-Options: DENY</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Referrer-Policy strict</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Permissions-Policy</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Rate limiting APIs</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Proxy streaming (no URLs Drive)</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>fileId regex validation</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Dominio doble validación</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Cache-Control: no-store en credenciales</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Sesión fija 8h</td><td><span class="badge ok">✅ OK</span></td><td>—</td></tr>
+          <tr><td>Rotación AUTH_SECRET</td><td><span class="badge fail">❌ Pendiente</span></td><td>wrangler secret put AUTH_SECRET (nuevo valor aleatorio ≥32 chars)</td></tr>
+          <tr><td>Verificar git history (GOOGLE_CLIENT_ID)</td><td><span class="badge warn">⚠️ Revisar</span></td><td>git log --all -p | grep GOOGLE_CLIENT — confirmar que no hay leaks en commits antiguos</td></tr>
+          <tr><td>ADMIN_EMAILS como wrangler secret</td><td><span class="badge warn">⚠️ Confirmar</span></td><td>Verificar wrangler secret list para confirmar que ADMIN_EMAILS está configurado</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- HEAD BLOCK COMPLETO -->
+  <section class="section" id="head-block">
+    <div class="section-title"><div class="icon icon-blue">🧠</div>Bloque &lt;head&gt; Completo para Layout.astro</div>
+    <div class="callout callout-blue"><strong>Cómo usar:</strong> Reemplazar el bloque &lt;head&gt; actual de src/layouts/Layout.astro con este. Acepta props: title, description, keywords, ogImage, canonicalURL.</div>
+    <pre><code><span class="c-cmt">---</span>
+<span class="c-cmt">// src/layouts/Layout.astro — props extendidos</span>
+<span class="c-kw">interface</span> Props {
+  title: <span class="c-val">string</span>;
+  description?: <span class="c-val">string</span>;
+  keywords?: <span class="c-val">string</span>;
+  ogImage?: <span class="c-val">string</span>;
+}
+<span class="c-kw">const</span> { title, description = <span class="c-str">"Portal de recursos académicos del CRAE — Instituto Profesional IPG"</span>,
+        keywords = <span class="c-str">"recursos académicos, IPG, CRAE, técnicas de estudio, APA, Moodle"</span>,
+        ogImage = <span class="c-str">"/og-image.png"</span> } = Astro.props;
+<span class="c-kw">const</span> siteUrl = <span class="c-str">"https://craeipg.automatizaciones-730.workers.dev"</span>;
+<span class="c-kw">const</span> canonicalURL = <span class="c-kw">new</span> URL(Astro.url.pathname, siteUrl).toString();
+<span class="c-kw">const</span> ogImageURL = <span class="c-kw">new</span> URL(ogImage, siteUrl).toString();
+<span class="c-cmt">---</span>
+
+<span class="c-tag">&lt;head&gt;</span>
+  <span class="c-cmt">&lt;!-- Base --&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">charset</span>=<span class="c-str">"UTF-8"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"viewport"</span> <span class="c-prop">content</span>=<span class="c-str">"width=device-width, initial-scale=1.0"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;title&gt;</span>{title}<span class="c-tag">&lt;/title&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"description"</span> <span class="c-prop">content</span>=<span class="c-str">{description}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"keywords"</span> <span class="c-prop">content</span>=<span class="c-str">{keywords}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"author"</span> <span class="c-prop">content</span>=<span class="c-str">"CRAE — Instituto Profesional IPG"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"robots"</span> <span class="c-prop">content</span>=<span class="c-str">"index, follow"</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Canonical --&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"canonical"</span> <span class="c-prop">href</span>=<span class="c-str">{canonicalURL}</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Idioma / GEO --&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"alternate"</span> <span class="c-prop">hreflang</span>=<span class="c-str">"es-CL"</span> <span class="c-prop">href</span>=<span class="c-str">{canonicalURL}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"alternate"</span> <span class="c-prop">hreflang</span>=<span class="c-str">"es"</span> <span class="c-prop">href</span>=<span class="c-str">{canonicalURL}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"geo.region"</span> <span class="c-prop">content</span>=<span class="c-str">"CL-RM"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"geo.placename"</span> <span class="c-prop">content</span>=<span class="c-str">"Santiago, Chile"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"geo.position"</span> <span class="c-prop">content</span>=<span class="c-str">"-33.4372;-70.6506"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"ICBM"</span> <span class="c-prop">content</span>=<span class="c-str">"-33.4372, -70.6506"</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Open Graph --&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:type"</span> <span class="c-prop">content</span>=<span class="c-str">"website"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:site_name"</span> <span class="c-prop">content</span>=<span class="c-str">"APRENDE+ CRAE IPG"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:title"</span> <span class="c-prop">content</span>=<span class="c-str">{title}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:description"</span> <span class="c-prop">content</span>=<span class="c-str">{description}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:image"</span> <span class="c-prop">content</span>=<span class="c-str">{ogImageURL}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:image:width"</span> <span class="c-prop">content</span>=<span class="c-str">"1200"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:image:height"</span> <span class="c-prop">content</span>=<span class="c-str">"630"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:url"</span> <span class="c-prop">content</span>=<span class="c-str">{canonicalURL}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">property</span>=<span class="c-str">"og:locale"</span> <span class="c-prop">content</span>=<span class="c-str">"es_CL"</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Twitter Card --&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"twitter:card"</span> <span class="c-prop">content</span>=<span class="c-str">"summary_large_image"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"twitter:title"</span> <span class="c-prop">content</span>=<span class="c-str">{title}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"twitter:description"</span> <span class="c-prop">content</span>=<span class="c-str">{description}</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"twitter:image"</span> <span class="c-prop">content</span>=<span class="c-str">{ogImageURL}</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Favicons --&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"icon"</span> <span class="c-prop">type</span>=<span class="c-str">"image/svg+xml"</span> <span class="c-prop">href</span>=<span class="c-str">"/favicon.svg"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"icon"</span> <span class="c-prop">type</span>=<span class="c-str">"image/x-icon"</span> <span class="c-prop">href</span>=<span class="c-str">"/favicon.ico"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"apple-touch-icon"</span> <span class="c-prop">href</span>=<span class="c-str">"/apple-touch-icon.png"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"manifest"</span> <span class="c-prop">href</span>=<span class="c-str">"/manifest.json"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"theme-color"</span> <span class="c-prop">content</span>=<span class="c-str">"#003399"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;meta</span> <span class="c-prop">name</span>=<span class="c-str">"msapplication-TileColor"</span> <span class="c-prop">content</span>=<span class="c-str">"#003399"</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Google Fonts con font-display:swap (mover desde index.astro) --&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"preconnect"</span> <span class="c-prop">href</span>=<span class="c-str">"https://fonts.googleapis.com"</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"preconnect"</span> <span class="c-prop">href</span>=<span class="c-str">"https://fonts.gstatic.com"</span> <span class="c-prop">crossorigin</span> <span class="c-tag">/&gt;</span>
+  <span class="c-tag">&lt;link</span> <span class="c-prop">rel</span>=<span class="c-str">"stylesheet"</span>
+        <span class="c-prop">href</span>=<span class="c-str">"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"</span> <span class="c-tag">/&gt;</span>
+
+  <span class="c-cmt">&lt;!-- Schema.org JSON-LD --&gt;</span>
+  <span class="c-tag">&lt;script</span> <span class="c-prop">type</span>=<span class="c-str">"application/ld+json"</span> <span class="c-prop">set:html</span>=<span class="c-str">{JSON.stringify({</span>
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "EducationalOrganization", "@id": `${siteUrl}/#organization`,
+        "name": "CRAE — Centro de Recursos de Apoyo Estudiantil IPG",
+        "alternateName": "APRENDE+ CRAE IPG", "url": siteUrl,
+        "description": "Portal de recursos académicos del Instituto Profesional IPG",
+        "address": { "@type": "PostalAddress", "addressLocality": "Santiago", "addressCountry": "CL" },
+        "parentOrganization": { "@type": "CollegeOrUniversity", "name": "Instituto Profesional IPG", "url": "https://www.ipg.cl" }
+      },
+      { "@type": "WebSite", "@id": `${siteUrl}/#website`,
+        "name": "APRENDE+ CRAE IPG", "url": siteUrl, "inLanguage": "es-CL",
+        "publisher": { "@id": `${siteUrl}/#organization` }
+      }
+    ]
+  <span class="c-str">})}</span> <span class="c-tag">/&gt;</span>
+<span class="c-tag">&lt;/head&gt;</span></code></pre>
+  </section>
+
+  <!-- CHECKLIST FINAL -->
+  <section class="section" id="checklist">
+    <div class="section-title"><div class="icon icon-green">✅</div>Checklist de Lanzamiento — Ordenado por Prioridad</div>
+    <p>Completar de arriba hacia abajo. Los primeros 8 ítems son obligatorios antes de compartir la URL.</p>
+
+    <h3>🔴 Hacer AHORA (antes de cualquier deploy)</h3>
+    <ul class="checklist">
+      <li class="todo"><span class="ci">❌</span><div><strong>Corregir título herramientas-digitales.astro</strong> — Cambiar a "Herramientas Digitales - CRAE IPG"</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Corregir título bienestar-apoyo.astro</strong> — Cambiar a "Bienestar y Apoyo Estudiantil - CRAE IPG"</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Actualizar Layout.astro</strong> — Reemplazar &lt;head&gt; con bloque completo de la sección anterior (OG, Twitter, canonical, geo, schema, font)</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Crear public/robots.txt</strong> — Contenido exacto en sección robots.txt de este documento</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Crear public/sitemap.xml</strong> — Contenido exacto en sección sitemap.xml de este documento</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Limpiar Práctica Laboral en Footer.tsx</strong> — Eliminar entrada de resourceLinks con href='/practica-laboral'</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Limpiar Práctica Laboral en HeroSearch.tsx</strong> — Eliminar entrada de QUICK_SECTIONS y SECTION_META['Práctica Laboral']</div></li>
+      <li class="todo"><span class="ci">❌</span><div><strong>Limpiar Práctica Laboral en HelpModal.tsx</strong> — Eliminar entrada de sectionCards y actualizar contador "6 Secciones" → "5 Secciones"</div></li>
+    </ul>
+
+    <h3>🟡 Hacer hoy (antes de compartir)</h3>
+    <ul class="checklist">
+      <li class="todo"><span class="ci">⚠️</span><div><strong>Crear public/og-image.png</strong> — PNG 1200×630px con branding APRENDE+ IPG. Sin esta imagen las redes no mostrarán preview visual.</div></li>
+      <li class="todo"><span class="ci">⚠️</span><div><strong>Crear public/apple-touch-icon.png</strong> — PNG 180×180px. Puede ser el logo IPG sobre fondo #003399.</div></li>
+      <li class="todo"><span class="ci">⚠️</span><div><strong>Crear public/manifest.json</strong> — Contenido exacto en sección Assets de este documento.</div></li>
+      <li class="todo"><span class="ci">⚠️</span><div><strong>Rotar AUTH_SECRET</strong> — <code>wrangler secret put AUTH_SECRET</code> con nuevo valor aleatorio ≥32 chars. Invalida sesiones viejas de 30 días.</div></li>
+      <li class="todo"><span class="ci">⚠️</span><div><strong>Verificar git history</strong> — <code>git log --all -p | grep -i "CLIENT_ID\|CLIENT_SECRET\|PRIVATE_KEY"</code> — confirmar que no hay secretos en historia git.</div></li>
+      <li class="todo"><span class="ci">⚠️</span><div><strong>Confirmar wrangler secrets</strong> — <code>wrangler secret list</code> — verificar que todos los 8 secrets estén configurados en el Worker de producción.</div></li>
+    </ul>
+
+    <h3>🟢 Post-Lanzamiento (próximos días)</h3>
+    <ul class="checklist">
+      <li class="partial"><span class="ci">🔜</span><div><strong>Configurar dominio personalizado</strong> — Dominio IPG (ej: aprende.ipg.cl) en Cloudflare + actualizar AUTH_URL + JSON-LD.</div></li>
+      <li class="partial"><span class="ci">🔜</span><div><strong>Activar Analytics</strong> — Cloudflare Analytics (gratis, ya incluido) o GA4 para monitorear uso.</div></li>
+      <li class="partial"><span class="ci">🔜</span><div><strong>Submit sitemap en Google Search Console</strong> — Una vez con dominio personalizado, registrar en GSC y enviar sitemap.</div></li>
+      <li class="partial"><span class="ci">🔜</span><div><strong>Skip-to-content link</strong> — Agregar &lt;a href="#main"&gt; al inicio del Layout para accesibilidad con teclado.</div></li>
+      <li class="done"><span class="ci">✅</span><div><strong>Deploy en Cloudflare Workers</strong> — npm run build &amp;&amp; wrangler deploy</div></li>
+      <li class="done"><span class="ci">✅</span><div><strong>Rate limiting activo</strong> — search 20/min, download 10/min, platform-info 5/min</div></li>
+      <li class="done"><span class="ci">✅</span><div><strong>Auth restringida a @ipg.cl y @alumnos.ipg.cl</strong></div></li>
+      <li class="done"><span class="ci">✅</span><div><strong>Práctica Laboral desconectada del UI</strong> — grid, hub, tour actualizados a 5 secciones</div></li>
+      <li class="done"><span class="ci">✅</span><div><strong>CSP, HSTS, X-Frame-Options activos</strong></div></li>
+      <li class="done"><span class="ci">✅</span><div><strong>34 recursos disponibles para descarga</strong></div></li>
+    </ul>
+  </section>
+
+</main>
+
+<a href="#" id="back-top" title="Volver arriba">↑</a>
+<script>
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('.sidebar-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

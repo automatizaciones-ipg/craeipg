@@ -6,22 +6,107 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  keywords?: string;
+  ogImage?: string;
 }
 
 const {
   title,
   description = 'Portal de recursos académicos del CRAE — Instituto Profesional IPG. Guías, normativas y herramientas digitales para estudiantes y docentes.',
+  keywords = 'recursos académicos, IPG, CRAE, técnicas de estudio, APA, Moodle, aula virtual, bienestar estudiantil',
+  ogImage = '/og-image.png',
 } = Astro.props;
+
+const siteUrl = 'https://craeipg.automatizaciones-730.workers.dev';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageURL = new URL(ogImage, siteUrl).toString();
 ---
 
 <!doctype html>
 <html lang="es" class="bg-slate-50 scroll-smooth">
   <head>
+    <!-- Base -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="CRAE — Instituto Profesional IPG" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Idioma / GEO -->
+    <link rel="alternate" hreflang="es-CL" href={canonicalURL} />
+    <link rel="alternate" hreflang="es" href={canonicalURL} />
+    <meta name="geo.region" content="CL-RM" />
+    <meta name="geo.placename" content="Santiago, Chile" />
+    <meta name="geo.position" content="-33.4372;-70.6506" />
+    <meta name="ICBM" content="-33.4372, -70.6506" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="APRENDE+ CRAE IPG" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:locale" content="es_CL" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Favicons & PWA -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#003399" />
+    <meta name="msapplication-TileColor" content="#003399" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "EducationalOrganization",
+          "@id": `${siteUrl}/#organization`,
+          "name": "CRAE — Centro de Recursos de Apoyo Estudiantil IPG",
+          "alternateName": "APRENDE+ CRAE IPG",
+          "url": siteUrl,
+          "description": "Portal de recursos académicos del Instituto Profesional IPG",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Santiago",
+            "addressCountry": "CL"
+          },
+          "parentOrganization": {
+            "@type": "CollegeOrUniversity",
+            "name": "Instituto Profesional IPG",
+            "url": "https://www.ipg.cl"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${siteUrl}/#website`,
+          "name": "APRENDE+ CRAE IPG",
+          "url": siteUrl,
+          "inLanguage": "es-CL",
+          "publisher": { "@id": `${siteUrl}/#organization` }
+        }
+      ]
+    })} />
   </head>
   <body
     class="min-h-screen flex flex-col text-slate-700 font-sans antialiased overflow-x-hidden selection:bg-[#0077ff]/20 selection:text-[#003399]"

@@ -1,0 +1,19 @@
+# APRENDE+ CRAE IPG — robots.txt
+User-agent: *
+
+# Permitir páginas de contenido
+Allow: /
+Allow: /inicio
+Allow: /tecnicas-estudio
+Allow: /gestion-tiempo
+Allow: /normas-apa
+Allow: /herramientas-digitales
+Allow: /bienestar-apoyo
+Allow: /recorrido-virtual
+
+# Bloquear rutas de administración y APIs
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://craeipg.automatizaciones-730.workers.dev/sitemap.xml

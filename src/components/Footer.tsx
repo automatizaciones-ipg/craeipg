@@ -19,7 +19,6 @@ const Footer: React.FC = () => {
     { label: 'Normas APA',             href: '/normas-apa' },
     { label: 'Herramientas Digitales', href: '/herramientas-digitales' },
     { label: 'Bienestar y Apoyo',      href: '/bienestar-apoyo' },
-    { label: 'Práctica Laboral',       href: '/practica-laboral' },
   ];
 
   const ipgLinks = [
@@ -27,6 +26,7 @@ const Footer: React.FC = () => {
     { label: 'Aula Virtual',           href: 'https://aulavirtual.ipg.cl',          external: true },
     { label: 'Portal Estudiantil',     href: 'https://www.ipg.cl/estudiantes',      external: true },
     { label: 'Recorrido Virtual',      href: '/recorrido-virtual',                  external: false },
+    { label: 'Documentación Técnica',  href: '/documentacion',                      external: false },
   ];
 
   return (

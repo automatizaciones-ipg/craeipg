@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Search, Loader2, FileText, Download, FileImage, Headphones,
   Video, ArrowRight, Brain, Clock, BookOpen, Heart,
-  MonitorSmartphone, Briefcase, X, ChevronRight
+  MonitorSmartphone, X, ChevronRight
 } from 'lucide-react';
 
 interface Resource {
@@ -64,7 +64,6 @@ const SECTION_META: Record<string, { icon: React.ReactNode; color: string; label
   'Normas APA':           { icon: <BookOpen size={13} />,        color: 'bg-blue-50 text-blue-600 border-blue-100',        label: 'APA' },
   'Bienestar y Apoyo':    { icon: <Heart size={13} />,           color: 'bg-rose-50 text-rose-600 border-rose-100',        label: 'Bienestar' },
   'Herramientas Digitales': { icon: <MonitorSmartphone size={13} />, color: 'bg-sky-50 text-sky-600 border-sky-100',      label: 'Digital' },
-  'Práctica Laboral':     { icon: <Briefcase size={13} />,       color: 'bg-amber-50 text-amber-600 border-amber-100',    label: 'Práctica' },
 };
 
 const FORMAT_BADGE: Record<string, string> = {
@@ -89,7 +88,6 @@ const QUICK_SECTIONS = [
   { label: 'Normas APA',          href: '/normas-apa',        icon: <BookOpen size={15} />, color: 'text-blue-600 bg-blue-50 border-blue-100' },
   { label: 'Herramientas Digitales', href: '/herramientas-digitales', icon: <MonitorSmartphone size={15} />, color: 'text-sky-600 bg-sky-50 border-sky-100' },
   { label: 'Bienestar y Apoyo',   href: '/bienestar-apoyo',  icon: <Heart size={15} />, color: 'text-rose-600 bg-rose-50 border-rose-100' },
-  { label: 'Práctica Laboral',    href: '/practica-laboral', icon: <Briefcase size={15} />, color: 'text-amber-600 bg-amber-50 border-amber-100' },
 ];
 
 function searchCatalog(query: string): Resource[] {

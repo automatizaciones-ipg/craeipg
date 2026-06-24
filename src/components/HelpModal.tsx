@@ -5,7 +5,7 @@ import {
   X, LogIn, Search, LayoutGrid, Download, Mail, Phone,
   CheckCircle2, ArrowRight, FileText, FileImage, Film,
   BrainCircuit, Clock, BookOpenCheck, MonitorSmartphone,
-  Heart, Briefcase, Star, Shield, ExternalLink, ChevronRight, ChevronLeft,
+  Heart, Star, Shield, ExternalLink, ChevronRight, ChevronLeft,
   HelpCircle,
 } from 'lucide-react';
 
@@ -133,13 +133,12 @@ const sectionCards = [
   { Icon: BookOpenCheck,    name: 'Normas APA',             count: '3',    color: 'from-white to-blue-50',       dark: false },
   { Icon: MonitorSmartphone,name: 'Herramientas Digitales', count: '18',   color: 'from-sky-50 to-white',        dark: false },
   { Icon: Heart,            name: 'Bienestar y Apoyo',      count: '4',    color: 'from-rose-500 to-pink-500',   dark: true },
-  { Icon: Briefcase,        name: 'Práctica Laboral',       count: 'Próx.', color: 'from-amber-50 to-white',    dark: false },
 ];
 
 const NavigatePanel: React.FC = () => (
   <div className="flex flex-col gap-6">
     <div className="text-center">
-      <h3 className="text-xl font-black text-slate-800">6 Secciones de Recursos</h3>
+      <h3 className="text-xl font-black text-slate-800">5 Secciones de Recursos</h3>
       <p className="text-slate-500 text-sm mt-1">Haz clic en cualquier sección para ver sus módulos</p>
     </div>
 
@@ -150,7 +149,7 @@ const NavigatePanel: React.FC = () => (
             <s.Icon className="w-4 h-4" />
           </div>
           <p className={`text-xs font-bold leading-tight ${s.dark ? 'text-white' : 'text-slate-800'}`}>{s.name}</p>
-          <p className={`text-[10px] mt-1 font-semibold ${s.dark ? 'text-blue-200' : 'text-slate-400'}`}>{s.count}{s.name !== 'Práctica Laboral' ? ' recursos' : ''}</p>
+          <p className={`text-[10px] mt-1 font-semibold ${s.dark ? 'text-blue-200' : 'text-slate-400'}`}>{s.count} recursos</p>
         </div>
       ))}
     </div>

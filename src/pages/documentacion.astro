@@ -1,0 +1,11 @@
+---
+// Importa el HTML completo en build-time como string raw.
+// La ruta /documentacion queda protegida automáticamente por el middleware
+// (no está en isPublicRoute), requiere sesión @ipg.cl / @alumnos.ipg.cl.
+import docHtml from '../../DOCUMENTACION_TECNICA.html?raw';
+
+return new Response(docHtml, {
+  status: 200,
+  headers: { 'Content-Type': 'text/html; charset=utf-8' },
+});
+---

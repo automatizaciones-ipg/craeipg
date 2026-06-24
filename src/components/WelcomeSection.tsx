@@ -9,11 +9,10 @@ const TOUR_VIDEO_ID = '';
 const CX = 200, CY = 100, R = 60;
 const HUB_NODES = [
   { label: 'Técnicas',  color: '#818cf8', angle: -90 },
-  { label: 'Tiempo',    color: '#34d399', angle: -30 },
-  { label: 'APA',       color: '#60a5fa', angle:  30 },
-  { label: 'Bienestar', color: '#f87171', angle:  90 },
-  { label: 'Digital',   color: '#38bdf8', angle: 150 },
-  { label: 'Práctica',  color: '#fbbf24', angle: 210 },
+  { label: 'Tiempo',    color: '#34d399', angle: -18 },
+  { label: 'APA',       color: '#60a5fa', angle:  54 },
+  { label: 'Bienestar', color: '#f87171', angle: 126 },
+  { label: 'Digital',   color: '#38bdf8', angle: 198 },
 ].map(n => ({
   ...n,
   x: CX + R * Math.cos(n.angle * Math.PI / 180),
@@ -33,7 +32,7 @@ const features = [
   {
     icon: <Compass className="w-5 h-5 text-[#0077ff]" />,
     title: 'Navegación Intuitiva',
-    desc: '6 secciones temáticas con contenido interactivo, tutoriales y recursos descargables.',
+    desc: '5 secciones temáticas con contenido interactivo, tutoriales y recursos descargables.',
   },
   {
     icon: <Library className="w-5 h-5 text-[#0077ff]" />,

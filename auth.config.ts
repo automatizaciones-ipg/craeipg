@@ -1,21 +1,18 @@
 import Google from "@auth/core/providers/google";
 import { defineConfig } from "auth-astro";
 
-// 🛠️ Parche de Precisión: Le dice a TypeScript que 'process' existirá en vivo
-declare const process: any;
-
 export default defineConfig({
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: import.meta.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: import.meta.env.GOOGLE_CLIENT_SECRET as string,
       authorization: { params: { prompt: "select_account" } }
     }),
   ],
   trustHost: true,
-  secret: process.env.AUTH_SECRET,
+  secret: import.meta.env.AUTH_SECRET,
   session: {
-    maxAge: 8 * 60 * 60, // 8 horas — sesión fija desde el login, sin renovación automática
+    maxAge: 8 * 60 * 60, // 8 horas fijas desde login, sin rolling
   },
   callbacks: {
     async signIn({ profile }) {

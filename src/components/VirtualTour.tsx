@@ -5,7 +5,7 @@ import {
   Search, LayoutGrid, Download, Mail, Phone,
   ArrowRight, ChevronRight, RotateCcw,
   Brain, Clock, BookOpenCheck, MonitorSmartphone,
-  Heart, Briefcase, FileText, FileImage, AlignLeft,
+  Heart, FileText, FileImage, AlignLeft,
   Target, BrainCircuit, StickyNote, ExternalLink,
   HelpCircle, Sparkles,
 } from 'lucide-react';
@@ -49,7 +49,7 @@ const part2Steps: StepMeta[] = [
     icon: <LayoutGrid className="w-6 h-6" />,
     badgeColor: 'bg-teal-500',
     title: 'Navega por las Secciones',
-    description: 'APRENDE+ tiene 6 secciones temáticas. Cada una agrupa recursos por área: estudio, tiempo, APA, herramientas digitales, bienestar y práctica laboral.',
+    description: 'APRENDE+ tiene 5 secciones temáticas. Cada una agrupa recursos por área: estudio, tiempo, APA, herramientas digitales y bienestar.',
     tip: 'Haz clic en la tarjeta "Técnicas de Estudio" del simulador para entrar a esa sección.',
   },
   {
@@ -193,7 +193,6 @@ function P2_GridMock({ onNext }: { onNext: () => void }) {
     { label: 'Normas APA',            icon: <BookOpenCheck className="w-3 h-3" />, color: 'from-white to-slate-50',     dark: false, clickable: false },
     { label: 'Herramientas Digitales',icon: <MonitorSmartphone className="w-3 h-3" />, color: 'from-sky-50 to-white',  dark: false, clickable: false },
     { label: 'Bienestar y Apoyo',     icon: <Heart className="w-3 h-3" />,         color: 'from-rose-500 to-pink-500', dark: true,  clickable: false },
-    { label: 'Práctica Laboral',      icon: <Briefcase className="w-3 h-3" />,    color: 'from-amber-50 to-white',    dark: false, clickable: false, badge: 'Próx.' },
   ];
   return (
     <motion.div key="p2m1" variants={mockFade} initial="hidden" animate="visible" exit="exit" className="w-full flex flex-col gap-2.5">
