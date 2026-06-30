@@ -23,9 +23,8 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
 ---
 
 <!doctype html>
-<html lang="es" class="bg-slate-50 scroll-smooth">
+<html lang="es" class="scroll-smooth">
   <head>
-    <!-- Base -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
@@ -34,10 +33,7 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
     <meta name="author" content="CRAE — Instituto Profesional IPG" />
     <meta name="robots" content="index, follow" />
 
-    <!-- Canonical -->
     <link rel="canonical" href={canonicalURL} />
-
-    <!-- Idioma / GEO -->
     <link rel="alternate" hreflang="es-CL" href={canonicalURL} />
     <link rel="alternate" hreflang="es" href={canonicalURL} />
     <meta name="geo.region" content="CL-RM" />
@@ -45,7 +41,6 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
     <meta name="geo.position" content="-33.4372;-70.6506" />
     <meta name="ICBM" content="-33.4372, -70.6506" />
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="APRENDE+ CRAE IPG" />
     <meta property="og:title" content={title} />
@@ -56,13 +51,11 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:locale" content="es_CL" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    <!-- Favicons & PWA -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -70,12 +63,10 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
     <meta name="theme-color" content="#003399" />
     <meta name="msapplication-TileColor" content="#003399" />
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" />
 
-    <!-- Schema.org JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
@@ -86,16 +77,8 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
           "alternateName": "APRENDE+ CRAE IPG",
           "url": siteUrl,
           "description": "Portal de recursos académicos del Instituto Profesional IPG",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Santiago",
-            "addressCountry": "CL"
-          },
-          "parentOrganization": {
-            "@type": "CollegeOrUniversity",
-            "name": "Instituto Profesional IPG",
-            "url": "https://www.ipg.cl"
-          }
+          "address": { "@type": "PostalAddress", "addressLocality": "Santiago", "addressCountry": "CL" },
+          "parentOrganization": { "@type": "CollegeOrUniversity", "name": "Instituto Profesional IPG", "url": "https://www.ipg.cl" }
         },
         {
           "@type": "WebSite",
@@ -108,28 +91,12 @@ const ogImageURL = new URL(ogImage, siteUrl).toString();
       ]
     })} />
   </head>
-  <body
-    class="min-h-screen flex flex-col text-slate-700 font-sans antialiased overflow-x-hidden selection:bg-[#0077ff]/20 selection:text-[#003399]"
-  >
-    {
-      /* EL HEADER DEBE SER client:load porque el usuario interactúa al instante (menú móvil, buscador, etc) */
-    }
+  <body class="min-h-screen flex flex-col bg-white text-slate-900 font-['Plus_Jakarta_Sans',sans-serif] antialiased overflow-x-hidden selection:bg-blue-100 selection:text-blue-900">
     <Header client:load />
-
-    <div class="flex flex-col flex-1 pt-24 min-h-screen">
-      <main
-        class="flex-1 w-full px-4 md:px-8 lg:px-12 pb-12 transition-all duration-300 z-10"
-      >
-        {
-          /* Aquí es donde Astro inyecta el contenido de cada página (index, normativas, etc) */
-        }
+    <div class="flex flex-col flex-1 pt-20 min-h-screen">
+      <main class="flex-1 w-full z-10">
         <slot />
       </main>
-
-      {/* OPTIMIZACIÓN CLAVE: client:visible */}
-      {
-        /* El JS pesado de Framer Motion del Footer NO se descargará ni ejecutará hasta que el usuario haga scroll y llegue al final de la página. Esto ahorra memoria y acelera la carga inicial enormemente. */
-      }
       <Footer client:visible />
     </div>
   </body>

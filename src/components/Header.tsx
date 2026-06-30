@@ -1,222 +1,171 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HelpCircle, Menu, X, ChevronRight, LogOut, Loader2 } from 'lucide-react';
-import { signOut } from 'auth-astro/client';
+import { Menu, X, ChevronRight, LogOut, Loader2, HelpCircle } from 'lucide-react';
 import HelpModal from './HelpModal';
 
-// Definimos los enlaces de navegación del CRAE (100% alineados con el Grid)
 const navLinks = [
-  { name: 'Técnicas de Estudio', href: '/tecnicas-estudio' },
-  { name: 'Gestión del Tiempo', href: '/gestion-tiempo' },
-  { name: 'Normas APA', href: '/normas-apa' },
+  { name: 'Técnicas de Estudio',    href: '/tecnicas-estudio' },
+  { name: 'Gestión del Tiempo',     href: '/gestion-tiempo' },
+  { name: 'Normas APA',             href: '/normas-apa' },
   { name: 'Herramientas Digitales', href: '/herramientas-digitales' },
-  { name: 'Bienestar y Apoyo', href: '/bienestar-apoyo' },
+  { name: 'Bienestar y Apoyo',      href: '/bienestar-apoyo' },
 ];
 
 const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
-  const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled]         = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut]     = useState(false);
+  const [isHelpOpen, setIsHelpOpen]         = useState(false);
 
   useEffect(() => {
-    // Patrón de optimización para no saturar la memoria
-    const handleScroll = (): void => {
-      window.requestAnimationFrame(() => {
-        setIsScrolled(window.scrollY > 20);
-      });
-    };
-    
-    // El { passive: true } es vital para mejorar el rendimiento del scroll en móviles
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => window.requestAnimationFrame(() => setIsScrolled(window.scrollY > 20));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Función asíncrona para manejar el cierre de sesión de forma segura
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
+    if (isLoggingOut) return;
     setIsLoggingOut(true);
-    try {
-      // 1. Destruimos la sesión de forma segura y estricta (sin pasar parámetros para evitar el error de TypeScript)
-      await signOut();
-      
-      // 2. Forzamos la redirección nativa al inicio
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-      setIsLoggingOut(false); // Restauramos el botón si falla
-    }
+    // Navegación directa al endpoint server-side de cierre de sesión.
+    // /api/signout responde con 302 + múltiples Set-Cookie de borrado.
+    // La navegación completa (no fetch) garantiza que el browser aplique
+    // todos los Set-Cookie correctamente — con fetch redirect:'manual'
+    // el browser recibe una respuesta opaca y OMITE los Set-Cookie.
+    window.location.replace('/api/signout');
   };
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-2' : 'py-4'}`}>
-      <div className="container mx-auto px-4 md:px-8">
-        
-        {/* BARRA DE NAVEGACIÓN PRINCIPAL */}
-        <nav className={`relative z-50 glass-header-light rounded-2xl transition-all duration-500 ${isScrolled || isMobileMenuOpen ? 'shadow-lg bg-white/90 backdrop-blur-xl' : 'bg-white/60 backdrop-blur-md'}`}>
-          <div className="flex items-center justify-between h-16 px-4 md:px-6">
-            
-            {/* 1. LOGO & BRANDING */}
-            <motion.a 
-              href="/"
-              initial={{ opacity: 0, x: -20 }}
+    <header className={`fixed top-0 w-full z-50 transition-all duration-400 ${isScrolled ? 'py-2' : 'py-3'}`}>
+      <div className="container mx-auto px-4 md:px-6">
+
+        <nav className={`relative z-50 rounded-2xl transition-all duration-400
+          ${isScrolled || isMobileMenuOpen
+            ? 'glass-header-light shadow-[0_2px_40px_rgba(0,0,0,0.08)]'
+            : 'bg-white/70 backdrop-blur-md'
+          }`}>
+
+          <div className="flex items-center justify-between h-14 px-4 md:px-5">
+
+            {/* Logo */}
+            <motion.a
+              href="/inicio"
+              initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2 md:gap-3 cursor-pointer group shrink-0"
+              className="shrink-0"
             >
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#003399] to-[#0077ff] rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                <div className="h-12 w-12 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-xl flex items-center justify-center font-extrabold text-white shadow-md text-base">
-                 IPG<span className="text-cyan-300 font-black ml-[1px]">+</span>
-               </div>
-              </div>
-              <div className="hidden md:block h-6 w-[2px] bg-slate-200 mx-1"></div>
-              <span className="text-xl md:text-2xl font-black tracking-tight text-slate-800">
-                APRENDE<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003399] to-[#0077ff]">+</span>
-              </span>
+              <img
+                src="https://ipg.cl/wp-content/uploads/2026/06/ipg-aurora-lockup-dark-text.webp"
+                alt="Instituto Profesional IPG"
+                className="h-16 w-auto object-contain"
+                loading="eager"
+              />
             </motion.a>
 
-            {/* 2. ENLACES CENTRALES (Solo Desktop) */}
-            <div className="hidden xl:flex items-center justify-center flex-1 mx-4 gap-4 xl:gap-6">
-              {navLinks.map((link, index) => (
+            {/* Links desktop */}
+            <div className="hidden xl:flex items-center justify-center flex-1 mx-4 gap-0.5">
+              {navLinks.map((link, i) => (
                 <motion.a
-                  key={index}
+                  key={i}
                   href={link.href}
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="relative group text-xs xl:text-sm font-semibold text-slate-600 hover:text-[#003399] transition-colors py-2 whitespace-nowrap"
+                  transition={{ delay: i * 0.06 }}
+                  className="relative group px-3.5 py-2 rounded-xl text-[13px] font-semibold text-slate-600 hover:text-[#003399] hover:bg-blue-50/60 transition-all duration-200 whitespace-nowrap"
                 >
                   {link.name}
-                  {/* Animación de subrayado premium */}
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#0077ff] transition-all duration-300 group-hover:w-full rounded-full"></span>
+                  <span
+                    className="absolute bottom-1.5 left-3.5 right-3.5 h-[1.5px] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+                    style={{ background: 'linear-gradient(90deg, #003399, #0EA5E9)' }}
+                  ></span>
                 </motion.a>
               ))}
             </div>
 
-            {/* 3. ACCIONES Y MENÚ HAMBURGUESA (Derecha) */}
-            <div className="flex items-center gap-3 shrink-0">
-              
+            {/* Acciones */}
+            <div className="flex items-center gap-2 shrink-0">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsHelpOpen(true)}
-                className="hidden sm:flex items-center gap-2 p-2 rounded-xl text-slate-500 hover:text-[#003399] hover:bg-blue-50 transition-all"
-                title="Centro de Ayuda"
+                className="hidden sm:flex p-2 rounded-xl text-slate-400 hover:text-[#003399] hover:bg-blue-50 transition-all"
               >
-                <HelpCircle size={20} strokeWidth={2.5} />
+                <HelpCircle size={18} strokeWidth={2} />
               </motion.button>
 
-              <div className="h-6 w-[2px] bg-slate-200 hidden sm:block"></div>
+              <div className="h-5 w-px bg-slate-200 hidden sm:block"></div>
 
-              {/* Botón Cerrar Sesión (Desktop y Tablets) */}
-              <motion.button 
+              <motion.button
                 onClick={handleSignOut}
                 disabled={isLoggingOut}
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-                className={`hidden sm:flex relative group overflow-hidden items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 disabled:opacity-75 disabled:cursor-wait
-                  ${isLoggingOut 
-                    ? 'bg-slate-100 text-slate-500 shadow-inner' 
-                    : 'bg-slate-800 text-white shadow-[0_4px_14px_0_rgba(15,23,42,0.39)] hover:shadow-[0_6px_20px_rgba(225,29,72,0.25)] hover:bg-rose-600'
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                className={`hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-300 disabled:opacity-60 disabled:cursor-wait
+                  ${isLoggingOut
+                    ? 'bg-slate-100 text-slate-400'
+                    : 'bg-slate-900 text-white hover:bg-rose-600 shadow-sm hover:shadow-[0_4px_16px_rgba(225,29,72,0.25)]'
                   }`}
               >
-                {!isLoggingOut && (
-                  <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                )}
-                <span>{isLoggingOut ? 'Saliendo...' : 'Cerrar Sesión'}</span>
-                
-                {/* Animación de icono al salir */}
+                <span>{isLoggingOut ? 'Saliendo…' : 'Salir'}</span>
                 <AnimatePresence mode="wait">
-                  {isLoggingOut ? (
-                    <motion.div
-                      key="loader"
-                      initial={{ opacity: 0, rotate: -90 }}
-                      animate={{ opacity: 1, rotate: 0 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <Loader2 size={14} className="sm:w-4 sm:h-4 animate-spin" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="icon"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="group-hover:translate-x-0.5 transition-transform"
-                    >
-                      <LogOut size={14} className="sm:w-4 sm:h-4" />
-                    </motion.div>
-                  )}
+                  {isLoggingOut
+                    ? <motion.div key="spin" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Loader2 size={13} className="animate-spin" /></motion.div>
+                    : <motion.div key="icon" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><LogOut size={13} /></motion.div>
+                  }
                 </AnimatePresence>
               </motion.button>
 
-              {/* Botón Menú Hamburguesa (Mobile, Tablet & pantallas < xl) */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="xl:hidden p-2 text-slate-700 bg-slate-100/80 hover:bg-[#0077ff]/10 hover:text-[#0077ff] rounded-xl transition-colors"
+                className="xl:hidden p-2 text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </motion.button>
-
             </div>
-
           </div>
         </nav>
 
-        {/* 4. MENÚ MÓVIL DESPLEGABLE */}
+        {/* Menú móvil */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              initial={{ opacity: 0, y: -10, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute top-20 left-4 right-4 z-40 xl:hidden"
+              exit={{ opacity: 0, y: -10, scale: 0.97 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="absolute top-[68px] left-4 right-4 z-40 xl:hidden"
             >
-              <div className="bg-white/95 backdrop-blur-xl border border-slate-200/60 shadow-2xl rounded-2xl p-4 flex flex-col gap-1 overflow-y-auto max-h-[80vh]">
-                
-                {/* Enlaces Móviles */}
-                {navLinks.map((link, index) => (
+              <div className="bg-white border border-slate-200/80 shadow-[0_20px_60px_rgba(0,0,0,0.12)] rounded-2xl p-3 flex flex-col gap-1">
+                {navLinks.map((link, i) => (
                   <motion.a
-                    key={index}
+                    key={i}
                     href={link.href}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -16 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 + 0.1 }}
-                    className="flex items-center justify-between p-3 rounded-xl text-slate-700 font-semibold hover:bg-[#0077ff]/5 hover:text-[#003399] transition-colors"
+                    transition={{ delay: i * 0.04 + 0.05 }}
+                    className="flex items-center justify-between px-4 py-3 rounded-xl text-slate-700 font-semibold text-sm hover:bg-blue-50 hover:text-[#003399] transition-all"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.name}
-                    <ChevronRight size={18} className="text-slate-400" />
+                    <ChevronRight size={15} className="text-slate-300" />
                   </motion.a>
                 ))}
-
-                <div className="h-[1px] bg-slate-100 my-2"></div>
-
-                {/* Botón Móvil "Cerrar Sesión" */}
+                <div className="h-px bg-slate-100 my-1.5"></div>
                 <motion.button
                   onClick={handleSignOut}
                   disabled={isLoggingOut}
-                  className={`flex items-center justify-center gap-2 w-full p-3 rounded-xl font-semibold shadow-sm transition-colors ${
-                    isLoggingOut 
-                    ? 'bg-slate-100 text-slate-500' 
-                    : 'bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white'
+                  className={`flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
+                    isLoggingOut ? 'bg-slate-100 text-slate-400' : 'bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white'
                   }`}
                 >
-                  <span>{isLoggingOut ? 'Cerrando sesión...' : 'Cerrar Sesión'}</span>
-                  {isLoggingOut ? (
-                    <Loader2 size={16} className="animate-spin" />
-                  ) : (
-                    <LogOut size={16} />
-                  )}
+                  <span>{isLoggingOut ? 'Cerrando sesión…' : 'Cerrar Sesión'}</span>
+                  {isLoggingOut ? <Loader2 size={14} className="animate-spin" /> : <LogOut size={14} />}
                 </motion.button>
-
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Overlay oscuro para fondo en móvil */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -228,7 +177,6 @@ const Header: React.FC = () => {
             />
           )}
         </AnimatePresence>
-
       </div>
 
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />

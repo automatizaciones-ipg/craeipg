@@ -1,324 +1,255 @@
 ---
-// src/pages/index.astro
-
-// IMPORTANTE: Mantenemos la importación de tus estilos globales para que Tailwind funcione
 import "../styles/global.css";
+const logoUrl     = "https://ipg.cl/wp-content/uploads/2026/06/LogoIPG_Resized.webp";
+const auroraLogo  = "https://ipg.cl/wp-content/uploads/2026/06/ipg-aurora-lockup-dark-text.webp";
 ---
 
-<html lang="es" class="h-full scroll-smooth">
+<html lang="es" class="h-full">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Acceso al Portal | APRENDE+ IPG</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   </head>
 
-  <body
-    class="min-h-screen bg-slate-50 lg:bg-white font-['Plus_Jakarta_Sans',sans-serif] antialiased selection:bg-blue-500/20 selection:text-blue-700"
-  >
-    <div
-      class="flex flex-col lg:flex-row min-h-screen w-full relative overflow-hidden"
-    >
-      <div
-        class="hidden lg:flex lg:w-1/2 relative bg-[#091124] items-center justify-center p-16 overflow-hidden border-r border-[#101b38] shadow-[20px_0_40px_rgba(0,0,0,0.15)] z-10"
-      >
-        <div class="absolute inset-0 z-0 opacity-60">
-          <div
-            class="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-gradient-to-br from-[#0052cc] to-[#003380] rounded-full blur-[140px] animate-aurora-slow"
-          >
-          </div>
-          <div
-            class="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-gradient-to-tr from-[#00bfff] to-[#0052cc] rounded-full blur-[140px] animate-aurora-delayed opacity-80"
-          >
-          </div>
+  <body class="h-full bg-white font-['Plus_Jakarta_Sans',sans-serif] antialiased overflow-hidden">
+    <div class="flex h-full w-full">
+
+      
+
+      <!-- ══════════════════════════════════════════════
+           IZQUIERDA — Panel de marca (gradient vívido)
+      ═══════════════════════════════════════════════════ -->
+      <div class="hidden lg:flex lg:w-[54%] relative overflow-hidden" style="background: linear-gradient(145deg, #001155 0%, #003399 40%, #0055cc 70%, #1a7fff 100%);">
+
+        <!-- Elemento geométrico giratorio de fondo -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          <div class="absolute w-[680px] h-[680px] rounded-full border border-white/5 animate-ambient"></div>
+          <div class="absolute w-[520px] h-[520px] rounded-full border border-white/7" style="animation: ambient-rotate 18s linear infinite reverse;"></div>
+          <div class="absolute w-[360px] h-[360px] rounded-full border border-white/8 animate-ambient" style="animation-duration: 12s;"></div>
+          <div class="absolute w-80 h-80 rounded-full" style="background: radial-gradient(circle, rgba(100,180,255,0.18) 0%, transparent 70%);"></div>
         </div>
 
-        <div
-          class="relative z-20 w-full max-w-xl flex flex-col justify-between h-full animate-fade-in-up"
-        >
-          <div class="self-start">
-            <div
-              class="inline-flex items-center gap-3 bg-[#0f1d40]/40 backdrop-blur-xl px-5 py-2.5 rounded-full border border-blue-400/20 shadow-2xl"
-            >
-              <span class="flex h-2.5 w-2.5 relative">
-                <span
-                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"
-                ></span>
-                <span
-                  class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"
-                ></span>
-              </span>
-              <span
-                class="text-[11px] font-bold tracking-[0.2em] text-blue-100 uppercase"
-                >Centro de Recursos de Apoyo Académico IPG</span
-              >
-            </div>
-          </div>
+        <!-- Dot grid sutil -->
+        <div class="absolute inset-0 dot-grid opacity-30 pointer-events-none"></div>
 
-          <div class="my-auto py-12">
-            <h1
-              class="text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-[1.15] mb-6 drop-shadow-lg"
-            >
-              Encuentra <br />recursos académicos en<br />
-              <span
-                class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-200 to-white"
-              >
-                Aprende+.
-              </span>
-            </h1>
+        <!-- Contenido del panel de marca -->
+        <div class="relative z-10 flex flex-col h-full px-14 xl:px-16 py-12 justify-between w-full">
 
-            <p
-              class="text-lg text-blue-100/80 font-light max-w-md leading-relaxed mb-12"
-            >
-              Bienvenido a <strong class="text-white font-semibold"
-                >APRENDE+</strong
-              >, el ecosistema digital diseñado para el desarrollo de
-              competencias estratégicas y autogestión en IPG.
-            </p>
-
-            <div class="space-y-6">
-              <div class="flex items-center gap-5 group">
-                <div
-                  class="w-12 h-12 rounded-2xl bg-[#0f1d40]/50 border border-blue-400/20 flex items-center justify-center text-cyan-300 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-400 transition-all duration-300 shadow-lg"
-                >
-                  <svg
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    ><path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    ></path></svg
-                  >
-                </div>
-                <p
-                  class="text-blue-50 font-medium text-[15px] group-hover:text-white transition-colors"
-                >
-                  Materiales y multimedia disponible para tu desarrollo
-                </p>
-              </div>
-
-              <div class="flex items-center gap-5 group">
-                <div
-                  class="w-12 h-12 rounded-2xl bg-[#0f1d40]/50 border border-blue-400/20 flex items-center justify-center text-cyan-300 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-400 transition-all duration-300 shadow-lg"
-                >
-                  <svg
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    ><path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path></svg
-                  >
-                </div>
-                <p
-                  class="text-blue-50 font-medium text-[15px] group-hover:text-white transition-colors"
-                >
-                  Estrategias avanzadas de autogestión académica y tiempo
-                </p>
+          <!-- TOP: Logo -->
+          <div class="animate-slide-up">
+            <div class="flex items-center gap-3">
+              <div class="h-auto w-[23%] overflow-hidden">
+                <img src={logoUrl} alt="Logo" class="h-full w-full object-contain" />
               </div>
             </div>
           </div>
 
-          <div
-            class="pt-8 border-t border-blue-400/20 flex justify-between items-center opacity-70"
-          >
-            <span
-              class="text-xs tracking-widest text-blue-200 font-semibold uppercase"
-              >V1.0 • Luis Rivera</span
-            >
-            <span class="text-xl font-black text-white tracking-tighter"
-              >IPG</span
-            >
+          <!-- CENTRO: Mensaje principal -->
+          <div class="my-auto">
+
+            <div class="space-y-1 mb-8">
+              <div class="overflow-hidden">
+                <h1 class="text-[3.6rem] xl:text-[4.2rem] font-black text-white leading-[1.0] animate-word-emerge delay-300">
+                  Tu centro de herramientas
+                </h1>
+              </div>
+              <div class="overflow-hidden">
+                <h1 class="text-[3.6rem] xl:text-[4.2rem] font-black leading-[1.0] animate-word-emerge delay-400" style="color: transparent; background: linear-gradient(90deg, #7dd4fc, #ffffff, #a5f3fc); -webkit-background-clip: text; background-clip: text;">
+                  para aprender, crecer y avanzar.
+                </h1>
+              </div>
+            </div>
+
+            <div class="overflow-hidden mb-12">
+              <p class="text-white/50 text-base leading-relaxed max-w-sm animate-word-emerge delay-500">
+                Accede a guías, materiales y herramientas diseñadas para potenciar
+                tu rendimiento académico en IPG.
+              </p>
+            </div>
+
+            <!-- Features — reemplazan las stats -->
+            <div class="flex flex-col gap-4 animate-slide-up delay-600">
+
+              <!-- Feature 1 -->
+              <div class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(125,212,252,0.10); border:1px solid rgba(125,212,252,0.20);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7dd4fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="14" rx="2"/>
+                    <path d="M8 21h8M12 17v4"/>
+                    <path d="M7 8h10M7 11h7"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-white/85 text-[13px] font-bold leading-tight">Materiales y multimedia disponible</p>
+                  <p class="text-white/38 text-[11.5px] font-medium mt-0.5 leading-snug">para tu desarrollo académico en IPG</p>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="w-full h-px" style="background:linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);"></div>
+
+              <!-- Feature 2 -->
+              <div class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(165,243,252,0.08); border:1px solid rgba(165,243,252,0.16);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5f3fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-white/85 text-[13px] font-bold leading-tight">Estrategias avanzadas de autogestión</p>
+                  <p class="text-white/38 text-[11.5px] font-medium mt-0.5 leading-snug">académica y administración del tiempo</p>
+                </div>
+              </div>
+
+            </div>
           </div>
+
+          <!-- BOTTOM: Firma -->
+          <div class="animate-slide-up delay-700">
+            <div class="border-t border-white/10 pt-6 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full" style="background:rgba(125,212,252,0.45);"></div>
+                <span class="text-white/25 text-[10px] font-bold tracking-[0.2em] uppercase">V1.0 · Luis Rivera</span>
+              </div>
+              <span class="text-white/25 text-[10px] font-bold tracking-[0.2em] uppercase">IPG © 2026</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div
-        class="absolute inset-0 bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100 lg:hidden -z-10"
-      >
-      </div>
-      <div
-        class="absolute top-[-5%] right-[-5%] w-72 h-72 bg-blue-300/30 rounded-full blur-[80px] lg:hidden -z-10"
-      >
-      </div>
+      <!-- ══════════════════════════════════════════════
+           DERECHA — Formulario de acceso (blanco puro)
+      ═══════════════════════════════════════════════════ -->
+      <div class="flex-1 flex items-center justify-center bg-white px-6 py-10 relative">
 
-      <div
-        class="w-full lg:w-1/2 flex items-center justify-center p-5 sm:p-8 lg:p-16 min-h-screen lg:min-h-0 relative z-10"
-      >
-        <div
-          class="w-full max-w-[420px] flex flex-col justify-center bg-white/90 backdrop-blur-2xl lg:bg-transparent lg:backdrop-blur-none px-6 py-10 sm:p-10 lg:p-0 rounded-[2.5rem] lg:rounded-none shadow-[0_20px_60px_rgb(0,0,0,0.05)] lg:shadow-none border border-white lg:border-none ring-1 ring-slate-900/5 lg:ring-0"
-        >
-          <div
-            class="text-center mb-8 sm:mb-10 animate-fade-in-up"
-            style="animation-delay: 0.1s;"
-          >
-            <div
-              class="h-20 w-20 sm:h-24 sm:w-24 bg-gradient-to-tr from-[#003399] to-[#0077ff] rounded-2xl sm:rounded-3xl flex items-center justify-center font-extrabold text-white shadow-xl shadow-blue-500/20 text-3xl sm:text-4xl mx-auto mb-6 transform transition-all duration-500 hover:scale-105 tracking-tighter"
-            >
-              IPG+
-            </div>
+        <!-- Orbe de acento muy sutil -->
+        <div class="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(0,51,153,0.04) 0%, transparent 70%);"></div>
 
-            <h2
-              class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2 sm:mb-3"
-            >
-              Ingresar a Aprende+
+        <!-- Línea decorativa izquierda -->
+        <div class="absolute left-0 top-[10%] bottom-[10%] w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent hidden lg:block"></div>
+
+        <div class="relative z-10 w-full max-w-[400px] flex flex-col items-center">
+
+          <!-- Logo aurora IPG — siempre visible -->
+          <div class="flex justify-center mb-10 w-full">
+            <img
+              src={auroraLogo}
+              alt="Instituto Profesional IPG"
+              class="h-24 w-auto object-contain"
+              loading="eager"
+            />
+          </div>
+
+          <!-- Cabecera del formulario -->
+          <div class="w-full mb-10 animate-slide-up">
+            <h2 class="text-[2rem] font-black text-slate-900 leading-tight mb-2 text-center">
+              Bienvenido a
+              <span class="text-gradient-brand">APRENDE+</span>
             </h2>
-            <p class="text-slate-500 font-medium text-sm sm:text-base px-4">
-              Autentícate utilizando tu correo institucional
+            <p class="text-slate-500 text-[15px] leading-relaxed">
+              Inicia sesión con tu cuenta institucional IPG para acceder a todos los recursos.
             </p>
           </div>
 
-          <div
-            class="space-y-5 sm:space-y-6 animate-fade-in-up w-full"
-            style="animation-delay: 0.2s;"
-          >
+          <!-- Login -->
+          <div class="w-full space-y-5 animate-slide-up delay-200">
+
+            <!-- Divider elegante -->
+            <div class="flex items-center gap-4">
+              <div class="flex-1 h-px bg-slate-100"></div>
+              <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Autenticación Google</span>
+              <div class="flex-1 h-px bg-slate-100"></div>
+            </div>
+
+            <!-- Botón Google -->
             <button
               id="btn-google-sso"
-              class="group w-full flex items-center justify-center gap-3 sm:gap-4 bg-white border-2 border-slate-200 hover:border-[#0052cc] py-3.5 sm:py-4 px-4 sm:px-6 rounded-2xl text-slate-700 font-bold text-[14px] sm:text-[15px] shadow-sm hover:bg-blue-50/50 hover:text-[#0052cc] hover:shadow-xl hover:shadow-blue-600/10 transition-all duration-300 active:scale-[0.98]"
+              class="group w-full relative overflow-hidden flex items-center justify-center gap-3.5 px-6 py-4 rounded-2xl text-[15px] font-semibold cursor-pointer transition-all duration-300
+                     bg-white border-2 border-slate-200 text-slate-800
+                     hover:border-[#003399] hover:shadow-[0_8px_40px_rgba(0,51,153,0.15)] hover:bg-white
+                     active:scale-[0.98]"
             >
-              <svg
-                class="w-5 h-5 transition-transform duration-300 group-hover:scale-110 flex-shrink-0"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                ></path>
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                ></path>
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"
-                ></path>
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                ></path>
+              <div class="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.4s_ease-in-out] bg-gradient-to-r from-transparent via-blue-50/60 to-transparent pointer-events-none"></div>
+              <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
-              Continuar con cuenta Google
+              <span>Continuar con Google</span>
             </button>
 
-            <div
-              class="bg-blue-50/80 border border-blue-100 rounded-2xl p-4 flex gap-3 items-start"
-            >
-              <svg
-                class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
+            <!-- Mensaje de error de autenticación (oculto por defecto) -->
+            <p id="sso-error" role="alert" class="hidden text-[12px] font-semibold text-red-600 text-center"></p>
+
+            <!-- Nota de dominio -->
+            <div class="flex items-start gap-3 p-4 rounded-xl bg-blue-50/70 border border-blue-100">
+              <svg class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
               </svg>
-              <div class="space-y-1.5">
-                <h4 class="text-[13px] font-bold text-blue-900">
-                  Validación Institucional
-                </h4>
-                <p class="text-[12px] text-blue-800/80 leading-relaxed">
-                  Acceso exclusivo para cuentas <br class="sm:hidden" />
-                  <span
-                    class="bg-blue-100 font-semibold px-1.5 py-0.5 rounded text-blue-900 inline-block mt-1 sm:mt-0"
-                    >@ipg.cl</span
-                  > o
-                  <span
-                    class="bg-blue-100 font-semibold px-1.5 py-0.5 rounded text-blue-900 inline-block mt-1 sm:mt-0"
-                    >@alumnos.ipg.cl</span
-                  >.
+              <div>
+                <p class="text-[12px] font-semibold text-slate-700">Acceso exclusivo para cuentas IPG</p>
+                <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                  Solo dominios
+                  <code class="mx-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-mono text-[10px]">@ipg.cl</code>
+                  y
+                  <code class="mx-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-mono text-[10px]">@alumnos.ipg.cl</code>
                 </p>
               </div>
             </div>
           </div>
 
-          <div
-            class="mt-8 sm:mt-10 lg:mt-12 pt-6 lg:border-t lg:border-slate-100 text-center animate-fade-in-up"
-            style="animation-delay: 0.3s;"
-          >
-            <p
-              class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]"
-            >
-              Instituto Profesional IPG &copy; 2026
-            </p>
+          <!-- Footer: logo IPG — visible en todos los dispositivos -->
+          <div class="w-full mt-10 flex flex-col items-center gap-3 animate-slide-up delay-400">
+            <div class="w-full h-px bg-slate-100"></div>
+            <img
+              src={logoUrl}
+              alt="Instituto Profesional IPG"
+              class="h-8 w-auto object-contain opacity-55"
+              loading="lazy"
+            />
+            <p class="text-[10px] text-slate-300 tracking-[0.15em] uppercase">© 2026 Instituto Profesional IPG</p>
           </div>
+
         </div>
       </div>
+
     </div>
   </body>
 </html>
 
-<style is:global>
-  /* Animación Suave de Desplazamiento de Auroras */
-  @keyframes aurora-slow {
-    0%,
-    100% {
-      transform: translate(0px, 0px) scale(1);
-    }
-    50% {
-      transform: translate(40px, -30px) scale(1.08);
-    }
-  }
-  @keyframes aurora-delayed {
-    0%,
-    100% {
-      transform: translate(0px, 0px) scale(1.05);
-    }
-    50% {
-      transform: translate(-40px, 40px) scale(0.95);
-    }
-  }
-  /* Entrada de Elementos */
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-aurora-slow {
-    animation: aurora-slow 12s ease-in-out infinite;
-  }
-  .animate-aurora-delayed {
-    animation: aurora-delayed 16s ease-in-out infinite;
-  }
-  .animate-fade-in-up {
-    animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-</style>
-
 <script>
-  // Importamos el motor nativo del cliente de auth-astro
-  const { signIn } = await import("auth-astro/client");
+  const btn = document.getElementById("btn-google-sso");
+  const label = btn?.querySelector("span");
+  const errEl = document.getElementById("sso-error");
+  const original = label?.textContent ?? "Continuar con Google";
 
-  const googleBtn = document.getElementById("btn-google-sso");
-  if (googleBtn) {
-    googleBtn.addEventListener("click", () => {
-      signIn("google");
-    });
-  }
+  btn?.addEventListener("click", async () => {
+    if (btn.hasAttribute("disabled")) return;
+    btn.setAttribute("disabled", "true");
+    btn.classList.add("opacity-70", "cursor-wait");
+    if (label) label.textContent = "Conectando…";
+    errEl?.classList.add("hidden");
+
+    try {
+      const { signIn } = await import("auth-astro/client");
+      await signIn("google");
+      // signIn redirige al flujo de Google; si vuelve aquí es por error.
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err instanceof Error ? err.message : err);
+      if (label) label.textContent = original;
+      btn.removeAttribute("disabled");
+      btn.classList.remove("opacity-70", "cursor-wait");
+      if (errEl) {
+        errEl.textContent = "No se pudo iniciar sesión. Revisa tu conexión e intenta de nuevo.";
+        errEl.classList.remove("hidden");
+      }
+    }
+  });
 </script>
