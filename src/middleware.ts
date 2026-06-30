@@ -13,7 +13,7 @@ const CSP = [
   "script-src 'self' 'unsafe-inline' https://accounts.google.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: https://*.googleusercontent.com",
+  "img-src 'self' data: https://*.googleusercontent.com https://ipg.cl https://*.ipg.cl",
   "connect-src 'self'",
   "frame-src https://drive.google.com",
   "frame-ancestors 'none'",
