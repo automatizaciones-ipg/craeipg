@@ -48,14 +48,14 @@ const LoginPanel: React.FC = () => (
     <div className="flex flex-col gap-5">
       <Step n={1} text="Abre aprende.ipg.cl en tu navegador" sub="Funciona en computador, celular o tablet." />
       <Step n={2} text="Haz clic en «Continuar con cuenta Google»" sub="Aparecerá la pantalla de inicio de sesión de Google." />
-      <Step n={3} text="Elige tu correo @ipg.cl o @alumnos.ipg.cl" sub="Debes usar tu cuenta institucional. Correos personales no tienen acceso." />
+      <Step n={3} text="Elige tu correo @ipg.cl, @alumnos.ipg.cl o @docentes.ipg.cl" sub="Debes usar tu cuenta institucional. Correos personales no tienen acceso." />
       <Step n={4} text="¡Listo! Ya estás dentro de APRENDE+" sub="No necesitas contraseña especial. El acceso es automático con tu cuenta Google." />
     </div>
 
     <div className="grid grid-cols-2 gap-3">
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 text-center">
-        <div className="text-2xl font-black text-[#003399]">@ipg.cl</div>
-        <p className="text-xs text-slate-500 mt-1">Docentes y staff</p>
+        <div className="text-base font-black text-[#003399]">@docentes.ipg.cl</div>
+        <p className="text-xs text-slate-500 mt-1">Docentes</p>
       </div>
       <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 text-center">
         <div className="text-base font-black text-[#003399]">@alumnos.ipg.cl</div>

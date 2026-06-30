@@ -25,7 +25,7 @@ export default defineConfig({
     async signIn({ profile }) {
       if (!profile || !profile.email) return false;
       const email = profile.email.toLowerCase();
-      const allowedDomains = ["@ipg.cl", "@alumnos.ipg.cl"];
+      const allowedDomains = ["@ipg.cl", "@alumnos.ipg.cl", "@docentes.ipg.cl"];
       return allowedDomains.some(domain => email.endsWith(domain));
     },
     async session({ session, token }) {

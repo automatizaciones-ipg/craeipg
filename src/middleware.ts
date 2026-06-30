@@ -129,7 +129,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   };
 
-  const ALLOWED_DOMAINS = ['@ipg.cl', '@alumnos.ipg.cl'];
+  const ALLOWED_DOMAINS = ['@ipg.cl', '@alumnos.ipg.cl', '@docentes.ipg.cl'];
 
   const isValidEmail = (email: string) =>
     ALLOWED_DOMAINS.some(d => email.endsWith(d));

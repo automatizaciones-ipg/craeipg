@@ -127,7 +127,7 @@ function P1_LoginMock({ onNext, simulating }: { onNext: () => void; simulating: 
       <div className="mt-4 w-full bg-blue-50 border border-blue-100 p-3 rounded-xl flex items-start gap-2">
         <Info className="w-3.5 h-3.5 text-[#0077ff] mt-0.5 shrink-0" />
         <p className="text-[11px] text-slate-600">
-          Solo cuentas <span className="font-semibold text-[#003399]">@ipg.cl</span> o <span className="font-semibold text-[#003399]">@alumnos.ipg.cl</span>
+          Solo cuentas <span className="font-semibold text-[#003399]">@ipg.cl</span>, <span className="font-semibold text-[#003399]">@alumnos.ipg.cl</span> o <span className="font-semibold text-[#003399]">@docentes.ipg.cl</span>
         </p>
       </div>
     </motion.div>

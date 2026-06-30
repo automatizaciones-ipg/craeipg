@@ -12,7 +12,7 @@ interface AppLocals {
   runtime?: { env?: CloudflareEnv };
 }
 
-const ALLOWED_DOMAINS = ['@ipg.cl', '@alumnos.ipg.cl'];
+const ALLOWED_DOMAINS = ['@ipg.cl', '@alumnos.ipg.cl', '@docentes.ipg.cl'];
 
 export const GET: APIRoute = async (context) => {
   const { request, locals } = context;
