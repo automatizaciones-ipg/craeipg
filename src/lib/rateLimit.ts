@@ -10,10 +10,11 @@ interface RateLimitResult {
 }
 
 /**
- * Rate limiter basado en ventana fija usando Cloudflare KV.
- * Si KV no está disponible (entorno dev), siempre permite.
+ * Rate limiter basado en ventana fija sobre un KVStore
+ * (en producción Node: memoryStore en memoria del proceso).
+ * Si el store no está disponible, siempre permite.
  *
- * @param kv         - Binding de Cloudflare KV
+ * @param kv         - Implementación de KVStore
  * @param identifier - Identificador único (email del usuario)
  * @param endpoint   - Nombre corto del endpoint ("search" | "download")
  * @param limit      - Máximo de requests permitidos en la ventana

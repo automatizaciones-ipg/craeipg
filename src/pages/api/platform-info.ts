@@ -1,21 +1,12 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
-import { checkRateLimit, type KVStore } from '../../lib/rateLimit';
-
-interface CloudflareEnv {
-  MOODLE_PASSWORD?: string;
-  EMAIL_PASSWORD?: string;
-  CRAE_KV?: KVStore;
-}
-
-interface AppLocals {
-  runtime?: { env?: CloudflareEnv };
-}
+import { checkRateLimit } from '../../lib/rateLimit';
+import { memoryKV } from '../../lib/memoryStore';
 
 const ALLOWED_DOMAINS = ['@ipg.cl', '@alumnos.ipg.cl', '@docentes.ipg.cl'];
 
 export const GET: APIRoute = async (context) => {
-  const { request, locals } = context;
+  const { request } = context;
 
   // 1. Autenticación
   const session = await getSession(request);
@@ -29,10 +20,8 @@ export const GET: APIRoute = async (context) => {
     return new Response(JSON.stringify({ error: 'Dominio no autorizado' }), { status: 403 });
   }
 
-  const runtimeEnv = (locals as AppLocals).runtime?.env;
-
   // 3. Rate limiting: 5 requests por minuto — endpoint de credenciales, umbral conservador
-  const rl = await checkRateLimit(runtimeEnv?.CRAE_KV, email, 'platform-info', 5, 60);
+  const rl = await checkRateLimit(memoryKV, email, 'platform-info', 5, 60);
   if (!rl.allowed) {
     return new Response(
       JSON.stringify({ error: 'Demasiadas solicitudes. Espera un momento.' }),
@@ -40,8 +29,8 @@ export const GET: APIRoute = async (context) => {
     );
   }
 
-  const moodlePassword = runtimeEnv?.MOODLE_PASSWORD ?? import.meta.env.MOODLE_PASSWORD ?? 'ipg.2025';
-  const emailPassword  = runtimeEnv?.EMAIL_PASSWORD  ?? import.meta.env.EMAIL_PASSWORD  ?? 'alumnos.2026';
+  const moodlePassword = process.env.MOODLE_PASSWORD ?? import.meta.env.MOODLE_PASSWORD ?? 'ipg.2025';
+  const emailPassword  = process.env.EMAIL_PASSWORD  ?? import.meta.env.EMAIL_PASSWORD  ?? 'alumnos.2026';
 
   return new Response(
     JSON.stringify({

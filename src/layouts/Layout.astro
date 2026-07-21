@@ -17,7 +17,8 @@ const {
   ogImage = '/og-image.png',
 } = Astro.props;
 
-const siteUrl = 'https://craeipg.automatizaciones-730.workers.dev';
+// AUTH_URL (env de producción) define la URL pública; fallback al origin de la request
+const siteUrl = process.env.AUTH_URL ?? import.meta.env.AUTH_URL ?? Astro.url.origin;
 const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageURL = new URL(ogImage, siteUrl).toString();
 ---

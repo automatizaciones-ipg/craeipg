@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
-import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 import auth from 'auth-astro';
 
 // https://astro.build/config
@@ -13,8 +13,7 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   integrations: [react(), auth()],
-  adapter: cloudflare({
-    // 🛡️ SOLUCIÓN ROBUSTA: Previene errores de compatibilidad con 'sharp' en el deploy a Cloudflare
-    imageService: 'compile' 
-  })
+  // standalone: genera dist/server/entry.mjs con servidor HTTP propio.
+  // Hostinger define HOST/PORT vía variables de entorno.
+  adapter: node({ mode: 'standalone' })
 });

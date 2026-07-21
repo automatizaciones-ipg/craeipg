@@ -1,17 +1,8 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
 import { getGoogleToken } from '../../lib/googleAuth';
-import { checkRateLimit, type KVStore } from '../../lib/rateLimit';
-
-interface DriveLocals {
-  runtime?: {
-    env?: {
-      GOOGLE_DRIVE_PRIVATE_KEY?: string;
-      GOOGLE_DRIVE_CLIENT_EMAIL?: string;
-      CRAE_KV?: KVStore;
-    };
-  };
-}
+import { checkRateLimit } from '../../lib/rateLimit';
+import { memoryKV } from '../../lib/memoryStore';
 
 export const GET: APIRoute = async (context) => {
   const { request, url } = context;
@@ -28,10 +19,8 @@ export const GET: APIRoute = async (context) => {
     return new Response(JSON.stringify([]), { status: 200 });
   }
 
-  const runtimeEnv = (context.locals as DriveLocals).runtime?.env;
-
   // 3. Rate limiting: 20 búsquedas por minuto por usuario
-  const rl = await checkRateLimit(runtimeEnv?.CRAE_KV, session.user.email, 'search', 20, 60);
+  const rl = await checkRateLimit(memoryKV, session.user.email, 'search', 20, 60);
   if (!rl.allowed) {
     return new Response(
       JSON.stringify({ error: 'Demasiadas búsquedas. Espera un momento antes de continuar.' }),
@@ -46,8 +35,8 @@ export const GET: APIRoute = async (context) => {
   }
 
   try {
-    const rawPrivateKey = runtimeEnv?.GOOGLE_DRIVE_PRIVATE_KEY ?? import.meta.env.GOOGLE_DRIVE_PRIVATE_KEY;
-    const clientEmail   = runtimeEnv?.GOOGLE_DRIVE_CLIENT_EMAIL  ?? import.meta.env.GOOGLE_DRIVE_CLIENT_EMAIL;
+    const rawPrivateKey = process.env.GOOGLE_DRIVE_PRIVATE_KEY ?? import.meta.env.GOOGLE_DRIVE_PRIVATE_KEY;
+    const clientEmail   = process.env.GOOGLE_DRIVE_CLIENT_EMAIL  ?? import.meta.env.GOOGLE_DRIVE_CLIENT_EMAIL;
 
     if (!rawPrivateKey || !clientEmail) {
       throw new Error('Credenciales de Google Drive no configuradas.');

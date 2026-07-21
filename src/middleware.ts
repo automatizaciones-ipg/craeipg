@@ -1,13 +1,6 @@
 import { getSession } from "auth-astro/server";
 import { defineMiddleware } from "astro:middleware";
 
-interface CloudflareRuntime {
-  runtime?: { env: Record<string, string> };
-}
-interface GlobalWithProcess {
-  process?: { env: Record<string, string> };
-}
-
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https://accounts.google.com",
@@ -27,9 +20,9 @@ const CSP = [
  * múltiples del signout/signin de auth-astro.
  *
  * CRÍTICO: new Headers(existingHeaders) puede colapsar Set-Cookie en algunos
- * entornos. Usamos headers.getAll('set-cookie') de la API de Cloudflare Workers
- * para extraerlos antes de construir la nueva respuesta y los re-inyectamos
- * con append para que lleguen como headers separados al browser.
+ * entornos. Usamos el estándar headers.getSetCookie() para extraerlos antes de
+ * construir la nueva respuesta y los re-inyectamos con append para que lleguen
+ * como headers separados al browser.
  */
 function withSecurityHeaders(response: Response, isDev: boolean): Response {
   // En dev omitimos CSP para no interferir con el HMR de Astro ni el OAuth localhost
@@ -44,13 +37,14 @@ function withSecurityHeaders(response: Response, isDev: boolean): Response {
     });
   }
 
-  // Extraer Set-Cookie ANTES de manipular headers
-  // Cloudflare Workers expone headers.getAll() para Set-Cookie
+  // Extraer Set-Cookie ANTES de manipular headers.
+  // Node (undici) expone el estándar headers.getSetCookie(); mantener fallback
+  // por si el runtime no lo implementa.
   let setCookies: string[] = [];
   try {
-    const headersWithGetAll = response.headers as Headers & { getAll?: (name: string) => string[] };
-    if (typeof headersWithGetAll.getAll === 'function') {
-      setCookies = headersWithGetAll.getAll('set-cookie');
+    const headersWithGetSetCookie = response.headers as Headers & { getSetCookie?: () => string[] };
+    if (typeof headersWithGetSetCookie.getSetCookie === 'function') {
+      setCookies = headersWithGetSetCookie.getSetCookie();
     } else {
       // Fallback estándar (puede estar combinado, pero es lo que hay)
       const raw = response.headers.get('set-cookie');
@@ -91,14 +85,8 @@ function withSecurityHeaders(response: Response, isDev: boolean): Response {
 export const onRequest = defineMiddleware(async (context, next) => {
   const isDev = import.meta.env.DEV;
 
-  // Inyectar Cloudflare secrets en process.env para librerías que lo usen
-  const locals = context.locals as CloudflareRuntime;
-  const runtimeEnv = locals.runtime?.env;
-  if (runtimeEnv) {
-    const globalRef = globalThis as unknown as GlobalWithProcess;
-    globalRef.process = globalRef.process || { env: {} };
-    globalRef.process.env = { ...globalRef.process.env, ...runtimeEnv };
-  }
+  // En Node (Hostinger) los secrets llegan directamente por process.env;
+  // ya no existe el puente locals.runtime.env de Cloudflare Workers.
 
   const pathname = context.url.pathname;
 

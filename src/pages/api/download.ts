@@ -1,28 +1,11 @@
 import type { APIRoute } from 'astro';
 import { getSession } from 'auth-astro/server';
 import { getGoogleToken } from '../../lib/googleAuth';
-import { checkRateLimit, type KVStore } from '../../lib/rateLimit';
-
-declare global {
-  var LOCAL_LOGS_CACHE: Array<Record<string, string | null | undefined>> | undefined;
-}
-
-interface CloudflareEnv {
-  GOOGLE_DRIVE_PRIVATE_KEY?: string;
-  GOOGLE_DRIVE_CLIENT_EMAIL?: string;
-  CRAE_KV?: KVStore & {
-    put(key: string, value: string): Promise<void>;
-  };
-}
-
-interface AppLocals {
-  runtime?: { env?: CloudflareEnv };
-}
-
-globalThis.LOCAL_LOGS_CACHE = globalThis.LOCAL_LOGS_CACHE || [];
+import { checkRateLimit } from '../../lib/rateLimit';
+import { memoryKV, addDownloadLog } from '../../lib/memoryStore';
 
 export const GET: APIRoute = async (context) => {
-  const { request, url, locals } = context;
+  const { request, url } = context;
 
   // 1. Autenticación
   const session = await getSession(request);
@@ -36,10 +19,8 @@ export const GET: APIRoute = async (context) => {
     return new Response('Error: Identificador de archivo inválido.', { status: 400 });
   }
 
-  const runtimeEnv = (locals as AppLocals).runtime?.env;
-
   // 3. Rate limiting: 10 descargas por minuto por usuario
-  const rl = await checkRateLimit(runtimeEnv?.CRAE_KV, session.user.email, 'download', 10, 60);
+  const rl = await checkRateLimit(memoryKV, session.user.email, 'download', 10, 60);
   if (!rl.allowed) {
     return new Response(
       'Límite de descargas alcanzado. Espera un momento antes de intentarlo de nuevo.',
@@ -48,8 +29,8 @@ export const GET: APIRoute = async (context) => {
   }
 
   try {
-    const rawPrivateKey = runtimeEnv?.GOOGLE_DRIVE_PRIVATE_KEY ?? import.meta.env.GOOGLE_DRIVE_PRIVATE_KEY;
-    const clientEmail   = runtimeEnv?.GOOGLE_DRIVE_CLIENT_EMAIL  ?? import.meta.env.GOOGLE_DRIVE_CLIENT_EMAIL;
+    const rawPrivateKey = process.env.GOOGLE_DRIVE_PRIVATE_KEY ?? import.meta.env.GOOGLE_DRIVE_PRIVATE_KEY;
+    const clientEmail   = process.env.GOOGLE_DRIVE_CLIENT_EMAIL  ?? import.meta.env.GOOGLE_DRIVE_CLIENT_EMAIL;
 
     if (!rawPrivateKey || !clientEmail) {
       throw new Error('Credenciales de Google Drive no configuradas en el entorno.');
@@ -74,20 +55,14 @@ export const GET: APIRoute = async (context) => {
       throw new Error('No se pudo inicializar la descarga binaria desde Google Drive.');
     }
 
-    // Auditoría de descarga
-    const logData = {
+    // Auditoría de descarga (buffer en memoria, tope de 500 entradas)
+    addDownloadLog({
       email: session.user.email,
       name: session.user.name ?? 'Alumno IPG',
       fileName: meta.name ?? 'Archivo Desconocido',
       timestamp: new Date().toISOString(),
       fileId,
-    };
-    const KV = runtimeEnv?.CRAE_KV;
-    if (KV) {
-      await KV.put(`download_log:${Date.now()}:${session.user.email}`, JSON.stringify(logData));
-    } else {
-      globalThis.LOCAL_LOGS_CACHE?.unshift(logData);
-    }
+    });
 
     // RFC 6266: filename* para soporte correcto de ñ, á, é en el nombre del archivo descargado
     const rawName = meta.name ?? 'archivo_crae';

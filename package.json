@@ -5,11 +5,15 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "wrangler pages dev ./dist",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
     "astro": "astro"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.13",
+    "@astrojs/node": "^9.5.5",
     "@astrojs/react": "^4.4.2",
     "@auth/core": "^0.34.3",
     "@tailwindcss/vite": "^4.2.1",
@@ -24,7 +28,6 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.1",
-    "tailwindcss-animate": "^1.0.7",
-    "wrangler": "^4.92.0"
+    "tailwindcss-animate": "^1.0.7"
   }
 }
